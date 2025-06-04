@@ -1,8 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/app.medspasyncpro.com/', // 👈 MUST be a string and include leading/trailing slash
+  base: '/', // 👈 for custom domains, this must be just '/'
 });
