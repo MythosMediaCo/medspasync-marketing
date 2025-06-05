@@ -15,7 +15,7 @@ export default function Login({ onLogin }) {
     try {
       const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, {
         email,
-        password,
+        password
       });
       onLogin(res.data.token);
       navigate('/dashboard');
@@ -44,13 +44,13 @@ export default function Login({ onLogin }) {
         />
         {error && <p className="text-red-500">{error}</p>}
         <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">
-          Log In
+          Login
         </button>
       </form>
-      <p className="mt-4 text-center text-sm text-gray-600">
+      <p className="text-center text-sm mt-4">
         Don’t have an account?{' '}
         <Link to="/register" className="text-blue-600 hover:underline">
-          Register here
+          Register
         </Link>
       </p>
     </div>
