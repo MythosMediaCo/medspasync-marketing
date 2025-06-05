@@ -1,27 +1,28 @@
-import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
-import axios from 'axios'
+// src/components/Login.jsx
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
 
 export default function Login({ onLogin }) {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const navigate = useNavigate()
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setError('')
+    e.preventDefault();
+    setError('');
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, {
+      const res = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/auth/login`, {
         email,
         password
-      })
-      onLogin(res.data.token)
-      navigate('/dashboard')
+      });
+      onLogin(res.data.token);
+      navigate('/dashboard');
     } catch (err) {
-      setError('Login failed: ' + (err.response?.data?.message || 'Unknown error'))
+      setError('Login failed: ' + (err.response?.data?.message || 'Unknown error'));
     }
-  }
+  };
 
   return (
     <div className="max-w-md mx-auto mt-20 bg-white p-8 rounded shadow">
@@ -53,5 +54,5 @@ export default function Login({ onLogin }) {
         </Link>
       </p>
     </div>
-  )
+  );
 }

@@ -1,3 +1,4 @@
+// src/components/Register.jsx
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
@@ -7,7 +8,7 @@ export default function Register({ onLogin }) {
     email: '',
     password: '',
     firstName: '',
-    lastName: '',
+    lastName: ''
   });
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -20,13 +21,11 @@ export default function Register({ onLogin }) {
     e.preventDefault();
     setError('');
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/register`, formData);
-      const token = response.data.token;
-      localStorage.setItem('token', token);
-      onLogin(token);
+      const res = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/auth/register`, formData);
+      onLogin(res.data.token);
       navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed');
+      setError('Registration failed: ' + (err.response?.data?.message || 'Unknown error'));
     }
   };
 
@@ -41,7 +40,6 @@ export default function Register({ onLogin }) {
           className="w-full p-2 border rounded"
           value={formData.firstName}
           onChange={handleChange}
-          required
         />
         <input
           type="text"
@@ -50,7 +48,6 @@ export default function Register({ onLogin }) {
           className="w-full p-2 border rounded"
           value={formData.lastName}
           onChange={handleChange}
-          required
         />
         <input
           type="email"
@@ -59,7 +56,6 @@ export default function Register({ onLogin }) {
           className="w-full p-2 border rounded"
           value={formData.email}
           onChange={handleChange}
-          required
         />
         <input
           type="password"
@@ -68,9 +64,8 @@ export default function Register({ onLogin }) {
           className="w-full p-2 border rounded"
           value={formData.password}
           onChange={handleChange}
-          required
         />
-        {error && <p className="text-red-500 text-sm">{error}</p>}
+        {error && <p className="text-red-500">{error}</p>}
         <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">
           Register
         </button>

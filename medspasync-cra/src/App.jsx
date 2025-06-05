@@ -1,28 +1,23 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate
-} from 'react-router-dom'
-import { useState } from 'react'
-import Login from './components/Login'
-import Register from './components/Register'
-import Dashboard from './components/Dashboard'
-import Upload from './components/Upload'
-import ClientDashboard from './components/ClientDashboard'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useState } from 'react';
+import Login from './components/Login';
+import Register from './components/Register';
+import Dashboard from './components/Dashboard';
+import ClientDashboard from './components/ClientDashboard';
+import Upload from './components/Upload';
 
-export default function App() {
-  const [token, setToken] = useState(() => localStorage.getItem('token') || null)
+function App() {
+  const [token, setToken] = useState(localStorage.getItem('token') || null);
 
   const handleLogin = (newToken) => {
-    localStorage.setItem('token', newToken)
-    setToken(newToken)
-  }
+    localStorage.setItem('token', newToken);
+    setToken(newToken);
+  };
 
   const handleLogout = () => {
-    localStorage.removeItem('token')
-    setToken(null)
-  }
+    localStorage.removeItem('token');
+    setToken(null);
+  };
 
   return (
     <Router>
@@ -33,10 +28,12 @@ export default function App() {
           <Route path="/register" element={<Register onLogin={handleLogin} />} />
           <Route path="/dashboard" element={token ? <Dashboard onLogout={handleLogout} /> : <Navigate to="/login" />} />
           <Route path="/upload" element={token ? <Upload /> : <Navigate to="/login" />} />
-          <Route path="/client" element={<ClientDashboard />} />
+          <Route path="/client-dashboard" element={token ? <ClientDashboard onLogout={handleLogout} /> : <Navigate to="/login" />} />
           <Route path="/debug" element={<pre>{token}</pre>} />
         </Routes>
       </div>
     </Router>
-  )
+  );
 }
+
+export default App;
