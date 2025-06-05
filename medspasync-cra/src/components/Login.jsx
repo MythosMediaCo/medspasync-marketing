@@ -1,4 +1,3 @@
-// src/components/Login.jsx
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
@@ -13,14 +12,16 @@ export default function Login({ onLogin }) {
     e.preventDefault();
     setError('');
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, {
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, {
         email,
-        password
+        password,
       });
-      onLogin(res.data.token);
+      const token = response.data.token;
+      localStorage.setItem('token', token);
+      onLogin(token);
       navigate('/dashboard');
     } catch (err) {
-      setError('Login failed: ' + (err.response?.data?.message || 'Unknown error'));
+      setError(err.response?.data?.message || 'Login failed');
     }
   };
 
@@ -34,6 +35,7 @@ export default function Login({ onLogin }) {
           className="w-full p-2 border rounded"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
         <input
           type="password"
@@ -41,8 +43,9 @@ export default function Login({ onLogin }) {
           className="w-full p-2 border rounded"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
-        {error && <p className="text-red-500">{error}</p>}
+        {error && <p className="text-red-500 text-sm">{error}</p>}
         <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">
           Login
         </button>
