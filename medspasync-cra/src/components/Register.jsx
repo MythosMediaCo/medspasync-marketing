@@ -1,49 +1,44 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { api } from '../api'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export default function Register({ onLogin }) {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     email: '',
     password: '',
     firstName: '',
     lastName: '',
-    practiceId: ''
-  })
-  const [error, setError] = useState('')
-  const navigate = useNavigate()
+  });
+  const [error, setError] = useState('');
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
+  const handleChange = e => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  const handleSubmit = async e => {
+    e.preventDefault();
     try {
-      const res = await api.post('/auth/register', form)
-      console.log('TOKEN:', res.data.token)
-      onLogin(res.data.token)
-      navigate('/dashboard')
+      const res = await axios.post('https://medspasync-backend-production.up.railway.app/auth/register', form);
+      onLogin(res.data.token);
+      navigate('/dashboard');
     } catch (err) {
-      console.error('[REGISTER_FAIL]', err)
-      setError('Registration failed: ' + (err?.response?.data?.message || 'Unknown error'))
+      console.error(err);
+      setError(err.response?.data?.message || 'Registration failed');
     }
-  }
+  };
 
   return (
-    <div className="max-w-md mx-auto mt-20 bg-white p-6 rounded shadow">
-      <h1 className="text-xl font-semibold mb-4">Register</h1>
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+    <div className="max-w-md mx-auto mt-10 bg-white p-6 shadow rounded">
+      <h2 className="text-xl font-semibold mb-4">Register</h2>
+      {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
       <form onSubmit={handleSubmit} className="space-y-4">
-        <input name="email" type="email" placeholder="Email" className="w-full border p-2 rounded" onChange={handleChange} required />
-        <input name="password" type="password" placeholder="Password" className="w-full border p-2 rounded" onChange={handleChange} required />
-        <input name="firstName" type="text" placeholder="First Name" className="w-full border p-2 rounded" onChange={handleChange} required />
-        <input name="lastName" type="text" placeholder="Last Name" className="w-full border p-2 rounded" onChange={handleChange} required />
-        <input name="practiceId" type="text" placeholder="Practice ID (optional)" className="w-full border p-2 rounded" onChange={handleChange} />
-        <button type="submit" className="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700">
-          Register
-        </button>
+        <input type="text" name="firstName" placeholder="First Name" onChange={handleChange} className="w-full p-2 border rounded" required />
+        <input type="text" name="lastName" placeholder="Last Name" onChange={handleChange} className="w-full p-2 border rounded" required />
+        <input type="email" name="email" placeholder="Email" onChange={handleChange} className="w-full p-2 border rounded" required />
+        <input type="password" name="password" placeholder="Password" onChange={handleChange} className="w-full p-2 border rounded" required />
+        <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Create Account</button>
       </form>
     </div>
-  )
+  );
 }
