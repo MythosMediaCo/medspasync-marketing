@@ -3,1186 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MedSpaSync Pro - Stop Losing $5,000+ Monthly to Reconciliation Errors</title>
-    <meta name="description" content="Automate medical spa reconciliation. Save 12+ hours monthly, recover $2K-5K in missed revenue. 90%+ accuracy for Allē, ASPIRE & POS tracking.">
-    
+    <title>MedSpaSync Pro | Recover $5,000+ Monthly with Zero Manual Reconciliation</title>
+    <meta name="description" content="Automated Alle & Aspire reconciliation for medical spas. Save 12+ hours monthly, reduce audit risk, and reclaim thousands in missed revenue.">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
+        body {
+            font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.6;
             color: #333;
-            overflow-x: hidden;
+            background: #f9f9fc;
         }
-
-        /* Header */
         .header {
             background: #fff;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .nav {
-            max-width: 1200px;
-            margin: 0 auto;
             padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-
         .logo {
-            font-size: 1.5rem;
             font-weight: 700;
-            color: #2563eb;
+            font-size: 1.5rem;
+            color: #667eea;
         }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
+        nav a {
+            margin-left: 1.5rem;
+            color: #444;
             text-decoration: none;
-            color: #555;
             font-weight: 500;
-            transition: color 0.3s;
         }
-
-        .nav-links a:hover {
-            color: #2563eb;
+        nav a:hover {
+            color: #667eea;
         }
-
-        .cta-button {
-            background: #2563eb;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            border: none;
-            cursor: pointer;
-            display: inline-block;
-        }
-
-        .cta-button:hover {
-            background: #1d4ed8;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-        }
-
-        .secondary-button {
-            background: transparent;
-            color: #2563eb;
-            border: 2px solid #2563eb;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            display: inline-block;
-            margin-left: 1rem;
-        }
-
-        .secondary-button:hover {
-            background: #2563eb;
-            color: white;
-        }
-
-        /* Hero Section */
         .hero {
+            text-align: center;
+            padding: 6rem 2rem;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 6rem 2rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
         }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-            opacity: 0.3;
-        }
-
-        .hero-content {
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
         .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            margin-bottom: 1.5rem;
-            line-height: 1.1;
-        }
-
-        .hero .subtitle {
-            font-size: 1.25rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-            line-height: 1.6;
-        }
-
-        .benefits-row {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin: 3rem 0;
-            flex-wrap: wrap;
-        }
-
-        .benefit-item {
-            background: rgba(255,255,255,0.1);
-            padding: 1.5rem;
-            border-radius: 1rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
-            min-width: 200px;
-        }
-
-        .benefit-item .icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .benefit-item h3 {
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .benefit-item p {
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        /* Section Styles */
-        .section {
-            padding: 5rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .section-header h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: #1f2937;
-        }
-
-        .section-header p {
-            font-size: 1.1rem;
-            color: #6b7280;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* Problem Section */
-        .problem {
-            background: #fef2f2;
-            border-radius: 2rem;
-            padding: 3rem;
-            margin: 2rem 0;
-        }
-
-        .problem-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .problem-item {
-            background: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            border-left: 4px solid #ef4444;
-        }
-
-        .problem-item h4 {
-            color: #dc2626;
-            font-weight: 600;
+            font-size: 2.75rem;
             margin-bottom: 1rem;
         }
-
-        /* Solution Section */
-        .solution {
-            background: #f0f9ff;
-            border-radius: 2rem;
-            padding: 3rem;
-            margin: 2rem 0;
-        }
-
-        .solution-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .solution-item {
-            background: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            border-left: 4px solid #10b981;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-
-        .solution-item h4 {
-            color: #059669;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .solution-item .icon {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        /* Stats Section */
-        .stats {
-            background: #1f2937;
-            color: white;
-            text-align: center;
-            margin: 4rem 0;
-            border-radius: 2rem;
-            padding: 4rem 2rem;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .stat-item h3 {
-            font-size: 3rem;
-            font-weight: 800;
-            color: #60a5fa;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-item p {
-            opacity: 0.9;
-        }
-
-        /* How It Works */
-        .steps {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 3rem;
-            margin-top: 3rem;
-        }
-
-        .step {
-            text-align: center;
-            position: relative;
-        }
-
-        .step-number {
-            background: #2563eb;
-            color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin: 0 auto 1.5rem;
-        }
-
-        .step h3 {
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-            color: #1f2937;
-        }
-
-        /* Pricing */
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .pricing-card {
-            background: white;
-            border: 2px solid #e5e7eb;
-            border-radius: 1.5rem;
-            padding: 2.5rem;
-            text-align: center;
-            position: relative;
-            transition: all 0.3s;
-        }
-
-        .pricing-card:hover {
-            border-color: #2563eb;
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-
-        .pricing-card.popular {
-            border-color: #2563eb;
-            transform: scale(1.05);
-        }
-
-        .pricing-card.popular::before {
-            content: "Most Popular";
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #2563eb;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 1rem;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        .price {
-            font-size: 3rem;
-            font-weight: 800;
-            color: #2563eb;
-            margin: 1rem 0;
-        }
-
-        .price-period {
-            font-size: 1rem;
-            color: #6b7280;
-        }
-
-        .features {
-            list-style: none;
-            margin: 2rem 0;
-            text-align: left;
-        }
-
-        .features li {
-            padding: 0.5rem 0;
-            position: relative;
-            padding-left: 1.5rem;
-        }
-
-        .features li::before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: #10b981;
-            font-weight: bold;
-        }
-
-        /* FAQ */
-        .faq {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .faq-item {
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 1rem;
-            margin-bottom: 1rem;
-            overflow: hidden;
-        }
-
-        .faq-question {
-            background: #f9fafb;
-            padding: 1.5rem;
-            cursor: pointer;
-            font-weight: 600;
-            border: none;
-            width: 100%;
-            text-align: left;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .faq-question:hover {
-            background: #f3f4f6;
-        }
-
-        .faq-answer {
-            padding: 0 1.5rem 1.5rem;
-            color: #6b7280;
-            display: none;
-        }
-
-        .faq-item.active .faq-answer {
-            display: block;
-        }
-
-        /* Final CTA */
-        .final-cta {
-            background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
-            color: white;
-            text-align: center;
-            padding: 5rem 2rem;
-            margin: 4rem 0 0;
-        }
-
-        .final-cta h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .final-cta p {
+        .hero p {
             font-size: 1.2rem;
-            margin-bottom: 2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
             opacity: 0.9;
         }
-
-        .guarantee {
-            background: rgba(255,255,255,0.1);
-            padding: 2rem;
-            border-radius: 1rem;
-            margin: 2rem auto;
-            max-width: 500px;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        /* Footer */
-        .footer {
-            background: #1f2937;
-            color: white;
-            padding: 3rem 2rem 2rem;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .footer-section h4 {
-            margin-bottom: 1rem;
-        }
-
-        .footer-section a {
-            color: #d1d5db;
+        .cta-btn {
+            background: white;
+            color: #667eea;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
             text-decoration: none;
-            display: block;
-            padding: 0.25rem 0;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-
-        .footer-section a:hover {
-            color: white;
-        }
-
-        .trust-signals {
+        .features {
             display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin: 2rem 0;
             flex-wrap: wrap;
+            justify-content: center;
+            padding: 4rem 2rem;
+            background: #fff;
         }
-
-        .trust-signal {
-            background: rgba(255,255,255,0.1);
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            font-size: 0.9rem;
+        .feature {
+            max-width: 300px;
+            margin: 1rem;
+            background: #f1f3f8;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.05);
         }
-
-        /* Mobile Responsiveness */
+        .feature h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            background: #333;
+            color: #fff;
+        }
         @media (max-width: 768px) {
-            .nav {
-                padding: 1rem;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-            
             .hero h1 {
-                font-size: 2.5rem;
+                font-size: 2rem;
             }
-            
-            .benefits-row {
+            .features {
                 flex-direction: column;
                 align-items: center;
             }
-            
-            .section {
-                padding: 3rem 1rem;
-            }
-            
-            .secondary-button {
-                margin-left: 0;
-                margin-top: 1rem;
-            }
-        }
-
-        /* Animations */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease;
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Contact Form */
-        .contact-form {
-            background: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            max-width: 500px;
-            margin: 2rem auto;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: #374151;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px solid #e5e7eb;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #2563eb;
-        }
-
-        .roi-calculator {
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-            border-radius: 1.5rem;
-            padding: 3rem;
-            margin: 3rem 0;
-            text-align: center;
-        }
-
-        .calculator-inputs {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin: 2rem 0;
-        }
-
-        .calculator-result {
-            background: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            margin-top: 2rem;
-            border: 2px solid #2563eb;
-        }
-
-        .savings-amount {
-            font-size: 3rem;
-            font-weight: 800;
-            color: #059669;
-            margin: 1rem 0;
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header class="header">
-        <nav class="nav">
-            <div class="logo">MedSpaSync Pro</div>
-            <ul class="nav-links">
-                <li><a href="#features">Features</a></li>
-                <li><a href="#pricing">Pricing</a></li>
-                <li><a href="#demo">Demo</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-            <a href="#calculator" class="cta-button">Calculate Savings</a>
+        <div class="logo">🏥 MedSpaSync Pro</div>
+        <nav>
+            <a href="#features">Features</a>
+            <a href="#roi">ROI Calculator</a>
+            <a href="login.html">Login</a>
         </nav>
     </header>
 
-    <!-- Hero Section -->
     <section class="hero">
-        <div class="hero-content">
-            <h1>Stop Losing $5,000+ Monthly to Reconciliation Errors</h1>
-            <p class="subtitle">Medical spas waste 12+ hours every month manually reconciling POS sales with Allē Rewards and ASPIRE Galderma Rewards programs. MedSpaSync Pro automates the entire process, recovering thousands in missed revenue while giving you your weekends back.</p>
-            
-            <div class="benefits-row">
-                <div class="benefit-item">
-                    <div class="icon">⏰</div>
-                    <h3>Save 12+ Hours Monthly</h3>
-                    <p>Eliminate manual spreadsheet reconciliation</p>
-                </div>
-                <div class="benefit-item">
-                    <div class="icon">💰</div>
-                    <h3>Recover $2K-5K</h3>
-                    <p>Find missed transactions and revenue leaks</p>
-                </div>
-                <div class="benefit-item">
-                    <div class="icon">✅</div>
-                    <h3>90%+ Accuracy</h3>
-                    <p>Automated matching vs 60% manual success rates</p>
-                </div>
-            </div>
+        <h1>Stop Losing Revenue on Rewards Reconciliation</h1>
+        <p>Automate your Allē & Aspire reconciliation. Save hours of staff time, avoid costly errors, and recover $2K–$5K per month — guaranteed.</p>
+        <a href="login.html" class="cta-btn">Start Free Trial</a>
+    </section>
 
-            <a href="#calculator" class="cta-button">See Your Potential Savings - Free Analysis</a>
-            <a href="#demo" class="secondary-button">Watch 2-Minute Demo</a>
+    <section class="features" id="features">
+        <div class="feature">
+            <h3>⚡ Instant Matching</h3>
+            <p>Upload your POS, Alle, and Aspire files. We match and flag discrepancies in seconds — not hours.</p>
+        </div>
+        <div class="feature">
+            <h3>📊 ROI Calculator</h3>
+            <p>Estimate your savings instantly and show your team the real business impact.</p>
+        </div>
+        <div class="feature">
+            <h3>🔐 HIPAA-Compliant</h3>
+            <p>We follow industry best practices for data security, encryption, and compliance.</p>
         </div>
     </section>
 
-    <!-- ROI Calculator Section -->
-    <section id="calculator" class="section">
-        <div class="roi-calculator">
-            <h2>Calculate Your Potential Savings</h2>
-            <p>See exactly how much time and money MedSpaSync Pro can save your medical spa</p>
-            
-            <div class="calculator-inputs">
-                <div class="form-group">
-                    <label for="locations">Number of Locations</label>
-                    <select id="locations">
-                        <option value="1">1 Location</option>
-                        <option value="2">2 Locations</option>
-                        <option value="3">3-5 Locations</option>
-                        <option value="6">6+ Locations</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="transactions">Monthly Transactions</label>
-                    <select id="transactions">
-                        <option value="500">Under 500</option>
-                        <option value="1000">500-1,000</option>
-                        <option value="2500">1,000-5,000</option>
-                        <option value="5000">5,000+</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="time">Hours Spent on Reconciliation</label>
-                    <select id="time">
-                        <option value="8">8 hours</option>
-                        <option value="12">12 hours</option>
-                        <option value="16">16+ hours</option>
-                    </select>
-                </div>
-            </div>
-            
-            <button onclick="calculateSavings()" class="cta-button">Calculate My Savings</button>
-            
-            <div id="calculator-result" class="calculator-result" style="display: none;">
-                <h3>Your Potential Savings</h3>
-                <div class="savings-amount" id="annual-savings">$0</div>
-                <p>Annual savings in time and recovered revenue</p>
-                <div style="margin-top: 1rem;">
-                    <strong>Time Saved:</strong> <span id="time-saved">0</span> hours monthly<br>
-                    <strong>Revenue Recovery:</strong> $<span id="revenue-recovery">0</span> monthly<br>
-                    <strong>ROI:</strong> <span id="roi">0</span>% return on investment
-                </div>
-                <a href="#contact" class="cta-button" style="margin-top: 1rem;">Get Started Today</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Problem Section -->
-    <section class="section">
-        <div class="section-header">
-            <h2>Every Medical Spa Manager Knows This Pain...</h2>
-            <p>The Sunday night reconciliation nightmare that's costing you time, money, and sanity</p>
-        </div>
-        
-        <div class="problem">
-            <h3 style="text-align: center; margin-bottom: 2rem; color: #dc2626;">Sunday Night Reality Check</h3>
-            <div class="problem-grid">
-                <div class="problem-item">
-                    <h4>Spreadsheet Chaos</h4>
-                    <p>Endless spreadsheets with mismatched transactions, formulas that break, and data that doesn't align across Allē, ASPIRE, and your POS system.</p>
-                </div>
-                <div class="problem-item">
-                    <h4>Weekend Work</h4>
-                    <p>Hours spent manually cross-referencing Allē and ASPIRE data with your POS transactions. Staff overtime just to close the books each month.</p>
-                </div>
-                <div class="problem-item">
-                    <h4>Revenue Leaks</h4>
-                    <p>$2,000-5,000 in missed transactions monthly that you can't track or recover. Hidden costs of incomplete reconciliation.</p>
-                </div>
-                <div class="problem-item">
-                    <h4>Compliance Risks</h4>
-                    <p>Constant worry about missed Allē rewards, ASPIRE redemptions, and regulatory compliance. What if something falls through the cracks?</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Solution Section -->
-    <section id="features" class="section">
-        <div class="section-header">
-            <h2>There's a Better Way</h2>
-            <p>MedSpaSync Pro: Built specifically for medical spas by industry experts</p>
-        </div>
-        
-        <div class="solution">
-            <h3 style="text-align: center; margin-bottom: 2rem; color: #059669;">Automated Reconciliation Engine</h3>
-            <div class="solution-grid">
-                <div class="solution-item fade-in">
-                    <div class="icon">📁</div>
-                    <h4>Smart File Processing</h4>
-                    <p>Automatically detects and processes POS sales data, Allē Rewards reports, and ASPIRE Galderma files. No manual formatting required.</p>
-                </div>
-                <div class="solution-item fade-in">
-                    <div class="icon">🎯</div>
-                    <h4>Advanced Matching</h4>
-                    <p>AI-powered algorithms achieve 90%+ accuracy rates using exact matching, fuzzy logic, and confidence scoring.</p>
-                </div>
-                <div class="solution-item fade-in">
-                    <div class="icon">📊</div>
-                    <h4>Real-Time Dashboard</h4>
-                    <p>Live reconciliation status, discrepancy alerts, and instant visibility into your financial data accuracy.</p>
-                </div>
-                <div class="solution-item fade-in">
-                    <div class="icon">📈</div>
-                    <h4>One-Click Reporting</h4>
-                    <p>Executive summaries, detailed analysis, and compliance reports generated automatically for management review.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Stats Section -->
-    <div class="stats">
-        <h2 style="margin-bottom: 2rem;">Proven Results Across Medical Spas</h2>
-        <div class="stats-grid">
-            <div class="stat-item">
-                <h3>90.9%</h3>
-                <p>Average match rate across all reconciliations</p>
-            </div>
-            <div class="stat-item">
-                <h3>96%</h3>
-                <p>Time reduction vs manual processes</p>
-            </div>
-            <div class="stat-item">
-                <h3>$3,400</h3>
-                <p>Average revenue recovery in first 90 days</p>
-            </div>
-            <div class="stat-item">
-                <h3>100%</h3>
-                <p>Customer satisfaction with accuracy</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- How It Works -->
-    <section class="section">
-        <div class="section-header">
-            <h2>Simple 3-Step Process</h2>
-            <p>From chaos to clarity in 30 minutes instead of 12+ hours</p>
-        </div>
-        
-        <div class="steps">
-            <div class="step">
-                <div class="step-number">1</div>
-                <h3>Upload Your Files</h3>
-                <p>Drag and drop your POS exports, Allē Rewards reports, and ASPIRE Galderma data. Our system automatically detects file types and formats.</p>
-            </div>
-            <div class="step">
-                <div class="step-number">2</div>
-                <h3>Automated Matching</h3>
-                <p>Advanced algorithms perform three-way reconciliation using exact matching, fuzzy logic, and confidence scoring.</p>
-            </div>
-            <div class="step">
-                <div class="step-number">3</div>
-                <h3>Review Results</h3>
-                <p>Get instant results with detailed match reports, discrepancy analysis, and executive summaries ready for management.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Pricing Section -->
-    <section id="pricing" class="section">
-        <div class="section-header">
-            <h2>Plans That Scale With Your Business</h2>
-            <p>ROI Guarantee: Recover your monthly investment or get your first month free</p>
-        </div>
-        
-        <div class="pricing-grid">
-            <div class="pricing-card">
-                <h3>Starter</h3>
-                <div class="price">$299<span class="price-period">/month</span></div>
-                <ul class="features">
-                    <li>1-2 locations</li>
-                    <li>Up to 1,000 transactions/month</li>
-                    <li>Email support</li>
-                    <li>Basic reporting</li>
-                    <li>90%+ match accuracy</li>
-                    <li>Allē & ASPIRE integration</li>
-                </ul>
-                <a href="#contact" class="cta-button">Start Free Trial</a>
-            </div>
-            
-            <div class="pricing-card popular">
-                <h3>Professional</h3>
-                <div class="price">$499<span class="price-period">/month</span></div>
-                <ul class="features">
-                    <li>3-5 locations</li>
-                    <li>Up to 5,000 transactions/month</li>
-                    <li>Priority support</li>
-                    <li>Advanced analytics</li>
-                    <li>Custom reporting</li>
-                    <li>Revenue recovery insights</li>
-                    <li>API access</li>
-                </ul>
-                <a href="#contact" class="cta-button">Start Free Trial</a>
-            </div>
-            
-            <div class="pricing-card">
-                <h3>Enterprise</h3>
-                <div class="price">$899<span class="price-period">/month</span></div>
-                <ul class="features">
-                    <li>6+ locations</li>
-                    <li>Unlimited transactions</li>
-                    <li>Dedicated support</li>
-                    <li>Custom integrations</li>
-                    <li>White-label options</li>
-                    <li>Advanced compliance</li>
-                    <li>On-site training</li>
-                </ul>
-                <a href="#contact" class="cta-button">Contact Sales</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Demo Section -->
-    <section id="demo" class="section" style="background: #f9fafb; border-radius: 2rem; padding: 4rem 2rem;">
-        <div class="section-header">
-            <h2>See MedSpaSync Pro in Action</h2>
-            <p>Watch how we turn reconciliation chaos into automated accuracy</p>
-        </div>
-        
-        <div style="text-align: center; margin: 2rem 0;">
-            <div style="background: #1f2937; color: white; padding: 4rem 2rem; border-radius: 1rem; max-width: 600px; margin: 0 auto;">
-                <h3 style="margin-bottom: 1rem;">🎥 2-Minute Demo Video</h3>
-                <p style="margin-bottom: 2rem;">See actual reconciliation results: Before (manual chaos) vs After (automated accuracy)</p>
-                <a href="#contact" class="cta-button">Request Demo Access</a>
-            </div>
-        </div>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem;">
-            <div style="text-align: center;">
-                <h4>Before: Manual Process</h4>
-                <div style="background: #fef2f2; padding: 2rem; border-radius: 1rem; margin-top: 1rem;">
-                    <p>❌ 12+ hours of work</p>
-                    <p>❌ 60% accuracy rate</p>
-                    <p>❌ $5K+ missed revenue</p>
-                    <p>❌ Weekend overtime</p>
-                </div>
-            </div>
-            <div style="text-align: center;">
-                <h4>After: MedSpaSync Pro</h4>
-                <div style="background: #f0fdf4; padding: 2rem; border-radius: 1rem; margin-top: 1rem;">
-                    <p>✅ 30 minutes total</p>
-                    <p>✅ 90%+ accuracy rate</p>
-                    <p>✅ $3K+ recovered monthly</p>
-                    <p>✅ Automated reports</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ Section -->
-    <section class="section">
-        <div class="section-header">
-            <h2>Frequently Asked Questions</h2>
-        </div>
-        
-        <div class="faq">
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFAQ(this)">
-                    How long does setup take?
-                    <span>+</span>
-                </button>
-                <div class="faq-answer">
-                    Less than 30 minutes. Upload your files and start reconciling immediately. No complicated integrations or IT setup required.
-                </div>
-            </div>
-            
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFAQ(this)">
-                    What file formats do you support?
-                    <span>+</span>
-                </button>
-                <div class="faq-answer">
-                    CSV, Excel, and PDF exports from all major POS systems, Allē Rewards platform, and ASPIRE Galderma systems. Our smart detection automatically identifies file types.
-                </div>
-            </div>
-            
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFAQ(this)">
-                    How accurate is the matching?
-                    <span>+</span>
-                </button>
-                <div class="faq-answer">
-                    90%+ average match rates with confidence scoring for every transaction. We use multiple algorithms including exact matching and fuzzy logic.
-                </div>
-            </div>
-            
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFAQ(this)">
-                    Do you integrate with our POS system?
-                    <span>+</span>
-                </button>
-                <div class="faq-answer">
-                    We work with exported data from any POS system. Direct API integrations are available for Enterprise plans with popular systems.
-                </div>
-            </div>
-            
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFAQ(this)">
-                    Is our financial data secure?
-                    <span>+</span>
-                </button>
-                <div class="faq-answer">
-                    Enterprise-grade encryption, HIPAA compliance, and SOC 2 Type II certification. We never store payment information or sensitive customer data.
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="section">
-        <div class="section-header">
-            <h2>Ready to Eliminate Reconciliation Nightmares?</h2>
-            <p>Join medical spas already saving 12+ hours monthly while recovering thousands in missed revenue</p>
-        </div>
-        
-        <div class="contact-form">
-            <h3 style="text-align: center; margin-bottom: 2rem;">Start Your Free Trial</h3>
-            <form id="contact-form">
-                <div class="form-group">
-                    <label for="name">Name *</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email *</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="company">Medical Spa Name *</label>
-                    <input type="text" id="company" name="company" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Phone</label>
-                    <input type="tel" id="phone" name="phone">
-                </div>
-                <div class="form-group">
-                    <label for="locations">Number of Locations</label>
-                    <select id="contact-locations" name="locations">
-                        <option value="1">1 Location</option>
-                        <option value="2-3">2-3 Locations</option>
-                        <option value="4-10">4-10 Locations</option>
-                        <option value="10+">10+ Locations</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="message">Current Reconciliation Challenges</label>
-                    <textarea id="message" name="message" rows="4" placeholder="Tell us about your current Allē/ASPIRE reconciliation process and pain points..."></textarea>
-                </div>
-                <button type="submit" class="cta-button" style="width: 100%;">Start Free Trial</button>
-            </form>
-        </div>
-    </section>
-
-    <!-- Final CTA -->
-    <div class="final-cta">
-        <h2>Ready to Get Your Weekends Back?</h2>
-        <p>Join medical spas already saving time and recovering revenue with automated reconciliation</p>
-        
-        <div class="guarantee">
-            <h3>💯 30-Day Money-Back Guarantee</h3>
-            <p>If MedSpaSync Pro doesn't save you time and recover revenue in your first month, get a full refund.</p>
-        </div>
-        
-        <a href="#contact" class="cta-button">Calculate Your Savings - Free ROI Analysis</a>
-        <a href="#demo" class="secondary-button">Schedule Demo Call</a>
-        
-        <div class="trust-signals">
-            <div class="trust-signal">✅ HIPAA Compliant</div>
-            <div class="trust-signal">✅ SOC 2 Type II Certified</div>
-            <div class="trust-signal">✅ 256-bit SSL Encryption</div>
-            <div class="trust-signal">✅ 99.9% Uptime SLA</div>
-        </div>
-    </div>
-
-    <!-- Footer -->
     <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>MedSpaSync Pro</h4>
-                <p>Automated reconciliation software built specifically for medical spas. Save time, recover revenue, eliminate errors.</p>
-                <p style="margin-top: 1rem;">
-                    <strong>Built by MythosMediaCo</strong><br>
-                    Software designed specifically for medical spas
-                </p>
-            </div>
-            <div class="footer-section">
-                <h4>Product</h4>
-                <a href="#features">Features</a>
-                <a href="#pricing">Pricing</a>
-                <a href="#demo">Demo</a>
-                <a href="#calculator">ROI Calculator</a>
-            </div>
-            <div class="footer-section">
-                <h4>Support</h4>
-                <a href="#contact">Contact Sales</a>
-                <a href="mailto:support@medspasync.com">Technical Support</a>
-                <a href="#faq">FAQ</a>
-                <a href="mailto:jacob@mythosmedia.co">Help Center</a>
-            </div>
-            <div class="footer-section">
-                <h4>Company</h4>
-                <a href="mailto:jacob@mythosmedia.co">About Us</a>
-                <a href="#contact">Careers</a>
-                <a href="mailto:jacob@mythosmedia.co">Press</a>
-                <a href="mailto:jacob@mythosmedia.co">Partners</a>
-            </div>
-        </div>
-        
-        <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #374151;">
-            <p>&copy; 2025 MythosMediaCo, LLC. All rights reserved. | <a href="mailto:jacob@mythosmedia.co" style="color: #d1d5db;">jacob@mythosmedia.co</a></p>
-        </div>
+        &copy; 2025 MedSpaSync Pro • Built by MythosMediaCo
     </footer>
 
+    <section id="roi" style="padding: 4rem 2rem; background: #f9f9fc;">
+        <h2 style="text-align:center; font-size:2rem; margin-bottom:2rem;">📈 ROI Calculator</h2>
+        <div style="max-width:600px; margin:0 auto;">
+            <label>Monthly Transactions: <input id="transactions" type="number" value="500" style="width:100%;padding:10px;margin-bottom:10px;"></label>
+            <label>Hours Spent Manually: <input id="hours" type="number" value="12" style="width:100%;padding:10px;margin-bottom:10px;"></label>
+            <label>Hourly Rate ($): <input id="rate" type="number" value="30" style="width:100%;padding:10px;margin-bottom:10px;"></label>
+            <label>Missed Discrepancies (%): <input id="missed" type="number" value="15" style="width:100%;padding:10px;margin-bottom:10px;"></label>
+            <div style="margin-top:1rem;">
+                <strong>Estimated Monthly ROI:</strong>
+                <p id="roiResult" style="font-size:1.5rem; color:#667eea;">$0</p>
+            </div>
+        </div>
+    </section>
+
     <script>
-        // FAQ Toggle
-        function toggleFAQ(button) {
-            const item = button.parentElement;
-            const isActive = item.classList.contains('active');
-            
-            // Close all FAQ items
-            document.querySelectorAll('.faq-item').forEach(faq => {
-                faq.classList.remove('active');
-                faq.querySelector('.faq-question span').textContent = '+';
-            });
-            
-            // Open clicked item if it wasn't active
-            if (!isActive) {
-                item.classList.add('active');
-                button.querySelector('span').textContent = '−';
-            }
+        function calculateROI() {
+            const tx = parseInt(document.getElementById('transactions').value) || 0;
+            const hrs = parseFloat(document.getElementById('hours').value) || 0;
+            const rate = parseFloat(document.getElementById('rate').value) || 0;
+            const missed = parseFloat(document.getElementById('missed').value) || 0;
+
+            const timeSavings = hrs * 0.96 * rate;
+            const missedTx = tx * (missed / 100);
+            const revenueRecovered = missedTx * 33;
+
+            const roi = Math.round(timeSavings + revenueRecovered);
+            document.getElementById('roiResult').textContent = '$' + roi.toLocaleString();
         }
 
-        // ROI Calculator
-        function calculateSavings() {
-            const locations = parseInt(document.getElementById('locations').value);
-            const transactions = parseInt(document.getElementById('transactions').value);
-            const timeSpent = parseInt(document.getElementById('time').value);
-            
-            // Calculate savings (simplified model)
-            const timeSavedHours = Math.max(timeSpent - 1, 0); // Save all but 30 min
-            const hourlyCost = 50; // Average manager hourly rate
-            const monthlySavedCost = timeSavedHours * hourlyCost;
-            
-            // Revenue recovery based on transaction volume
-            const revenueRecoveryRate = Math.min(transactions * 2.5, 5000); // $2.50 per transaction, max $5k
-            
-            const monthlyTotal = monthlySavedCost + revenueRecoveryRate;
-            const annualSavings = monthlyTotal * 12;
-            
-            // Calculate ROI based on pricing
-            let monthlyCost = 299;
-            if (locations >= 6) monthlyCost = 899;
-            else if (locations >= 3) monthlyCost = 499;
-            
-            const roi = Math.round((monthlyTotal / monthlyCost - 1) * 100);
-            
-            // Display results
-            document.getElementById('annual-savings').textContent = '$' + annualSavings.toLocaleString();
-            document.getElementById('time-saved').textContent = timeSavedHours;
-            document.getElementById('revenue-recovery').textContent = Math.round(revenueRecoveryRate).toLocaleString();
-            document.getElementById('roi').textContent = roi;
-            document.getElementById('calculator-result').style.display = 'block';
-            
-            // Scroll to result
-            document.getElementById('calculator-result').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Form submission
-        document.getElementById('contact-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Thank you for your interest! We\'ll contact you within 24 hours to set up your free trial.');
+        ['transactions', 'hours', 'rate', 'missed'].forEach(id => {
+            document.getElementById(id).addEventListener('input', calculateROI);
         });
 
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Animation on scroll - FIXED
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
-
-        // Observe elements for animation - FIXED TO INCLUDE SOLUTION ITEMS
-        document.querySelectorAll('.section, .stats, .solution-item').forEach(el => {
-            el.classList.add('fade-in');
-            observer.observe(el);
-        });
-
-        // Mobile menu toggle (placeholder for future implementation)
-        function toggleMobileMenu() {
-            // Implementation for mobile menu
-        }
+        calculateROI();
     </script>
 </body>
 </html>
+
