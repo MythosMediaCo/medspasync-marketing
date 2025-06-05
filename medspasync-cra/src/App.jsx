@@ -1,40 +1,42 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useState } from 'react';
-import Login from './components/Login';
-import Register from './components/Register';
-import Dashboard from './components/Dashboard';
-import ClientDashboard from './components/ClientDashboard';
-import PrivateRoute from './components/PrivateRoute';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate
+} from 'react-router-dom'
+import { useState } from 'react'
+import Login from './components/Login'
+import Register from './components/Register'
+import Dashboard from './components/Dashboard'
+import Upload from './components/Upload'
+import ClientDashboard from './components/ClientDashboard'
 
-function App() {
-  const [token, setToken] = useState(localStorage.getItem('token'));
+export default function App() {
+  const [token, setToken] = useState(() => localStorage.getItem('token') || null)
 
   const handleLogin = (newToken) => {
-    setToken(newToken);
-  };
+    localStorage.setItem('token', newToken)
+    setToken(newToken)
+  }
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    setToken(null);
-  };
+    localStorage.removeItem('token')
+    setToken(null)
+  }
 
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Login onLogin={handleLogin} />} />
-        <Route path="/login" element={<Login onLogin={handleLogin} />} />
-        <Route path="/register" element={<Register onLogin={handleLogin} />} />
-        <Route
-          path="/dashboard"
-          element={<PrivateRoute token={token}><Dashboard onLogout={handleLogout} /></PrivateRoute>}
-        />
-        <Route
-          path="/client"
-          element={<PrivateRoute token={token}><ClientDashboard onLogout={handleLogout} /></PrivateRoute>}
-        />
-      </Routes>
+      <div className="min-h-screen bg-gray-100 p-4">
+        <Routes>
+          <Route path="/" element={token ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
+          <Route path="/login" element={<Login onLogin={handleLogin} />} />
+          <Route path="/register" element={<Register onLogin={handleLogin} />} />
+          <Route path="/dashboard" element={token ? <Dashboard onLogout={handleLogout} /> : <Navigate to="/login" />} />
+          <Route path="/upload" element={token ? <Upload /> : <Navigate to="/login" />} />
+          <Route path="/client" element={<ClientDashboard />} />
+          <Route path="/debug" element={<pre>{token}</pre>} />
+        </Routes>
+      </div>
     </Router>
-  );
+  )
 }
-
-export default App;
