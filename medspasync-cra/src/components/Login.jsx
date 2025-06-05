@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { api } from '../api'
 
 export default function Login({ onLogin }) {
@@ -15,14 +15,15 @@ export default function Login({ onLogin }) {
       onLogin(res.data.token)
       navigate('/dashboard')
     } catch (err) {
-      setError('Invalid credentials')
+      console.error('[LOGIN_FAIL]', err)
+      setError('Login failed: ' + (err?.response?.data?.message || 'Unknown error'))
     }
   }
 
   return (
     <div className="max-w-md mx-auto mt-20 bg-white p-6 rounded shadow">
       <h1 className="text-xl font-semibold mb-4">Login</h1>
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+      {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="email"
@@ -40,10 +41,19 @@ export default function Login({ onLogin }) {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+        >
           Login
         </button>
       </form>
+      <p className="text-sm mt-4 text-center">
+        Don’t have an account?{' '}
+        <Link to="/register" className="text-blue-600 hover:underline">
+          Sign up here
+        </Link>
+      </p>
     </div>
   )
 }
