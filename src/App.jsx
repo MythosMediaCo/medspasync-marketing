@@ -1,4 +1,9 @@
 // src/App.jsx
+import { webcrypto } from 'crypto';
+
+if (!globalThis.crypto) {
+  globalThis.crypto = webcrypto;
+}
 import {
   BrowserRouter as Router,
   Routes,
