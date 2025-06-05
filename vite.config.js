@@ -1,21 +1,44 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import nodePolyfills from 'rollup-plugin-node-polyfills'
+import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
+import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  build: {
-    rollupOptions: {
-      plugins: [nodePolyfills()]
+  optimizeDeps: {
+    esbuildOptions: {
+      define: {
+        global: 'globalThis'
+      },
+      plugins: [
+        NodeGlobalsPolyfillPlugin({
+          buffer: true,
+          process: true
+        }),
+        NodeModulesPolyfillPlugin()
+      ]
+    }
+  },
+  resolve: {
+    alias: {
+      crypto: 'crypto-browserify',
+      stream: 'stream-browserify',
+      assert: 'assert',
+      buffer: 'buffer',
+      process: 'process/browser',
+      util: 'util'
     }
   },
   define: {
     'process.env': {}
   },
-  resolve: {
-    alias: {
-      crypto: 'crypto-browserify'
+  build: {
+    rollupOptions: {
+      onwarn(warning, warn) {
+        // suppress eval warnings
+        if (warning.code === 'EVAL') return
+        warn(warning)
+      }
     }
   }
 })
