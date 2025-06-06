@@ -1,38 +1,48 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useState } from 'react';
-import Login from './components/Login';
-import Register from './components/Register';
-import Dashboard from './components/Dashboard';
-import ClientDashboard from './components/ClientDashboard';
-import Upload from './components/Upload';
+import React from 'react';
+import './App.css';
 
 function App() {
-  const [token, setToken] = useState(localStorage.getItem('token') || null);
-
-  const handleLogin = (newToken) => {
-    localStorage.setItem('token', newToken);
-    setToken(newToken);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    setToken(null);
-  };
-
   return (
-    <Router>
-      <div className="min-h-screen bg-gray-100 p-4">
-        <Routes>
-          <Route path="/" element={token ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
-          <Route path="/login" element={<Login onLogin={handleLogin} />} />
-          <Route path="/register" element={<Register onLogin={handleLogin} />} />
-          <Route path="/dashboard" element={token ? <Dashboard onLogout={handleLogout} /> : <Navigate to="/login" />} />
-          <Route path="/upload" element={token ? <Upload /> : <Navigate to="/login" />} />
-          <Route path="/client-dashboard" element={token ? <ClientDashboard onLogout={handleLogout} /> : <Navigate to="/login" />} />
-          <Route path="/debug" element={<pre>{token}</pre>} />
-        </Routes>
-      </div>
-    </Router>
+    <div className="App">
+      <header className="App-header">
+        <h1>🏥 MedSpaSync Pro</h1>
+        <p>Advanced Medical Spa Management Platform</p>
+        <div className="status-indicator">
+          <span className="status-dot"></span>
+          <span>System Online</span>
+        </div>
+        <div className="feature-grid">
+          <div className="feature-card">
+            <h3>💳 Payment Reconciliation</h3>
+            <p>Automated payment processing and reconciliation</p>
+          </div>
+          <div className="feature-card">
+            <h3>👥 Client Management</h3>
+            <p>Comprehensive client records and history</p>
+          </div>
+          <div className="feature-card">
+            <h3>📊 Financial Reporting</h3>
+            <p>Real-time financial insights and analytics</p>
+          </div>
+          <div className="feature-card">
+            <h3>🔒 Secure Platform</h3>
+            <p>Enterprise-grade security and compliance</p>
+          </div>
+        </div>
+        <div className="api-status">
+          <p>
+            <strong>Backend API:</strong>{' '}
+            <a 
+              href="https://medspasync-backend-production-7zxb.up.railway.app/api/health"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Connected ✅
+            </a>
+          </p>
+        </div>
+      </header>
+    </div>
   );
 }
 
