@@ -1,27 +1,68 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff, Mail, Lock, ArrowRight, Loader2 } from 'lucide-react';
 
-const LoginPage = () => {
+const EnhancedLoginPage = () => {
   const [formData, setFormData] = useState({
     email: '',
-    password: ''
+    password: '',
+    rememberMe: false
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [errors, setErrors] = useState({});
+
+  // Built-in validation functions
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Email validation
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!validateEmail(formData.email)) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+
+    // Password validation
+    if (!formData.password) {
+      newErrors.password = 'Password is required';
+    } else if (formData.password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-    setError(''); // Clear error when user types
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+
+    // Clear specific field error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+
     setIsLoading(true);
-    setError('');
+    setErrors({});
 
     try {
       const response = await fetch('https://api.medspasyncpro.com/api/auth/login', {
@@ -29,22 +70,57 @@ const LoginPage = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password
+        }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        // In a real app, you'd store in state management or secure storage
-        alert('Login successful! Token: ' + data.token.substring(0, 20) + '...');
+        // Store token and user data
+        if (data.token) {
+          localStorage.setItem('medspasync_auth_token', data.token);
+        }
+        if (data.user) {
+          localStorage.setItem('medspasync_user_data', JSON.stringify(data.user));
+        }
+        
+        alert('Login successful! Redirecting to dashboard...');
+        // Redirect to dashboard
+        window.location.href = '/dashboard';
       } else {
-        setError(data.message || 'Login failed');
+        setErrors({ submit: data.message || 'Login failed' });
       }
     } catch (err) {
-      setError('Network error. Please try again.');
+      setErrors({ submit: 'Network error. Please try again.' });
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const fillDemoCredentials = () => {
+    setFormData(prev => ({
+      ...prev,
+      email: 'admin@medspasync.com',
+      password: 'admin123'
+    }));
+    // Clear any existing errors
+    setErrors({});
+  };
+
+  const handleForgotPassword = () => {
+    const email = formData.email || prompt('Please enter your email address:');
+    if (email && validateEmail(email)) {
+      alert(`Password reset instructions have been sent to ${email}`);
+    } else if (email) {
+      alert('Please enter a valid email address');
+    }
+  };
+
+  const handleSignUp = () => {
+    window.location.href = '/register';
   };
 
   return (
@@ -66,10 +142,10 @@ const LoginPage = () => {
         {/* Login Card */}
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="space-y-6">
-            {/* Error Message */}
-            {error && (
+            {/* Submit Error Message */}
+            {errors.submit && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                <p className="text-red-600 text-sm">{error}</p>
+                <p className="text-red-600 text-sm">{errors.submit}</p>
               </div>
             )}
 
@@ -87,11 +163,15 @@ const LoginPage = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  required
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                  className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${
+                    errors.email ? 'border-red-300' : 'border-gray-300'
+                  }`}
                   placeholder="admin@medspasync.com"
                 />
               </div>
+              {errors.email && (
+                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+              )}
             </div>
 
             {/* Password Field */}
@@ -108,8 +188,9 @@ const LoginPage = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  required
-                  className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                  className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors ${
+                    errors.password ? 'border-red-300' : 'border-gray-300'
+                  }`}
                   placeholder="Enter your password"
                 />
                 <button
@@ -118,27 +199,37 @@ const LoginPage = () => {
                   className="absolute inset-y-0 right-0 pr-3 flex items-center"
                 >
                   {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600 transition-colors" />
                   ) : (
-                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600 transition-colors" />
                   )}
                 </button>
               </div>
+              {errors.password && (
+                <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+              )}
             </div>
 
             {/* Remember Me & Forgot Password */}
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <input
-                  id="remember"
+                  id="rememberMe"
+                  name="rememberMe"
                   type="checkbox"
+                  checked={formData.rememberMe}
+                  onChange={handleChange}
                   className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                 />
-                <label htmlFor="remember" className="ml-2 block text-sm text-gray-700">
+                <label htmlFor="rememberMe" className="ml-2 block text-sm text-gray-700">
                   Remember me
                 </label>
               </div>
-              <button className="text-sm text-indigo-600 hover:text-indigo-500">
+              <button 
+                type="button"
+                onClick={handleForgotPassword}
+                className="text-sm text-indigo-600 hover:text-indigo-500 transition-colors"
+              >
                 Forgot password?
               </button>
             </div>
@@ -166,21 +257,22 @@ const LoginPage = () => {
           {/* Demo Credentials */}
           <div className="mt-6 p-4 bg-gray-50 rounded-lg">
             <p className="text-sm text-gray-600 font-medium mb-2">Demo Credentials:</p>
-            <div className="space-y-1">
-              <button 
-                onClick={() => setFormData({email: 'admin@medspasync.com', password: 'admin123'})}
-                className="text-xs text-indigo-600 hover:text-indigo-800 block"
-              >
-                📧 admin@medspasync.com / 🔑 admin123 (Click to fill)
-              </button>
-            </div>
+            <button 
+              onClick={fillDemoCredentials}
+              className="text-xs text-indigo-600 hover:text-indigo-800 transition-colors block w-full text-left p-2 hover:bg-indigo-50 rounded"
+            >
+              📧 admin@medspasync.com / 🔑 admin123 (Click to fill)
+            </button>
           </div>
 
           {/* Sign Up Link */}
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Don't have an account?{' '}
-              <button className="text-indigo-600 hover:text-indigo-500 font-medium">
+              <button 
+                onClick={handleSignUp}
+                className="text-indigo-600 hover:text-indigo-500 font-medium transition-colors"
+              >
                 Sign up for free
               </button>
             </p>
@@ -193,9 +285,35 @@ const LoginPage = () => {
             API Status: <span className="text-green-600">Connected ✅</span>
           </p>
         </div>
+
+        {/* Quick Actions */}
+        <div className="mt-4 text-center">
+          <div className="flex justify-center space-x-4 text-xs text-gray-500">
+            <button 
+              onClick={() => alert('Help documentation coming soon!')}
+              className="hover:text-indigo-600 transition-colors"
+            >
+              Need Help?
+            </button>
+            <span>•</span>
+            <button 
+              onClick={() => alert('Support chat coming soon!')}
+              className="hover:text-indigo-600 transition-colors"
+            >
+              Contact Support
+            </button>
+            <span>•</span>
+            <button 
+              onClick={() => window.open('/', '_blank')}
+              className="hover:text-indigo-600 transition-colors"
+            >
+              About MedSpaSync
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
-export default LoginPage;
+export default EnhancedLoginPage;
