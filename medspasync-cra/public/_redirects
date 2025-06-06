@@ -1,0 +1,9 @@
+# Netlify redirects for React Router
+/*    /index.html   200
+
+# API redirects (if needed)
+/api/*  https://medspasync-backend-production-7zxb.up.railway.app/api/:splat  200
+
+# Force HTTPS
+http://app.medspasync.com/*  https://app.medspasync.com/:splat  301!
+http://medspasync-app.netlify.app/*  https://medspasync-app.netlify.app/:splat  301!
