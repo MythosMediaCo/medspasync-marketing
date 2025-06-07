@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { API_BASE_URL } from '../utils/constants.js';
-import { storageService } from './storage.js'; // This is the named import
+import { API_BASE_URL } from '../utils/constants.js'; // Explicit .js
+import { storageService } from './storage.js'; // NAMED IMPORT - IMPORTANT
 import toast from 'react-hot-toast';
 
 class ApiService {
