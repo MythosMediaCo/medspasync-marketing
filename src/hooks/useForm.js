@@ -15,78 +15,90 @@ export const useForm = (initialValues = {}, validationSchema = null) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   /**
-   * Updates a single form field value.
-   * Clears the error for that field if it was previously touched and had an error.
+   * Memoized function to validate a single field against the Yup schema.
+   * @param {string} name - The name of the field to validate.
+   * @param {*} value - The value of the field.
+   * @returns {Promise<boolean>} True if valid, false otherwise.
+   */
+  const validateField = useCallback(async (name, value) => {
+    if (!validationSchema) return true; // No schema, always valid
+
+    try {
+      await validationSchema.validateAt(name, { [name]: value });
+      setErrors(prev => { // Use functional update for errors
+        if (prev[name]) { // Only update if error exists to prevent unnecessary renders
+          const newErrors = { ...prev };
+          delete newErrors[name];
+          return newErrors;
+        }
+        return prev;
+      });
+      return true;
+    } catch (error) {
+      setErrors(prev => ({ ...prev, [name]: error.message })); // Always update on error
+      return false;
+    }
+  }, [validationSchema, setErrors]); // `setErrors` is stable, validationSchema can change
+
+
+  /**
+   * Memoized function to update a single form field value.
+   * This version tries to be more conservative with `setErrors` to break cycles.
    * @param {string} name - The name of the form field.
    * @param {*} value - The new value for the form field.
    */
   const setValue = useCallback((name, value) => {
     setValues(prev => ({ ...prev, [name]: value }));
 
-    // Clear error for the field immediately if it was touched and had an error
-    if (touched[name] && errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
-    }
-  }, [errors, touched]); // Dependencies: errors and touched states
+    // Only attempt to clear error if it currently exists AND the field is touched
+    setErrors(prevErrors => {
+      if (prevErrors[name] && touched[name]) { // Check touched to avoid clearing before interaction
+        const newErrors = { ...prevErrors };
+        delete newErrors[name];
+        return newErrors;
+      }
+      return prevErrors;
+    });
+  }, [touched, setValues, setErrors]); // Add setValues and setErrors to deps
+
 
   /**
-   * Marks a form field as "touched" (meaning the user has interacted with it).
+   * Memoized function to mark a form field as "touched".
    * @param {string} name - The name of the form field.
    * @param {boolean} isTouched - Whether the field is touched (defaults to true).
    */
   const setFieldTouched = useCallback((name, isTouched = true) => {
     setTouched(prev => ({ ...prev, [name]: isTouched }));
-  }, []); // No dependencies needed as it only uses setter from useState
+  }, [setTouched]);
+
 
   /**
    * Generic change handler for input elements.
-   * Extracts name, value, type, and checked properties from the event target.
    * @param {Event} e - The change event from an input element.
    */
   const handleChange = useCallback((e) => {
     const { name, value, type, checked } = e.target;
     setValue(name, type === 'checkbox' ? checked : value);
-  }, [setValue]); // Dependency: setValue (which is stable)
+  }, [setValue]);
 
-  /**
-   * Validates a single field against the Yup schema.
-   * @param {string} name - The name of the field to validate.
-   * @param {*} value - The value of the field.
-   * @returns {Promise<boolean>} True if valid, false otherwise.
-   */
-  const validateField = useCallback(async (name, value) => {
-    if (!validationSchema) return true;
-
-    try {
-      await validationSchema.validateAt(name, { [name]: value });
-      setErrors(prev => ({ ...prev, [name]: '' }));
-      return true;
-    } catch (error) {
-      setErrors(prev => ({ ...prev, [name]: error.message }));
-      return false;
-    }
-  }, [validationSchema, setErrors]); // Dependencies: validationSchema and setErrors
 
   /**
    * Generic blur handler for input elements.
-   * Marks the field as touched and triggers validation for that field.
-   * Removed useCallback here to simplify potential loop issues,
-   * as its dependencies can sometimes cause re-renders if not perfectly stable.
-   * The underlying functions (setFieldTouched, validateField) are already memoized.
+   * This is a regular function now, not useCallback, to break potential cycles.
    * @param {Event} e - The blur event from an input element.
    */
-  const handleBlur = async (e) => { // NOT useCallback
+  const handleBlur = async (e) => {
       const { name } = e.target;
-      setFieldTouched(name, true);
+      setFieldTouched(name, true); // This causes a state update
 
       if (validationSchema) {
-        await validateField(name, values[name]);
+        await validateField(name, values[name]); // This also causes a state update
       }
   };
 
 
   /**
-   * Validates the entire form against the Yup schema.
+   * Memoized function to validate the entire form against the Yup schema.
    * @returns {Promise<boolean>} True if the entire form is valid, false otherwise.
    */
   const validateForm = useCallback(async () => {
@@ -94,7 +106,7 @@ export const useForm = (initialValues = {}, validationSchema = null) => {
 
     try {
       await validationSchema.validate(values, { abortEarly: false });
-      setErrors({});
+      setErrors({}); // This causes a state update
       return true;
     } catch (error) {
       const newErrors = {};
@@ -103,13 +115,14 @@ export const useForm = (initialValues = {}, validationSchema = null) => {
             newErrors[err.path] = err.message;
         }
       });
-      setErrors(newErrors);
+      setErrors(newErrors); // This causes a state update
       return false;
     }
-  }, [validationSchema, values, setErrors]); // Dependencies: validationSchema, values, setErrors
+  }, [validationSchema, values, setErrors]);
+
 
   /**
-   * Returns a function to handle form submission.
+   * Returns a memoized function to handle form submission.
    * @param {Function} onSubmit - The callback function to execute on successful form submission.
    * @returns {Function} The submit handler function.
    */
@@ -117,7 +130,7 @@ export const useForm = (initialValues = {}, validationSchema = null) => {
     return async (e) => {
       e.preventDefault();
       setIsSubmitting(true);
-      setErrors({});
+      setErrors({}); // Clear all previous errors before re-validation
 
       try {
         const isValid = await validateForm();
@@ -130,7 +143,8 @@ export const useForm = (initialValues = {}, validationSchema = null) => {
         setIsSubmitting(false);
       }
     };
-  }, [values, validateForm, setErrors]); // Dependencies: values, validateForm, setErrors
+  }, [values, validateForm, setErrors]);
+
 
   /**
    * Resets the form to its initial values and clears all errors and touched state.
@@ -141,7 +155,8 @@ export const useForm = (initialValues = {}, validationSchema = null) => {
     setErrors({});
     setTouched({});
     setIsSubmitting(false);
-  }, [initialValues]); // Dependency: initialValues (should be stable)
+  }, [initialValues, setValues, setErrors, setTouched, setIsSubmitting]);
+
 
   // Memoized boolean to indicate if the form is currently valid (no errors)
   const isFormValid = useMemo(() => Object.keys(errors).length === 0, [errors]);
@@ -158,11 +173,11 @@ export const useForm = (initialValues = {}, validationSchema = null) => {
     setValue,
     setFieldTouched,
     handleChange,
-    handleBlur, // handleBlur is now a regular function, not useCallback
+    handleBlur, // handleBlur is not memoized itself, so no need for it in dependencies
     handleSubmit,
     validateField,
     validateForm,
     reset,
-    setErrors
+    setErrors // Exposed setErrors for external control
   };
 };
