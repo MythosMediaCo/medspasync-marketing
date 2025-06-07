@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Modal from '../components/Ui/Modal.jsx';
 import { useForm } from '../hooks/useForm.js';
 import { validationSchemas } from '../utils/validation.js';
-import { useAuth } from '../services/AuthContext.js';
+import { useAuth } from '../services/AuthContext.jsx';
 
 const LoginPage = React.memo(() => {
     const navigate = useNavigate();

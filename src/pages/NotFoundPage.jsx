@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../services/AuthContext.js';
+import { useAuth } from '../services/AuthContext.jsx';
 
 const NotFoundPage = React.memo(() => {
     const navigate = useNavigate();

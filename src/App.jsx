@@ -4,7 +4,7 @@ import ErrorBoundary from './components/Common/ErrorBoundary.jsx'; // Explicit .
 import LoadingScreen from './components/Common/LoadingScreen.jsx'; // Explicit .jsx extension
 
 // Auth Components & Context
-import { AuthProvider, useAuth } from './services/AuthContext.jsx'; // Explicit .jsx extension
+import { AuthProvider, useAuth } from './services/AuthContext.jsxx'; // Explicit .jsx extension
 import ProtectedRoute from './components/auth/ProtectedRoute.jsx';   // Explicit .jsx extension
 import PublicRoute from './components/auth/PublicRoute.jsx';     // Explicit .jsx extension
 

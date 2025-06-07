@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../components/Ui/Modal.jsx';
-import { useAuth } from '../services/AuthContext.js';
+import { useAuth } from '../services/AuthContext.jsx';
 import { formatCurrency, formatTime, generateInitials } from '../utils/formatting.js';
 
 const DashboardPage = React.memo(() => {

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Modal from '../components/Ui/Modal.jsx'; // Explicit .jsx extension
 import { useForm } from '../hooks/useForm.js'; // Explicit .js extension
 import { validationSchemas } from '../utils/validation.js'; // Explicit .js extension
-import { useAuth } from '../services/AuthContext.js'; // Explicit .js extension
+import { useAuth } from '../services/AuthContext.jsx'; // Explicit .js extension
 
 const RegisterPage = React.memo(() => {
     const navigate = useNavigate();

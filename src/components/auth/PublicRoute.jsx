@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../../services/AuthContext.js';
+import { useAuth } from '../../services/AuthContext.jsx';
 import { Loader2 } from 'lucide-react';
 
 const PublicRoute = ({ children, redirectTo = '/dashboard' }) => {
