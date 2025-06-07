@@ -1,58 +1,108 @@
-import React, { useState } from 'react';
+// src/App.js
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useAppState } from './hooks/useAppState';
+import ErrorBoundary from './components/ErrorBoundary';
+import LoadingScreen from './components/Common/LoadingScreen';
+import LandingPage from './pages/LandingPage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import DashboardPage from './pages/DashboardPage';
+import NotFoundPage from './pages/NotFoundPage';
 
-// Import only working components
-import EnhancedLoginPage from './components/auth/EnhancedLoginPage';
-import EnhancedRegisterPage from './components/auth/EnhancedRegisterPage';
-import EnhancedDashboard from './components/dashboard/EnhancedDashboard';
-
+// Main App Component
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return !!localStorage.getItem('medspasync_auth_token');
-  });
+    const appState = useAppState();
+    const {
+        isAuthenticated,
+        loading,
+        user,
+        error,
+        navigate, // This 'navigate' will now handle internal page state, not full routing
+        login,
+        logout,
+        register,
+        clearError
+    } = appState;
 
-  return (
-    <Router>
-      <div className="App">
-        <Routes>
-          <Route 
-            path="/" 
-            element={isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} 
-          />
-          <Route 
-            path="/login" 
-            element={isAuthenticated ? <Navigate to="/dashboard" /> : <EnhancedLoginPage />} 
-          />
-          <Route 
-            path="/register" 
-            element={isAuthenticated ? <Navigate to="/dashboard" /> : <EnhancedRegisterPage />} 
-          />
-          <Route 
-            path="/dashboard" 
-            element={isAuthenticated ? <EnhancedDashboard /> : <Navigate to="/login" />} 
-          />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </div>
-    </Router>
-  );
+    // Show a global loading screen during initial app load or for global loading states
+    if (loading) {
+        return <LoadingScreen />;
+    }
+
+    return (
+        <ErrorBoundary>
+            <Router>
+                <div className="App min-h-screen bg-gray-50">
+                    <Routes>
+                        {/* Public Routes */}
+                        <Route
+                            path="/"
+                            element={
+                                isAuthenticated ? (
+                                    <Navigate to="/dashboard" replace />
+                                ) : (
+                                    <LandingPage navigate={navigate} loading={loading} />
+                                )
+                            }
+                        />
+                        <Route
+                            path="/login"
+                            element={
+                                isAuthenticated ? (
+                                    <Navigate to="/dashboard" replace />
+                                ) : (
+                                    <LoginPage
+                                        navigate={navigate}
+                                        onLogin={login}
+                                        loading={loading}
+                                        error={error}
+                                        clearError={clearError}
+                                    />
+                                )
+                            }
+                        />
+                        <Route
+                            path="/register"
+                            element={
+                                isAuthenticated ? (
+                                    <Navigate to="/dashboard" replace />
+                                ) : (
+                                    <RegisterPage
+                                        navigate={navigate}
+                                        onRegister={register}
+                                        loading={loading}
+                                    />
+                                )
+                            }
+                        />
+
+                        {/* Protected Routes */}
+                        <Route
+                            path="/dashboard"
+                            element={
+                                isAuthenticated ? (
+                                    <DashboardPage
+                                        navigate={navigate}
+                                        onLogout={logout}
+                                        user={user}
+                                    />
+                                ) : (
+                                    <Navigate to="/login" replace />
+                                )
+                            }
+                        />
+                        {/* Add other protected routes here later, e.g.: */}
+                        {/* <Route path="/appointments" element={isAuthenticated ? <AppointmentsPage /> : <Navigate to="/login" replace />} /> */}
+                        {/* <Route path="/clients" element={isAuthenticated ? <ClientsPage /> : <Navigate to="/login" replace />} /> */}
+
+                        {/* 404 Fallback */}
+                        <Route path="*" element={<NotFoundPage isAuthenticated={isAuthenticated} navigate={navigate} />} />
+                    </Routes>
+                </div>
+            </Router>
+        </ErrorBoundary>
+    );
 }
-
-const NotFoundPage = () => (
-  <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-    <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
-      <h1 className="text-2xl font-bold text-gray-900 mb-4">Page Not Found</h1>
-      <p className="text-gray-600 mb-6">
-        The page you're looking for doesn't exist.
-      </p>
-      <button
-        onClick={() => window.location.href = '/dashboard'}
-        className="w-full bg-indigo-600 text-white px-4 py-3 rounded-lg hover:bg-indigo-700 transition-colors"
-      >
-        Go to Dashboard
-      </button>
-    </div>
-  </div>
-);
 
 export default App;
