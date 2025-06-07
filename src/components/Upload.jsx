@@ -1,3 +1,6 @@
+// medspasync-frontend-main/src/components/Upload.jsx
+import React from 'react';
+
 export default function Upload() {
   return (
     <div className="max-w-xl mx-auto mt-10 bg-white p-6 rounded shadow">

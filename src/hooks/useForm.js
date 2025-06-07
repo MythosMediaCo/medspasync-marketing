@@ -1,4 +1,4 @@
-// src/hooks/useForm.js
+// medspasync-frontend-main/src/hooks/useForm.js
 import { useState, useCallback } from 'react';
 
 export const useForm = (initialValues = {}, validationSchema = null) => {
@@ -9,12 +9,12 @@ export const useForm = (initialValues = {}, validationSchema = null) => {
 
   const setValue = useCallback((name, value) => {
     setValues(prev => ({ ...prev, [name]: value }));
-    
-    // Clear error when value changes
-    if (errors[name]) {
+
+    // Clear error when value changes and field has been touched
+    if (touched[name] && errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
-  }, [errors]);
+  }, [errors, touched]);
 
   const setFieldTouched = useCallback((name, isTouched = true) => {
     setTouched(prev => ({ ...prev, [name]: isTouched }));
@@ -25,20 +25,21 @@ export const useForm = (initialValues = {}, validationSchema = null) => {
     setValue(name, type === 'checkbox' ? checked : value);
   }, [setValue]);
 
-  const handleBlur = useCallback((e) => {
+  const handleBlur = useCallback(async (e) => {
     const { name } = e.target;
     setFieldTouched(name, true);
-    
+
     // Validate field on blur if schema exists
     if (validationSchema) {
-      validateField(name, values[name]);
+      await validateField(name, values[name]);
     }
-  }, [values, validationSchema]);
+  }, [values, validationSchema, setFieldTouched, validateField]);
 
   const validateField = useCallback(async (name, value) => {
     if (!validationSchema) return true;
 
     try {
+      // Validate only the specific field
       await validationSchema.validateAt(name, { [name]: value });
       setErrors(prev => ({ ...prev, [name]: '' }));
       return true;
@@ -69,14 +70,18 @@ export const useForm = (initialValues = {}, validationSchema = null) => {
     return async (e) => {
       e.preventDefault();
       setIsSubmitting(true);
+      setErrors({}); // Clear all previous errors before validation attempt
 
       try {
         const isValid = await validateForm();
         if (isValid) {
           await onSubmit(values);
+          // Optional: reset form after successful submission
+          // reset();
         }
       } catch (error) {
-        console.error('Form submission error:', error);
+        console.error('Form submission handler error:', error);
+        // Errors from onSubmit will be caught by useAPIMutation or AuthContext and toasted
       } finally {
         setIsSubmitting(false);
       }
@@ -90,15 +95,17 @@ export const useForm = (initialValues = {}, validationSchema = null) => {
     setIsSubmitting(false);
   }, [initialValues]);
 
-  const isValid = Object.keys(errors).length === 0;
-  const isDirty = JSON.stringify(values) !== JSON.stringify(initialValues);
+  // Determine form validity based on current errors (useful for submit button disabled state)
+  const isFormValid = useMemo(() => Object.keys(errors).length === 0, [errors]);
+  const isDirty = useMemo(() => JSON.stringify(values) !== JSON.stringify(initialValues), [values, initialValues]);
+
 
   return {
     values,
     errors,
     touched,
     isSubmitting,
-    isValid,
+    isFormValid, // Renamed for clarity
     isDirty,
     setValue,
     setFieldTouched,
@@ -107,6 +114,7 @@ export const useForm = (initialValues = {}, validationSchema = null) => {
     handleSubmit,
     validateField,
     validateForm,
-    reset
+    reset,
+    setErrors // Expose setErrors for external clearing/setting if needed (e.g. on server error)
   };
 };

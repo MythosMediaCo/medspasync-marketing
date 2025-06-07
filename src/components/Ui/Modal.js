@@ -1,6 +1,7 @@
-// src/components/ui/Modal.js
+// medspasync-frontend-main/src/components/Ui/Modal.js
 import React, { useEffect } from 'react';
-import { X } from 'lucide-react';
+import ReactDOM from 'react-dom'; // Import ReactDOM for createPortal
+import { X } from 'lucide-react'; // Make sure you have lucide-react installed
 
 const Modal = ({
   isOpen,
@@ -10,7 +11,12 @@ const Modal = ({
   size = 'md',
   showCloseButton = true,
   closeOnOverlayClick = true,
-  className = ''
+  className = '',
+  // New props for confirmation type modals
+  type = 'alert', // 'alert' or 'confirm'
+  confirmText = 'Confirm',
+  cancelText = 'Cancel',
+  onConfirm
 }) => {
   useEffect(() => {
     const handleEscape = (e) => {
@@ -21,12 +27,12 @@ const Modal = ({
 
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden'; // Prevent scrolling on body
     }
 
     return () => {
       document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = 'unset'; // Restore scrolling
     };
   }, [isOpen, onClose]);
 
@@ -46,15 +52,15 @@ const Modal = ({
     }
   };
 
-  return (
+  return ReactDOM.createPortal(
     <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div 
+      <div
         className="flex min-h-screen items-center justify-center p-4"
         onClick={handleOverlayClick}
       >
         {/* Overlay */}
         <div className="fixed inset-0 bg-black opacity-50"></div>
-        
+
         {/* Modal */}
         <div className={`relative bg-white rounded-2xl shadow-xl w-full ${sizes[size]} ${className}`}>
           {/* Header */}
@@ -67,20 +73,48 @@ const Modal = ({
                 <button
                   onClick={onClose}
                   className="text-gray-400 hover:text-gray-600 transition-colors"
+                  aria-label="Close modal"
                 >
                   <X className="h-6 w-6" />
                 </button>
               )}
             </div>
           )}
-          
+
           {/* Content */}
           <div className="p-6">
             {children}
+            {type === 'confirm' && (
+                <div className="flex flex-col space-y-3 mt-6">
+                    <button
+                        onClick={onConfirm}
+                        className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
+                    >
+                        {confirmText}
+                    </button>
+                    <button
+                        onClick={onClose}
+                        className="w-full bg-gray-100 text-gray-700 hover:bg-gray-200 py-3 px-4 rounded-lg font-medium transition-colors"
+                    >
+                        {cancelText}
+                    </button>
+                </div>
+            )}
+            {type === 'alert' && (
+                <div className="flex flex-col space-y-3 mt-6">
+                    <button
+                        onClick={onClose}
+                        className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
+                    >
+                        Close
+                    </button>
+                </div>
+            )}
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.getElementById('modal-root') // This assumes you have <div id="modal-root"></div> in your public/index.html
   );
 };
 

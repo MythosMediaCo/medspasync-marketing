@@ -1,7 +1,7 @@
-// src/hooks/useAPI.js
+// medspasync-frontend-main/src/hooks/useAPI.js
 import { useState, useEffect, useCallback } from 'react';
 import apiService from '../services/api';
-import toast from 'react-hot-toast';
+import toast from 'react-hot-toast'; // Ensure react-hot-toast is installed and imported
 
 export const useAPI = (url, options = {}) => {
   const [data, setData] = useState(null);
@@ -19,26 +19,26 @@ export const useAPI = (url, options = {}) => {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await apiService.get(overrideUrl, overrideOptions);
-      
+
       setData(response);
-      
+
       if (onSuccess) {
         onSuccess(response);
       }
-      
+
       return response;
     } catch (err) {
       const errorMessage = err.response?.data?.message || err.message || 'An error occurred';
       setError(errorMessage);
-      
+
       if (onError) {
         onError(err);
       } else {
-        toast.error(errorMessage);
+        toast.error(errorMessage); // Display error using toast
       }
-      
+
       throw err;
     } finally {
       setLoading(false);
@@ -77,28 +77,28 @@ export const useAPIMutation = (mutationFn, options = {}) => {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await mutationFn(...args);
-      
+
       if (onSuccess) {
         onSuccess(response);
       }
-      
+
       if (successMessage) {
-        toast.success(successMessage);
+        toast.success(successMessage); // Display success using toast
       }
-      
+
       return response;
     } catch (err) {
       const message = errorMessage || err.response?.data?.message || err.message || 'An error occurred';
       setError(message);
-      
+
       if (onError) {
         onError(err);
       } else {
-        toast.error(message);
+        toast.error(message); // Display error using toast
       }
-      
+
       throw err;
     } finally {
       setLoading(false);

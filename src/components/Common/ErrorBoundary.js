@@ -1,4 +1,4 @@
-// src/components/ErrorBoundary.js
+// medspasync-frontend-main/src/components/Common/ErrorBoundary.js
 import React from 'react';
 
 class ErrorBoundary extends React.Component {
@@ -13,7 +13,7 @@ class ErrorBoundary extends React.Component {
 
     componentDidCatch(error, errorInfo) {
         // In a production app, you would log error to an error reporting service
-        // console.error('MedSpaSync Pro Error:', error, errorInfo);
+        console.error('MedSpaSync Pro Error:', error, errorInfo); // Keep for development debugging
         // Example: Sentry.captureException(error, { extra: errorInfo });
     }
 

@@ -1,5 +1,5 @@
 // medspasync-frontend-main/src/utils/constants.js
-export const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://api.medspasyncpro.com';
+export const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000'; // Default to localhost for dev
 
 export const API_ENDPOINTS = {
     AUTH: {

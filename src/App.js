@@ -1,16 +1,16 @@
 // medspasync-frontend-main/src/App.js
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ErrorBoundary from './components/Common/ErrorBoundary';
 import LoadingScreen from './components/Common/LoadingScreen';
 
 // Auth Components & Context
-import { AuthProvider, useAuth } from './services/AuthContext'; // Updated import path
-import ProtectedRoute from './components/auth/ProtectedRoute'; // Using the robust one
-import PublicRoute from './components/auth/PublicRoute';     // Using the robust one
+import { AuthProvider, useAuth } from './services/AuthContext';
+import ProtectedRoute from './components/auth/ProtectedRoute';
+import PublicRoute from './components/auth/PublicRoute';
 
 // UI Components
-import Toast from './components/Ui/Toast'; // Global toast notifications
+import Toast from './components/Ui/Toast';
 
 // Page Components
 import LandingPage from './pages/LandingPage';
@@ -21,11 +21,7 @@ import NotFoundPage from './pages/NotFoundPage';
 
 // Component that renders the main app content after auth context is ready
 function AppContent() {
-    const { isLoading, isAuthenticated, user, logout } = useAuth();
-
-    // Set page title dynamically (optional, can be done per-page too)
-    // Removed previous navigate prop from App.js for better routing management
-    // Individual pages now use useNavigate from react-router-dom directly.
+    const { isLoading } = useAuth(); // Only need isLoading here for initial load
 
     // Show a global loading screen during initial authentication check
     if (isLoading) {
@@ -55,7 +51,7 @@ function AppContent() {
                     path="/dashboard"
                     element={<ProtectedRoute requiredRoles={['admin', 'manager', 'staff', 'receptionist']}><DashboardPage /></ProtectedRoute>}
                 />
-                {/* Example of other protected routes with role-based access */}
+                {/* Add other protected routes here later, e.g.: */}
                 {/* <Route
                     path="/appointments"
                     element={<ProtectedRoute requiredRoles={['admin', 'manager', 'staff']}><AppointmentsPage /></ProtectedRoute>}

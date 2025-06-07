@@ -1,4 +1,4 @@
-// src/utils/validation.js
+// medspasync-frontend-main/src/utils/validation.js
 import * as yup from 'yup';
 
 export const validationSchemas = {
@@ -42,7 +42,7 @@ export const validationSchemas = {
       .string()
       .min(2, 'Spa name must be at least 2 characters')
       .required('Spa name is required'),
-    agreeToTerms: yup
+    agreeToTerms: yup // Added for validation (if you have a checkbox)
       .boolean()
       .oneOf([true], 'You must agree to the terms and conditions')
   }),
@@ -72,9 +72,9 @@ export const validatePassword = (password) => {
     numbers: /\d/.test(password),
     special: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)
   };
-  
+
   const score = Object.values(requirements).filter(Boolean).length;
-  
+
   return {
     requirements,
     score,

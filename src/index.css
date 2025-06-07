@@ -1,0 +1,35 @@
+/* medspasync-frontend-main/src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add any global custom styles here */
+body {
+  font-family: 'Inter', sans-serif; /* Example: If you use a custom font, import it in public/index.html or via CSS */
+}
+
+/* Animation for floating hero section on landing page */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Animation for modal entry */
+@keyframes scaleIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.animate-scaleIn {
+    animation: scaleIn 0.2s ease-out forwards;
+}

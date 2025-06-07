@@ -1,4 +1,4 @@
-// src/hooks/useLocalStorage.js
+// medspasync-frontend-main/src/hooks/useLocalStorage.js
 import { useState, useEffect } from 'react';
 
 export const useLocalStorage = (key, initialValue) => {

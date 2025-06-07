@@ -1,4 +1,4 @@
-// src/utils/formatting.js
+// medspasync-frontend-main/src/utils/formatting.js
 export const formatCurrency = (amount, currency = 'USD') => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -14,7 +14,7 @@ export const formatDate = (date, options = {}) => {
     month: 'short',
     day: 'numeric'
   };
-  
+
   return new Intl.DateTimeFormat('en-US', { ...defaultOptions, ...options }).format(new Date(date));
 };
 
@@ -29,11 +29,11 @@ export const formatTime = (date) => {
 export const formatPhoneNumber = (phone) => {
   const cleaned = phone.replace(/\D/g, '');
   const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
-  
+
   if (match) {
     return `(${match[1]}) ${match[2]}-${match[3]}`;
   }
-  
+
   return phone;
 };
 
@@ -55,11 +55,11 @@ export const calculateAge = (dateOfBirth) => {
   const birthDate = new Date(dateOfBirth);
   let age = today.getFullYear() - birthDate.getFullYear();
   const monthDiff = today.getMonth() - birthDate.getMonth();
-  
+
   if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
     age--;
   }
-  
+
   return age;
 };
 
