@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useReducer, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import authService from './auth';
-import { storageService } from './storage'; # IMPORTANT: This is the named import
+import authService from './auth.js'; // Explicit .js
+import { storageService } from './storage.js'; // Explicit .js, and named import
 import toast from 'react-hot-toast';
 
 const AuthContext = createContext();
@@ -200,4 +200,3 @@ const authReducer = (state, action) => {
         }
         return context;
     };
-EOF

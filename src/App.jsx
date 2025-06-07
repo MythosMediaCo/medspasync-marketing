@@ -1,37 +1,34 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import ErrorBoundary from './components/Common/ErrorBoundary.js'; // Ensure .js extension
-import LoadingScreen from './components/Common/LoadingScreen.js'; // Ensure .js extension
+import ErrorBoundary from './components/Common/ErrorBoundary.jsx'; // .jsx
+import LoadingScreen from './components/Common/LoadingScreen.jsx'; // .jsx
 
 // Auth Components & Context
-import { AuthProvider, useAuth } from './services/AuthContext.js'; // Ensure .js extension
-import ProtectedRoute from './components/auth/ProtectedRoute.js';   // Ensure .js extension
-import PublicRoute from './components/auth/PublicRoute.js';     // Ensure .js extension
+import { AuthProvider, useAuth } from './services/AuthContext.js'; // This remains .js
+import ProtectedRoute from './components/auth/ProtectedRoute.jsx';   // .jsx
+import PublicRoute from './components/auth/PublicRoute.jsx';     // .jsx
 
 // UI Components
-import Toast from './components/Ui/Toast.js'; // Ensure .js extension
+import Toast from './components/Ui/Toast.jsx'; // .jsx
 
 // Page Components
-import LandingPage from './pages/LandingPage.js'; // Ensure .js extension
-import LoginPage from './pages/LoginPage.js';     // Ensure .js extension
-import RegisterPage from './pages/RegisterPage.js'; // Ensure .js extension
-import DashboardPage from './pages/DashboardPage.js'; // Ensure .js extension
-import NotFoundPage from './pages/NotFoundPage.js'; // Ensure .js extension
+import LandingPage from './pages/LandingPage.jsx'; // .jsx
+import LoginPage from './pages/LoginPage.jsx';     // .jsx
+import RegisterPage from './pages/RegisterPage.jsx'; // .jsx
+import DashboardPage from './pages/DashboardPage.jsx'; // .jsx
+import NotFoundPage from './pages/NotFoundPage.jsx'; // .jsx
 
-// AppContent handles rendering after AuthProvider is ready
 function AppContent() {
-    const { isLoading } = useAuth(); // Global loading state from AuthContext
+    const { isLoading } = useAuth();
 
-    // Show a global loading screen during initial authentication check
     if (isLoading) {
         return <LoadingScreen message="Initializing application, please wait..." />;
     }
 
     return (
         <div className="App min-h-screen bg-gray-50">
-            <Toast /> {/* Global toast notification container */}
+            <Toast />
             <Routes>
-                {/* Public Routes - Accessible to all, but redirects authenticated users */}
                 <Route
                     path="/"
                     element={<PublicRoute><LandingPage /></PublicRoute>}
@@ -44,34 +41,16 @@ function AppContent() {
                     path="/register"
                     element={<PublicRoute><RegisterPage /></PublicRoute>}
                 />
-
-                {/* Protected Routes - Requires authentication and optionally specific roles */}
                 <Route
                     path="/dashboard"
                     element={<ProtectedRoute requiredRoles={['admin', 'manager', 'staff', 'receptionist']}><DashboardPage /></ProtectedRoute>}
                 />
-                {/* Example of other protected routes with role-based access */}
-                {/* <Route
-                    path="/appointments"
-                    element={<ProtectedRoute requiredRoles={['admin', 'manager', 'staff']}><AppointmentsPage /></ProtectedRoute>}
-                />
-                <Route
-                    path="/clients"
-                    element={<ProtectedRoute requiredRoles={['admin', 'manager', 'receptionist']}><ClientsPage /></ProtectedRoute>}
-                />
-                <Route
-                    path="/settings"
-                    element={<ProtectedRoute requiredRoles={['admin']}><SettingsPage /></ProtectedRoute>}
-                /> */}
-
-                {/* 404 Fallback Route - Catches all undefined paths */}
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>
         </div>
     );
 }
 
-// Main App component: Sets up Router, ErrorBoundary, and AuthProvider
 function App() {
     return (
         <ErrorBoundary>
