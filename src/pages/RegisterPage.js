@@ -1,95 +1,54 @@
-// src/pages/RegisterPage.js
+// medspasync-frontend-main/src/pages/RegisterPage.js
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CustomModal from '../components/CustomModal'; // Import the new modal component
+import Modal from '../components/Ui/Modal'; // Use your Modal component
+import { useForm } from '../hooks/useForm';
+import { validationSchemas } from '../utils/validation';
+import { useAuth } from '../services/AuthContext'; // Use the AuthContext
 
-const RegisterPage = React.memo(({ onRegister, loading: appLoading }) => {
+const RegisterPage = React.memo(() => {
     const navigate = useNavigate();
-    const [formData, setFormData] = useState({
+    const { register, error: authError, clearError } = useAuth(); // Get register function and auth error from AuthContext
+    const [success, setSuccess] = useState(false); // Local success state for registration form
+    const [showModal, setShowModal] = useState(false);
+    const [modalConfig, setModalConfig] = useState({});
+
+    const {
+        values,
+        errors,
+        handleChange,
+        handleSubmit,
+        isSubmitting,
+        reset // To reset form after submission/on mount
+    } = useForm({
         firstName: '',
         lastName: '',
         email: '',
         password: '',
-        confirmPassword: '', // Added for confirmation
-        spaName: ''
-    });
-    const [isLoading, setIsLoading] = useState(false);
-    const [success, setSuccess] = useState(false);
-    const [errors, setErrors] = useState({}); // For form validation errors
-    const [apiError, setApiError] = useState(null); // For errors from onRegister call
-    const [showModal, setShowModal] = useState(false);
-    const [modalConfig, setModalConfig] = useState({});
+        confirmPassword: '',
+        spaName: '',
+        agreeToTerms: false // Added for validation schema
+    }, validationSchemas.register); // Use Yup validation schema
 
+    // Clear form and auth errors on mount
     useEffect(() => {
-        setErrors({}); // Clear validation errors on mount
-        setApiError(null); // Clear API error on mount
-    }, []);
+        reset();
+        clearError();
+    }, [clearError, reset]);
 
-    const validateForm = useCallback(() => {
-        const newErrors = {};
-
-        if (!formData.firstName.trim()) newErrors.firstName = 'First Name is required.';
-        if (!formData.lastName.trim()) newErrors.lastName = 'Last Name is required.';
-        if (!formData.spaName.trim()) newErrors.spaName = 'Medical Spa Name is required.';
-
-        if (!formData.email.trim()) {
-            newErrors.email = 'Email address is required.';
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-            newErrors.email = 'Please enter a valid email address.';
-        }
-
-        if (!formData.password) {
-            newErrors.password = 'Password is required.';
-        } else if (formData.password.length < 8) { // Recommend longer passwords
-            newErrors.password = 'Password must be at least 8 characters.';
-        }
-
-        if (!formData.confirmPassword) {
-            newErrors.confirmPassword = 'Please confirm your password.';
-        } else if (formData.password !== formData.confirmPassword) {
-            newErrors.confirmPassword = 'Passwords do not match.';
-        }
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    }, [formData]);
-
-    const handleSubmit = useCallback(async (e) => {
-        e.preventDefault();
-
-        if (!validateForm()) return;
-
-        setIsLoading(true);
-        setApiError(null); // Clear previous API errors
-
+    // Handle form submission using useForm's handleSubmit
+    const onSubmit = useCallback(async (formData) => {
         try {
-            const result = await onRegister(formData);
+            const result = await register(formData);
             if (result.success) {
                 setSuccess(true);
-                // Optionally navigate to login automatically after success, or show success page
-                // navigate('/login');
             } else {
-                setApiError(result.message || 'Registration failed.');
+                // AuthContext's register function should throw error, which will be caught below
             }
         } catch (err) {
-            setApiError(err.message || 'An unexpected error occurred during registration.');
-        } finally {
-            setIsLoading(false);
+            // Error is handled by AuthContext and displayed by Toast/App's ErrorBoundary
         }
-    }, [formData, validateForm, onRegister]);
-
-    const handleChange = useCallback((e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-
-        // Clear individual field errors when user starts typing
-        if (errors[name]) {
-            setErrors(prev => ({ ...prev, [name]: '' }));
-        }
-        setApiError(null); // Clear API error on input change
-    }, [errors]);
-
-    const isFormLoading = isLoading || appLoading;
+    }, [register]);
 
     if (success) {
         return (
@@ -140,15 +99,15 @@ const RegisterPage = React.memo(({ onRegister, loading: appLoading }) => {
 
                 {/* Registration Card */}
                 <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
-                    {apiError && (
+                    {authError && ( // Display global auth error if any
                         <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
                             <div className="flex items-center">
                                 <span className="text-red-600 mr-2">⚠️</span>
-                                <p className="text-red-600 text-sm font-medium">{apiError}</p>
+                                <p className="text-red-600 text-sm font-medium">{authError}</p>
                             </div>
                         </div>
                     )}
-                    <form onSubmit={handleSubmit} className="space-y-5">
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5"> {/* Use useForm's handleSubmit */}
                         {/* Name Fields */}
                         <div className="grid grid-cols-2 gap-4">
                             <div>
@@ -159,13 +118,13 @@ const RegisterPage = React.memo(({ onRegister, loading: appLoading }) => {
                                     type="text"
                                     id="firstName"
                                     name="firstName"
-                                    value={formData.firstName}
+                                    value={values.firstName}
                                     onChange={handleChange}
                                     className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all ${
                                         errors.firstName ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-white'
                                     }`}
                                     placeholder="John"
-                                    disabled={isFormLoading}
+                                    disabled={isSubmitting}
                                     aria-invalid={errors.firstName ? "true" : "false"}
                                     aria-describedby={errors.firstName ? "firstName-error" : undefined}
                                 />
@@ -182,13 +141,13 @@ const RegisterPage = React.memo(({ onRegister, loading: appLoading }) => {
                                     type="text"
                                     id="lastName"
                                     name="lastName"
-                                    value={formData.lastName}
+                                    value={values.lastName}
                                     onChange={handleChange}
                                     className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all ${
                                         errors.lastName ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-white'
                                     }`}
                                     placeholder="Doe"
-                                    disabled={isFormLoading}
+                                    disabled={isSubmitting}
                                     aria-invalid={errors.lastName ? "true" : "false"}
                                     aria-describedby={errors.lastName ? "lastName-error" : undefined}
                                 />
@@ -207,13 +166,13 @@ const RegisterPage = React.memo(({ onRegister, loading: appLoading }) => {
                                 type="text"
                                 id="spaName"
                                 name="spaName"
-                                value={formData.spaName}
+                                value={values.spaName}
                                 onChange={handleChange}
                                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all ${
                                     errors.spaName ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-white'
                                 }`}
                                 placeholder="Beautiful Skin Med Spa"
-                                disabled={isFormLoading}
+                                disabled={isSubmitting}
                                 aria-invalid={errors.spaName ? "true" : "false"}
                                 aria-describedby={errors.spaName ? "spaName-error" : undefined}
                             />
@@ -229,15 +188,15 @@ const RegisterPage = React.memo(({ onRegister, loading: appLoading }) => {
                             </label>
                             <input
                                 type="email"
-                                id="registerEmail" // Unique ID
+                                id="registerEmail"
                                 name="email"
-                                value={formData.email}
+                                value={values.email}
                                 onChange={handleChange}
                                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all ${
                                     errors.email ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-white'
                                 }`}
                                 placeholder="john@yourmedspa.com"
-                                disabled={isFormLoading}
+                                disabled={isSubmitting}
                                 aria-invalid={errors.email ? "true" : "false"}
                                 aria-describedby={errors.email ? "registerEmail-error" : undefined}
                             />
@@ -253,15 +212,15 @@ const RegisterPage = React.memo(({ onRegister, loading: appLoading }) => {
                             </label>
                             <input
                                 type="password"
-                                id="registerPassword" // Unique ID
+                                id="registerPassword"
                                 name="password"
-                                value={formData.password}
+                                value={values.password}
                                 onChange={handleChange}
                                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all ${
                                     errors.password ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-white'
                                 }`}
                                 placeholder="Create a strong password"
-                                disabled={isFormLoading}
+                                disabled={isSubmitting}
                                 aria-invalid={errors.password ? "true" : "false"}
                                 aria-describedby={errors.password ? "registerPassword-error" : undefined}
                             />
@@ -279,13 +238,13 @@ const RegisterPage = React.memo(({ onRegister, loading: appLoading }) => {
                                 type="password"
                                 id="confirmPassword"
                                 name="confirmPassword"
-                                value={formData.confirmPassword}
+                                value={values.confirmPassword}
                                 onChange={handleChange}
                                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all ${
                                     errors.confirmPassword ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-white'
                                 }`}
                                 placeholder="Confirm your password"
-                                disabled={isFormLoading}
+                                disabled={isSubmitting}
                                 aria-invalid={errors.confirmPassword ? "true" : "false"}
                                 aria-describedby={errors.confirmPassword ? "confirmPassword-error" : undefined}
                             />
@@ -294,13 +253,37 @@ const RegisterPage = React.memo(({ onRegister, loading: appLoading }) => {
                             )}
                         </div>
 
+                        {/* Agree to Terms Checkbox */}
+                        <div className="flex items-center">
+                            <input
+                                type="checkbox"
+                                id="agreeToTerms"
+                                name="agreeToTerms"
+                                checked={values.agreeToTerms}
+                                onChange={handleChange}
+                                className={`h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded ${
+                                    errors.agreeToTerms ? 'border-red-300' : ''
+                                }`}
+                                disabled={isSubmitting}
+                                aria-invalid={errors.agreeToTerms ? "true" : "false"}
+                                aria-describedby={errors.agreeToTerms ? "agreeToTerms-error" : undefined}
+                            />
+                            <label htmlFor="agreeToTerms" className="ml-2 block text-sm text-gray-700">
+                                I agree to the <a href="#" className="text-indigo-600 hover:underline">terms and conditions</a>
+                            </label>
+                        </div>
+                        {errors.agreeToTerms && (
+                            <p id="agreeToTerms-error" className="mt-1 text-sm text-red-600">{errors.agreeToTerms}</p>
+                        )}
+
+
                         {/* Submit Button */}
                         <button
                             type="submit"
-                            disabled={isFormLoading}
+                            disabled={isSubmitting}
                             className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg disabled:opacity-50"
                         >
-                            {isFormLoading ? (
+                            {isSubmitting ? (
                                 <>
                                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2 inline-block"></div>
                                     Creating account...
@@ -321,7 +304,7 @@ const RegisterPage = React.memo(({ onRegister, loading: appLoading }) => {
                             <button
                                 onClick={() => navigate('/login')}
                                 className="text-indigo-600 hover:text-indigo-500 font-medium transition-colors"
-                                disabled={isFormLoading}
+                                disabled={isSubmitting}
                             >
                                 Sign in here
                             </button>
@@ -329,6 +312,7 @@ const RegisterPage = React.memo(({ onRegister, loading: appLoading }) => {
                     </div>
                 </div>
             </div>
+            <Modal isOpen={showModal} {...modalConfig} />
         </div>
     );
 });

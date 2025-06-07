@@ -1,64 +1,73 @@
-// src/services/storage.js
+// medspasync-frontend-main/src/services/storage.js
 import { STORAGE_KEYS } from '../utils/constants';
 
 class StorageService {
-  // Token management
-  setAuthToken(token) {
-    localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token);
-  }
+    // Token management
+    setAuthToken(token) {
+        localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token);
+    }
 
-  getAuthToken() {
-    return localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
-  }
+    getAuthToken() {
+        return localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
+    }
 
-  setRefreshToken(token) {
-    localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, token);
-  }
+    setRefreshToken(token) {
+        localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, token);
+    }
 
-  getRefreshToken() {
-    return localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
-  }
+    getRefreshToken() {
+        return localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
+    }
 
-  // User data management
-  setUserData(userData) {
-    localStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(userData));
-  }
+    // User data management
+    setUserData(userData) {
+        localStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(userData));
+    }
 
-  getUserData() {
-    const userData = localStorage.getItem(STORAGE_KEYS.USER_DATA);
-    return userData ? JSON.parse(userData) : null;
-  }
+    getUserData() {
+        const userData = localStorage.getItem(STORAGE_KEYS.USER_DATA);
+        return userData ? JSON.parse(userData) : null;
+    }
 
-  // Settings management
-  setSettings(settings) {
-    localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
-  }
+    // Last activity timestamp for session management
+    setLastActivity(timestamp) {
+        localStorage.setItem(STORAGE_KEYS.LAST_ACTIVITY, timestamp);
+    }
 
-  getSettings() {
-    const settings = localStorage.getItem(STORAGE_KEYS.SETTINGS);
-    return settings ? JSON.parse(settings) : {};
-  }
+    getLastActivity() {
+        return localStorage.getItem(STORAGE_KEYS.LAST_ACTIVITY);
+    }
 
-  // Theme management
-  setTheme(theme) {
-    localStorage.setItem(STORAGE_KEYS.THEME, theme);
-  }
+    // Settings management
+    setSettings(settings) {
+        localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
+    }
 
-  getTheme() {
-    return localStorage.getItem(STORAGE_KEYS.THEME) || 'light';
-  }
+    getSettings() {
+        const settings = localStorage.getItem(STORAGE_KEYS.SETTINGS);
+        return settings ? JSON.parse(settings) : {};
+    }
 
-  // Clear all data
-  clearAll() {
-    Object.values(STORAGE_KEYS).forEach(key => {
-      localStorage.removeItem(key);
-    });
-  }
+    // Theme management
+    setTheme(theme) {
+        localStorage.setItem(STORAGE_KEYS.THEME, theme);
+    }
 
-  // Check if user is authenticated
-  isAuthenticated() {
-    return !!this.getAuthToken();
-  }
+    getTheme() {
+        return localStorage.getItem(STORAGE_KEYS.THEME) || 'light';
+    }
+
+    // Clear all data
+    clearAll() {
+        Object.values(STORAGE_KEYS).forEach(key => {
+            localStorage.removeItem(key);
+        });
+    }
+
+    // Check if user is authenticated (based on token presence)
+    isAuthenticated() {
+        return !!this.getAuthToken();
+    }
 }
 
 export default new StorageService();

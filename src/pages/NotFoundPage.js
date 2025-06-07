@@ -1,9 +1,11 @@
-// src/pages/NotFoundPage.js
+// medspasync-frontend-main/src/pages/NotFoundPage.js
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../services/AuthContext'; // To check auth status
 
-const NotFoundPage = React.memo(({ isAuthenticated }) => {
+const NotFoundPage = React.memo(() => {
     const navigate = useNavigate();
+    const { isAuthenticated } = useAuth(); // Get auth status from AuthContext
 
     const handleGoHome = useCallback(() => {
         navigate(isAuthenticated ? '/dashboard' : '/');

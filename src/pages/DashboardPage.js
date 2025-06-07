@@ -1,10 +1,13 @@
-// src/pages/DashboardPage.js
+// medspasync-frontend-main/src/pages/DashboardPage.js
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CustomModal from '../components/CustomModal';
+import Modal from '../components/Ui/Modal'; // Use your Modal component
+import { useAuth } from '../services/AuthContext'; // Use the AuthContext
+import { formatCurrency, formatTime } from '../utils/formatting'; // Import utility functions
 
-const DashboardPage = React.memo(({ onLogout, user }) => {
-    const navigate = useNavigate(); // Use React Router's navigate
+const DashboardPage = React.memo(() => {
+    const navigate = useNavigate();
+    const { user, logout } = useAuth(); // Get user and logout from AuthContext
     const [currentTime, setCurrentTime] = useState(new Date());
     const [activeTab, setActiveTab] = useState('overview');
     const [notifications] = useState(3); // Hardcoded for demo
@@ -18,23 +21,8 @@ const DashboardPage = React.memo(({ onLogout, user }) => {
         return () => clearInterval(timer);
     }, []);
 
-    const formatTime = useCallback((date) => {
-        return new Intl.DateTimeFormat('en-US', {
-            hour: 'numeric',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: true
-        }).format(date);
-    }, []);
-
-    const formatCurrency = useCallback((amount) => {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2
-        }).format(amount);
-    }, []);
+    // No need to pass formatTime and formatCurrency as props anymore,
+    // they are imported directly.
 
     // Memoized static data for demo. In production, this would be fetched from API.
     const stats = useMemo(() => ({
@@ -79,35 +67,40 @@ const DashboardPage = React.memo(({ onLogout, user }) => {
     const handleLogoutClick = useCallback(() => {
         setModalConfig({
             title: 'Confirm Logout',
-            message: 'Are you sure you want to sign out?',
+            children: <p className="text-gray-600 text-sm text-center">Are you sure you want to sign out of MedSpaSync Pro?</p>,
             confirmText: 'Yes, Sign Out',
             cancelText: 'No, Keep Me Logged In',
             onConfirm: () => {
-                onLogout(); // Call the actual logout function from useAppState
+                logout(); // Call the actual logout function from AuthContext
                 setShowModal(false);
             },
             onClose: () => setShowModal(false),
-            type: 'confirm'
+            type: 'confirm',
+            size: 'sm'
         });
         setShowModal(true);
-    }, [onLogout]);
+    }, [logout]);
 
     const handleSettingsClick = useCallback(() => {
         setModalConfig({
-            title: 'Settings',
-            message: 'Settings module coming soon! Manage your profile, spa details, and preferences here.',
+            title: 'Settings Module',
+            children: <p className="text-gray-600 text-sm text-center">Manage your profile, spa details, and preferences here. This module is coming soon!</p>,
             onClose: () => setShowModal(false),
-            type: 'alert'
+            showCloseButton: true,
+            closeOnOverlayClick: true,
+            size: 'sm'
         });
         setShowModal(true);
     }, []);
 
     const handleNotificationsClick = useCallback(() => {
         setModalConfig({
-            title: 'Notifications',
-            message: 'You have new messages and appointment updates! This feature will provide a detailed notification center.',
+            title: 'Notifications Center',
+            children: <p className="text-gray-600 text-sm text-center">You have new messages and appointment updates! This feature will provide a detailed notification center, coming soon.</p>,
             onClose: () => setShowModal(false),
-            type: 'alert'
+            showCloseButton: true,
+            closeOnOverlayClick: true,
+            size: 'sm'
         });
         setShowModal(true);
     }, []);
@@ -391,7 +384,7 @@ const DashboardPage = React.memo(({ onLogout, user }) => {
                     <span className="text-sm font-medium">Enhanced Dashboard Ready!</span>
                 </div>
             </div>
-            <CustomModal {...modalConfig} isOpen={showModal} />
+            <Modal isOpen={showModal} {...modalConfig} />
         </div>
     );
 });
