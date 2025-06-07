@@ -1,7 +1,8 @@
+// src/services/api.js
 import axios from 'axios';
-import { API_BASE_URL } from '../utils/constants.js'; // Explicit .js
-import { storageService } from './storage.js'; // NAMED IMPORT - IMPORTANT
-import toast from 'react-hot-toast';
+import { API_BASE_URL } from '../utils/constants.js';
+import { storageService } from './storageService.js';
+import { toast } from 'react-hot-toast';
 
 class ApiService {
   constructor() {
@@ -11,7 +12,8 @@ class ApiService {
       headers: {
         'Content-Type': 'application/json',
       },
-      withCredentials: true,
+      // Remove withCredentials to avoid CORS issues with GitHub Codespaces
+      // withCredentials: true,
     });
 
     this.setupInterceptors();
@@ -24,16 +26,23 @@ class ApiService {
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
+        console.log('API Request:', config.method?.toUpperCase(), config.url);
         return config;
       },
       (error) => {
+        console.error('Request interceptor error:', error);
         return Promise.reject(error);
       }
     );
 
     this.client.interceptors.response.use(
-      (response) => response,
+      (response) => {
+        console.log('API Response:', response.status, response.config.url);
+        return response;
+      },
       async (error) => {
+        console.error('API Error:', error.response?.status, error.config?.url, error.message);
+        
         const originalRequest = error.config;
 
         if (error.response?.status === 401 && !originalRequest._retry) {
@@ -42,7 +51,7 @@ class ApiService {
           try {
             const refreshToken = storageService.getRefreshToken();
             if (refreshToken) {
-              const refreshResponse = await axios.post(`${API_BASE_URL}/api/auth/refresh`, {
+              const refreshResponse = await axios.post(`${API_BASE_URL}/auth/refresh`, {
                 refreshToken
               });
 

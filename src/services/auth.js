@@ -1,90 +1,132 @@
-import apiService from './api.js'; // Explicit .js
-import { storageService } from './storage.js'; // NAMED IMPORT - IMPORTANT
-import toast from 'react-hot-toast';
-import { API_ENDPOINTS } from '../utils/constants.js'; // Explicit .js
+// src/services/auth.js
+import apiService from './api.js';
+import { storageService } from './storageService.js';
+import { API_ENDPOINTS } from '../utils/constants.js';
 
 class AuthService {
-  async login(credentials) {
-    try {
-      const response = await apiService.post(API_ENDPOINTS.AUTH.LOGIN, credentials);
-
-      if (response.token) {
-        storageService.setAuthToken(response.token);
-        if (response.refreshToken) {
-          storageService.setRefreshToken(response.refreshToken);
+    async login(credentials) {
+        try {
+            const response = await apiService.post(API_ENDPOINTS.AUTH.LOGIN, credentials);
+            
+            // Store tokens and user data
+            if (response.token) {
+                storageService.setAuthToken(response.token);
+            }
+            if (response.refreshToken) {
+                storageService.setRefreshToken(response.refreshToken);
+            }
+            if (response.user) {
+                storageService.setUserData(response.user);
+            }
+            
+            return response;
+        } catch (error) {
+            console.error('Login failed:', error);
+            throw new Error(error.response?.data?.message || error.message || 'Login failed');
         }
-        if (response.user) {
-          storageService.setUserData(response.user);
+    }
+
+    async register(userData) {
+        try {
+            const response = await apiService.post(API_ENDPOINTS.AUTH.REGISTER, userData);
+            
+            // Optionally auto-login after registration
+            if (response.token) {
+                storageService.setAuthToken(response.token);
+                if (response.user) {
+                    storageService.setUserData(response.user);
+                }
+            }
+            
+            return response;
+        } catch (error) {
+            console.error('Registration failed:', error);
+            throw new Error(error.response?.data?.message || error.message || 'Registration failed');
         }
-      }
-      return response;
-    } catch (error) {
-      throw new Error(error.response?.data?.message || 'Login failed');
     }
-  }
 
-  async register(userData) {
-    try {
-      const response = await apiService.post(API_ENDPOINTS.AUTH.REGISTER, userData);
-      return response;
-    } catch (error) {
-      throw new Error(error.response?.data?.message || 'Registration failed');
+    async logout() {
+        try {
+            // Call logout endpoint if available
+            await apiService.post(API_ENDPOINTS.AUTH.LOGOUT);
+        } catch (error) {
+            console.error('Logout API call failed:', error);
+            // Continue with local logout even if API call fails
+        } finally {
+            // Always clear local storage
+            storageService.clearAll();
+        }
     }
-  }
 
-  async logout() {
-    try {
-      const refreshToken = storageService.getRefreshToken();
-      if (refreshToken) {
-        await apiService.post(API_ENDPOINTS.AUTH.LOGOUT, { refreshToken });
-      }
-    } catch (error) {
-      console.error('Backend logout error:', error);
-    } finally {
-      storageService.clearAll();
+    async getProfile() {
+        try {
+            const response = await apiService.get(API_ENDPOINTS.AUTH.PROFILE);
+            
+            // Update stored user data
+            if (response.user) {
+                storageService.setUserData(response.user);
+            }
+            
+            return response;
+        } catch (error) {
+            console.error('Get profile failed:', error);
+            throw new Error(error.response?.data?.message || error.message || 'Failed to get user profile');
+        }
     }
-  }
 
-  async refreshToken() {
-    try {
-      const refreshToken = storageService.getRefreshToken();
-      if (!refreshToken) {
-        throw new Error('No refresh token available. User must re-authenticate.');
-      }
+    async refreshToken() {
+        try {
+            const refreshToken = storageService.getRefreshToken();
+            if (!refreshToken) {
+                throw new Error('No refresh token available');
+            }
 
-      const response = await apiService.post(API_ENDPOINTS.AUTH.REFRESH, {
-        refreshToken
-      });
+            const response = await apiService.post(API_ENDPOINTS.AUTH.REFRESH, {
+                refreshToken
+            });
 
-      if (response.token) {
-        storageService.setAuthToken(response.token);
-      }
-      return response;
-    } catch (error) {
-      storageService.clearAll();
-      throw error;
+            if (response.token) {
+                storageService.setAuthToken(response.token);
+            }
+
+            return response;
+        } catch (error) {
+            console.error('Token refresh failed:', error);
+            storageService.clearAll();
+            throw new Error(error.response?.data?.message || error.message || 'Token refresh failed');
+        }
     }
-  }
 
-  async getProfile() {
-    try {
-      const response = await apiService.get(API_ENDPOINTS.AUTH.PROFILE);
-      if (response.user) {
-        storageService.setUserData(response.user);
-      }
-      return response;
-    } catch (error) {
-      throw new Error(error.response?.data?.message || 'Failed to fetch user profile');
+    async demoLogin() {
+        try {
+            const response = await apiService.post('/api/auth/demo');
+            
+            // Store tokens and user data
+            if (response.token) {
+                storageService.setAuthToken(response.token);
+            }
+            if (response.user) {
+                storageService.setUserData(response.user);
+            }
+            
+            return response;
+        } catch (error) {
+            console.error('Demo login failed:', error);
+            throw new Error(error.response?.data?.message || error.message || 'Demo login failed');
+        }
     }
-  }
 
-  isAuthenticated() {
-    return storageService.isAuthenticated();
-  }
+    isAuthenticated() {
+        return storageService.isAuthenticated();
+    }
 
-  getCurrentUser() {
-    return storageService.getUserData();
-  }
+    getCurrentUser() {
+        return storageService.getUserData();
+    }
+
+    getToken() {
+        return storageService.getAuthToken();
+    }
 }
 
-export const authService = new AuthService(); // NAMED EXPORT
+export const authService = new AuthService();

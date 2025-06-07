@@ -1,4 +1,26 @@
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+// src/utils/constants.js
+
+// Smart API Base URL that handles GitHub Codespaces
+const getAPIBaseURL = () => {
+  // First, check for explicit environment variable
+  if (import.meta.env.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL;
+  }
+
+  // Check if we're in GitHub Codespaces
+  if (typeof window !== 'undefined' && window.location.hostname.includes('.app.github.dev')) {
+    // Extract the codespace name from the current URL
+    const currentHost = window.location.hostname;
+    const codespaceName = currentHost.split('-').slice(0, -1).join('-');
+    // Construct the backend URL (assuming backend runs on port 5000)
+    return `https://${codespaceName}-5000.app.github.dev`;
+  }
+  
+  // Default to localhost for local development
+  return 'http://localhost:5000';
+};
+
+export const API_BASE_URL = getAPIBaseURL();
 
 export const API_ENDPOINTS = {
     AUTH: {
@@ -6,7 +28,9 @@ export const API_ENDPOINTS = {
         REGISTER: '/api/auth/register',
         REFRESH: '/api/auth/refresh',
         LOGOUT: '/api/auth/logout',
-        PROFILE: '/api/auth/profile'
+        PROFILE: '/api/auth/profile',
+        ME: '/api/auth/me',
+        DEMO: '/api/auth/demo'
     },
     CLIENTS: {
         LIST: '/api/clients',
@@ -73,3 +97,6 @@ export const CLIENT_STATUS = {
     VIP: 'vip',
     BLOCKED: 'blocked'
 };
+
+// Debug logging to see what URL is being used
+console.log('API_BASE_URL:', API_BASE_URL);
