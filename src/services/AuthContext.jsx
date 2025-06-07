@@ -1,5 +1,5 @@
-// src/services/AuthContext.jsx
-import React, { createContext, useContext, useReducer, useEffect, useCallback } from 'react';
+// src/services/AuthContext.jsx - Safe version without infinite loops
+import React, { createContext, useContext, useReducer, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from './auth.js';
 import { storageService } from './storageService.js';
@@ -50,9 +50,15 @@ const authReducer = (state, action) => {
 export const AuthProvider = ({ children }) => {
     const [state, dispatch] = useReducer(authReducer, initialState);
     const navigate = useNavigate();
+    const initializeRef = useRef(false);
 
     const checkAuthenticationStatus = useCallback(async () => {
+        // Prevent multiple simultaneous calls
+        if (initializeRef.current) return;
+        initializeRef.current = true;
+        
         dispatch({ type: 'SET_LOADING', payload: true });
+        
         try {
             const token = storageService.getAuthToken();
             const userData = storageService.getUserData();
@@ -73,8 +79,14 @@ export const AuthProvider = ({ children }) => {
                 if (userData) {
                     dispatch({ type: 'SET_USER', payload: userData });
                 } else {
-                    const profileResponse = await authService.getProfile();
-                    dispatch({ type: 'SET_USER', payload: profileResponse.user });
+                    try {
+                        const profileResponse = await authService.getProfile();
+                        dispatch({ type: 'SET_USER', payload: profileResponse.user });
+                    } catch (profileError) {
+                        console.error('Failed to get profile:', profileError);
+                        storageService.clearAll();
+                        dispatch({ type: 'SET_USER', payload: null });
+                    }
                 }
                 storageService.setLastActivity(Date.now().toString());
             } else {
@@ -88,17 +100,38 @@ export const AuthProvider = ({ children }) => {
             dispatch({ type: 'SET_USER', payload: null });
         } finally {
             dispatch({ type: 'SET_LOADING', payload: false });
+            initializeRef.current = false;
         }
     }, []);
 
+    // Initialize authentication only once
     useEffect(() => {
-        checkAuthenticationStatus();
+        let mounted = true;
+        
+        const initialize = async () => {
+            if (mounted) {
+                await checkAuthenticationStatus();
+            }
+        };
+        
+        initialize();
+        
+        return () => {
+            mounted = false;
+        };
+    }, [checkAuthenticationStatus]);
 
+    // Handle storage changes (cross-tab logout)
+    useEffect(() => {
         const handleStorageChange = (e) => {
             if (e.key === STORAGE_KEYS.AUTH_TOKEN) {
                 if (e.newValue) {
-                    checkAuthenticationStatus();
+                    // Token added in another tab
+                    if (!state.isAuthenticated) {
+                        checkAuthenticationStatus();
+                    }
                 } else {
+                    // Token removed in another tab
                     if (state.isAuthenticated) {
                         dispatch({ type: 'LOGOUT' });
                         toast.info('You have been logged out from another browser tab or window.');

@@ -1,5 +1,5 @@
 // src/hooks/useForm.js
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 
 /**
  * Custom hook for form state management and validation
@@ -11,6 +11,14 @@ export const useForm = (initialValues = {}, validationSchema = null) => {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Use refs to avoid dependency issues
+  const validationSchemaRef = useRef(validationSchema);
+  const initialValuesRef = useRef(initialValues);
+  
+  // Update refs when props change
+  validationSchemaRef.current = validationSchema;
+  initialValuesRef.current = initialValues;
 
   /**
    * Handle input changes
@@ -27,25 +35,22 @@ export const useForm = (initialValues = {}, validationSchema = null) => {
     // Clear error for this field when user starts typing
     setErrors(prev => {
       if (prev[name]) {
-        return {
-          ...prev,
-          [name]: ''
-        };
+        const { [name]: removed, ...rest } = prev;
+        return rest;
       }
       return prev;
     });
-  }, []); // Remove errors dependency to prevent infinite loops
+  }, []);
 
   /**
-   * Validate all form fields
+   * Validate all form fields using current values
    */
-  const validate = useCallback(() => {
-    if (!validationSchema || !validationSchema.validate) {
+  const validateForm = useCallback((currentValues) => {
+    if (!validationSchemaRef.current || !validationSchemaRef.current.validate) {
       return {};
     }
-
-    return validationSchema.validate(values);
-  }, [values, validationSchema]);
+    return validationSchemaRef.current.validate(currentValues);
+  }, []);
 
   /**
    * Handle form submission
@@ -57,37 +62,44 @@ export const useForm = (initialValues = {}, validationSchema = null) => {
       setIsSubmitting(true);
       
       try {
-        // Validate form
-        const validationErrors = validationSchema?.validate ? validationSchema.validate(values) : {};
-        
-        if (Object.keys(validationErrors).length > 0) {
-          setErrors(validationErrors);
-          return;
-        }
+        // Get current values and validate
+        setValues(currentValues => {
+          const validationErrors = validateForm(currentValues);
+          
+          if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            setIsSubmitting(false);
+            return currentValues;
+          }
 
-        // Clear any previous errors
-        setErrors({});
+          // Clear any previous errors
+          setErrors({});
 
-        // Call the submit handler
-        await onSubmit(values);
+          // Call the submit handler asynchronously
+          onSubmit(currentValues).catch(error => {
+            console.error('Form submission error:', error);
+          }).finally(() => {
+            setIsSubmitting(false);
+          });
+          
+          return currentValues;
+        });
         
       } catch (error) {
         console.error('Form submission error:', error);
-        // Error handling is typically done in the component
-      } finally {
         setIsSubmitting(false);
       }
     };
-  }, [values, validationSchema]); // Remove validate dependency
+  }, [validateForm]);
 
   /**
    * Reset form to initial values
    */
   const reset = useCallback(() => {
-    setValues(initialValues);
+    setValues(initialValuesRef.current);
     setErrors({});
     setIsSubmitting(false);
-  }, [initialValues]);
+  }, []);
 
   /**
    * Set form values programmatically
@@ -118,12 +130,12 @@ export const useForm = (initialValues = {}, validationSchema = null) => {
   }, []);
 
   /**
-   * Check if form is valid
+   * Check if form is valid with current values
    */
   const isValid = useCallback(() => {
-    const validationErrors = validationSchema?.validate ? validationSchema.validate(values) : {};
+    const validationErrors = validateForm(values);
     return Object.keys(validationErrors).length === 0;
-  }, [values, validationSchema]); // Remove validate dependency
+  }, [values, validateForm]);
 
   /**
    * Get error for a specific field
@@ -151,6 +163,5 @@ export const useForm = (initialValues = {}, validationSchema = null) => {
     isValid,
     getFieldError,
     hasFieldError
-    // Remove validate from return to prevent external dependencies
   };
 };
