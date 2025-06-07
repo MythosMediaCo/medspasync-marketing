@@ -3,15 +3,15 @@
 // Enhanced Dashboard with Real-time Analytics
 // ========================================
 
-import React, { useState, useMemo, useCallback } from 'react'; // Added useCallback
-import { Calendar, Users, DollarSign, BarChart3, TrendingUp, Clock, Star } from 'lucide-react';
-import { useClients } from '../hooks/useClients.js'; // Assuming this hook exists and fetches clients
-import { useAppointmentsByDateRange } from '../hooks/useAppointments.js'; // Assuming this hook fetches appointments
-import { useServices } from '../hooks/useServices.js'; // Assuming this hook fetches services
-import StatusBadge from '../components/Ui/StatusBadge.jsx'; // Assuming this component exists
-import { LoadingCard } from '../components/Common/LoadingScreen.jsx'; // Corrected import from LoadingSpinner to LoadingScreen
+import React, { useState, useMemo, useCallback } from 'react';
+import { Calendar, Users, DollarSign, BarChart3, TrendingUp, Clock, Star, Phone, Mail, User } from 'lucide-react'; // Added Phone, Mail, User
+import { useClients } from '../hooks/useClients.js'; // Explicit .js extension
+import { useAppointmentsByDateRange } from '../hooks/useAppointments.js'; // Explicit .js extension
+import { useServices } from '../hooks/useServices.js'; // Explicit .js extension
+import StatusBadge from '../components/Ui/StatusBadge.jsx'; // Explicit .jsx extension
+import { LoadingCard } from '../components/Common/LoadingScreen.jsx'; // Explicit .jsx extension
 import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from 'date-fns';
-import { generateInitials } from '../utils/formatting.js'; // Added generateInitials
+import { generateInitials, formatCurrency } from '../utils/formatting.js'; // Added formatCurrency
 
 // Metric Card Component
 const MetricCard = React.memo(({ title, value, change, trend, icon: Icon, gradient, isLoading }) => (
@@ -19,7 +19,7 @@ const MetricCard = React.memo(({ title, value, change, trend, icon: Icon, gradie
         <div className="absolute top-0 right-0 w-32 h-32 -mr-16 -mt-16 opacity-10">
             <div className={`w-full h-full rounded-full bg-gradient-to-r ${gradient}`}></div>
         </div>
-        
+
         <div className="relative">
             <div className="flex items-center justify-between mb-4">
                 <div className={`p-3 rounded-xl bg-gradient-to-r ${gradient}`}>
@@ -34,7 +34,7 @@ const MetricCard = React.memo(({ title, value, change, trend, icon: Icon, gradie
                     </span>
                 )}
             </div>
-            
+
             <div>
                 {isLoading ? (
                     <div className="space-y-2">
@@ -109,19 +109,78 @@ const RecentActivity = React.memo(({ appointments, clients, isLoading }) => {
     );
 });
 
-// Client Card Component (for TopClients)
-const ClientCard = React.memo(({ client }) => (
-    <div className="flex items-center space-x-4 p-3 rounded-xl hover:bg-gray-50 transition-colors">
-        <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-semibold">
-            {generateInitials(client.firstName, client.lastName)}
+// Client Card Component (for TopClients and ClientsPage)
+// This is a common component that can be used across multiple pages
+const ClientCard = React.memo(({ client, onView, onEdit, onDelete }) => (
+    <div className="bg-gradient-to-br from-white to-blue-50/30 rounded-2xl p-6 shadow-lg border border-blue-100/50 flex flex-col h-full">
+        <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center space-x-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-semibold text-lg">
+                    {generateInitials(client.firstName, client.lastName)}
+                </div>
+                <div>
+                    <h3 className="font-semibold text-gray-900">{client.firstName} {client.lastName}</h3>
+                    {client.email && <p className="text-sm text-gray-600">{client.email}</p>}
+                </div>
+            </div>
+            <StatusBadge status={client.status} type="client" />
         </div>
-        <div className="flex-1">
-            <h3 className="font-semibold text-gray-900">
-                {client.firstName} {client.lastName}
-            </h3>
-            <p className="text-sm text-gray-600">{client.email}</p>
+
+        <div className="space-y-2 text-sm flex-1">
+            {client.phone && (
+                <div className="flex items-center text-gray-600">
+                    <Phone className="w-4 h-4 mr-2" />
+                    {client.phone}
+                </div>
+            )}
+            <div className="flex items-center text-gray-600">
+                <Calendar className="w-4 h-4 mr-2" />
+                {client._count?.appointments || 0} appointments
+            </div>
+            {client.totalSpent > 0 && (
+                <div className="flex items-center text-gray-600">
+                    <DollarSign className="w-4 h-4 mr-2" />
+                    Total Spent: {formatCurrency(client.totalSpent)}
+                </div>
+            )}
+            <div className="flex items-center text-gray-600">
+                <User className="w-4 h-4 mr-2" />
+                Member since {format(new Date(client.createdAt), 'yyyy')}
+            </div>
         </div>
-        <StatusBadge status={client.status} type="client" />
+
+        {client.notes && (
+            <div className="mt-4 pt-4 border-t border-gray-100">
+                <p className="text-xs text-gray-500 truncate">{client.notes}</p>
+            </div>
+        )}
+
+        <div className="flex justify-end mt-4 space-x-2">
+            {onView && (
+                <button
+                    onClick={() => onView(client)}
+                    className="text-blue-600 hover:underline text-sm"
+                >
+                    View
+                </button>
+            )}
+            {onEdit && (
+                <button
+                    onClick={() => onEdit(client)}
+                    className="text-indigo-600 hover:underline text-sm"
+                >
+                    Edit
+                </button>
+            )}
+            {onDelete && (
+                <button
+                    onClick={() => onDelete(client)}
+                    className="text-red-600 hover:underline text-sm"
+                >
+                    Delete
+                </button>
+            )}
+        </div>
     </div>
 ));
 
@@ -173,7 +232,7 @@ const TopClients = React.memo(({ clients, isLoading }) => {
 // Main Dashboard Component
 const Dashboard = React.memo(() => { // Wrap main component in React.memo
     const [dateRange, setDateRange] = useState('week');
-    
+
     // Calculate date ranges based on selected dateRange
     const today = useMemo(() => new Date(), []); // Memoize today's date
     const dateRanges = useMemo(() => {
@@ -219,7 +278,7 @@ const Dashboard = React.memo(() => { // Wrap main component in React.memo
     const metrics = useMemo(() => {
         const totalRevenue = appointments.reduce((sum, apt) => sum + (apt.price || 0), 0);
         const vipClients = clients.filter(client => client.status === 'VIP').length;
-        
+
         // Filter appointments for 'today' based on the current date, not the selected dateRange
         const todayAppointments = appointments.filter(apt => {
             const aptDate = new Date(apt.dateTime);
@@ -227,7 +286,7 @@ const Dashboard = React.memo(() => { // Wrap main component in React.memo
         }).length;
 
         const avgAppointmentValue = appointments.length > 0 ? totalRevenue / appointments.length : 0;
-        
+
         const completedAppointmentsCount = appointments.filter(apt => apt.status === 'COMPLETED').length;
         const completionRate = appointments.length > 0 ? (completedAppointmentsCount / appointments.length) * 100 : 0;
 
@@ -253,7 +312,7 @@ const Dashboard = React.memo(() => { // Wrap main component in React.memo
                         <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
                         <p className="text-gray-600 mt-1">Welcome back! Here's what's happening at your spa.</p>
                     </div>
-                    
+
                     <div className="flex items-center space-x-4">
                         <select
                             value={dateRange}
@@ -350,7 +409,7 @@ const Dashboard = React.memo(() => { // Wrap main component in React.memo
                                 View All
                             </button>
                         </div>
-                        
+
                         <RecentActivity 
                             appointments={appointments} 
                             clients={clients}
@@ -368,7 +427,7 @@ const Dashboard = React.memo(() => { // Wrap main component in React.memo
                                 View All
                             </button>
                         </div>
-                        
+
                         <TopClients 
                             clients={clients}
                             isLoading={clientsLoading}
@@ -380,7 +439,7 @@ const Dashboard = React.memo(() => { // Wrap main component in React.memo
             {/* Service Performance */}
             <div className="mt-8 bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-6">Service Performance</h2>
-                
+
                 {servicesLoading ? (
                     <div className="space-y-4">
                         {Array.from({ length: 3 }).map((_, i) => (
@@ -406,7 +465,7 @@ const Dashboard = React.memo(() => { // Wrap main component in React.memo
                                 const revenue = appointments
                                     .filter(apt => apt.serviceId === service.id)
                                     .reduce((sum, apt) => sum + (apt.price || 0), 0);
-                                
+
                                 return (
                                     <div key={service.id} className="flex items-center justify-between">
                                         <div className="flex-1 mr-4">
