@@ -1,22 +1,22 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import ErrorBoundary from './components/Common/ErrorBoundary.jsx'; // .jsx
-import LoadingScreen from './components/Common/LoadingScreen.jsx'; // .jsx
+import ErrorBoundary from './components/Common/ErrorBoundary.jsx';
+import LoadingScreen from './components/Common/LoadingScreen.jsx';
 
 // Auth Components & Context
-import { AuthProvider, useAuth } from './services/AuthContext.js'; // This remains .js
-import ProtectedRoute from './components/auth/ProtectedRoute.jsx';   // .jsx
-import PublicRoute from './components/auth/PublicRoute.jsx';     // .jsx
+import { AuthProvider, useAuth } from './services/AuthContext.js'; // .js for the provider
+import ProtectedRoute from './components/auth/ProtectedRoute.jsx';
+import PublicRoute from './components/auth/PublicRoute.jsx';
 
 // UI Components
-import Toast from './components/Ui/Toast.jsx'; // .jsx
+import Toast from './components/Ui/Toast.jsx';
 
 // Page Components
-import LandingPage from './pages/LandingPage.jsx'; // .jsx
-import LoginPage from './pages/LoginPage.jsx';     // .jsx
-import RegisterPage from './pages/RegisterPage.jsx'; // .jsx
-import DashboardPage from './pages/DashboardPage.jsx'; // .jsx
-import NotFoundPage from './pages/NotFoundPage.jsx'; // .jsx
+import LandingPage from './pages/LandingPage.jsx';
+import LoginPage from './pages/LoginPage.jsx';
+import RegisterPage from './pages/RegisterPage.jsx';
+import DashboardPage from './pages/DashboardPage.jsx';
+import NotFoundPage from './pages/NotFoundPage.jsx';
 
 function AppContent() {
     const { isLoading } = useAuth();
@@ -41,10 +41,12 @@ function AppContent() {
                     path="/register"
                     element={<PublicRoute><RegisterPage /></PublicRoute>}
                 />
+
                 <Route
                     path="/dashboard"
                     element={<ProtectedRoute requiredRoles={['admin', 'manager', 'staff', 'receptionist']}><DashboardPage /></ProtectedRoute>}
                 />
+
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>
         </div>

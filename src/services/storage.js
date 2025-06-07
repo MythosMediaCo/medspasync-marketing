@@ -1,4 +1,4 @@
-import { STORAGE_KEYS } from '../utils/constants';
+import { STORAGE_KEYS } from '../utils/constants.js';
 
 class StorageService {
     setAuthToken(token) {

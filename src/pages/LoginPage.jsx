@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Modal from '../components/Ui/Modal';
-import { useForm } from '../hooks/useForm';
-import { validationSchemas } from '../utils/validation';
-import { useAuth } from '../services/AuthContext';
+import Modal from '../components/Ui/Modal.jsx';
+import { useForm } from '../hooks/useForm.js';
+import { validationSchemas } from '../utils/validation.js';
+import { useAuth } from '../services/AuthContext.js';
 
 const LoginPage = React.memo(() => {
     const navigate = useNavigate();

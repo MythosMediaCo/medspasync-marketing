@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import apiService from '../services/api';
+import apiService from '../services/api.jsx'; // Explicit .js
 import toast from 'react-hot-toast';
 
 export const useAPI = (url, options = {}) => {

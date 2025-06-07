@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Modal from '../components/Ui/Modal';
-import { useAuth } from '../services/AuthContext';
-import { formatCurrency, formatTime, generateInitials } from '../utils/formatting';
+import Modal from '../components/Ui/Modal.jsx';
+import { useAuth } from '../services/AuthContext.js';
+import { formatCurrency, formatTime, generateInitials } from '../utils/formatting.js';
 
 const DashboardPage = React.memo(() => {
     const navigate = useNavigate();
