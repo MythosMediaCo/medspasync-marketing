@@ -1,4 +1,4 @@
-import { STORAGE_KEYS } from '../utils/constants.js';
+import { STORAGE_KEYS } from '../utils/constants.js'; // Ensure .js extension
 
 class StorageService {
     setAuthToken(token) {
@@ -49,4 +49,4 @@ class StorageService {
     }
 }
 
-export const storageService = new StorageService();
+export const storageService = new StorageService(); // NAMED EXPORT
