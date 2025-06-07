@@ -9,10 +9,9 @@ import { useState, useCallback, useMemo } from 'react';
  * @returns {object} Form state, errors, and handler functions.
  */
 export const useForm = (initialValues = {}, validationSchema = null) => {
-  // Corrected: useState destructuring must use array brackets []
   const [values, setValues] = useState(initialValues);
-  const [errors, setErrors] = useState({}); // Corrected: useState destructuring must use array brackets []
-  const [touched, setTouched] = useState({}); // Corrected: useState destructuring must use array brackets []
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   /**
@@ -50,21 +49,6 @@ export const useForm = (initialValues = {}, validationSchema = null) => {
   }, [setValue]);
 
   /**
-   * Generic blur handler for input elements.
-   * Marks the field as touched and triggers validation for that field.
-   * @param {Event} e - The blur event from an input element.
-   */
-  const handleBlur = useCallback(async (e) => {
-    const { name } = e.target;
-    setFieldTouched(name, true);
-
-    // Validate field on blur if a validation schema is provided
-    if (validationSchema) {
-      await validateField(name, values[name]);
-    }
-  }, [values, validationSchema, setFieldTouched, useCallback]); // Added useCallback to dependencies
-
-  /**
    * Validates a single field against the Yup schema.
    * @param {string} name - The name of the field to validate.
    * @param {*} value - The value of the field.
@@ -82,7 +66,21 @@ export const useForm = (initialValues = {}, validationSchema = null) => {
       setErrors(prev => ({ ...prev, [name]: error.message })); // Set error message
       return false;
     }
-  }, [validationSchema]);
+  }, [validationSchema]); // validateField depends on validationSchema
+
+  /**
+   * Generic blur handler for input elements.
+   * Marks the field as touched and triggers validation for that field.
+   * @param {Event} e - The blur event from an input element.
+   */
+  const handleBlur = useCallback(async (e) => {
+    const { name } = e.target;
+    setFieldTouched(name, true);
+
+    if (validationSchema) {
+      await validateField(name, values[name]);
+    }
+  }, [values, validationSchema, setFieldTouched, validateField]); // Correct dependencies: validateField is a stable useCallback
 
   /**
    * Validates the entire form against the Yup schema.
