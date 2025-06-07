@@ -1,28 +1,21 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react'; // Make sure this import is here
+// medspasync-frontend/vite.config.js
+import { defineConfig } from 'vite'; // <<-- THIS LINE IS THE FIX
+import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [
-    react(), // This plugin is crucial for JSX transformation
+    react(), // This plugin is crucial for React and JSX transformation
   ],
-  // The esbuild config below was intended for .js files containing JSX,
-  // but it seems it might be causing issues or not being applied correctly to .jsx.
-  // For .jsx files, @vitejs/plugin-react (imported as 'react' above) should handle it natively.
-  // Let's remove the explicit `esbuild` config for now,
-  // and rely on `@vitejs/plugin-react`'s defaults for .jsx.
-  // If errors persist after this, we can re-evaluate.
-  /*
-  esbuild: {
-    loader: 'jsx',
-    include: /src\/.*\.js$/, // This targets .js files, not .jsx
-    exclude: []
-  },
-  */
-  optimizeDeps: {
-    exclude: [], // Keep empty unless specific issues arise later
+  css: {
+    postcss: './postcss.config.js', // Explicitly tell Vite where to find PostCSS config
   },
   build: {
-    outDir: 'dist',
-    emptyOutDir: true,
+    outDir: 'dist', // Default build output directory for Vite
+    emptyOutDir: true, // Clears the output directory before building
   },
+  // You can add other configurations here if needed, e.g., for server port, host:
+  // server: {
+  //   port: 5173, // Ensure this matches the port you expect
+  //   host: true, // For Codespaces, helps expose to network
+  // }
 });

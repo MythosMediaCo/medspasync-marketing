@@ -5,7 +5,7 @@
 
 /* Global Styles */
 body {
-  font-family: 'Inter', sans-serif; /* Recommended: Import a suitable font, e.g., via Google Fonts in index.html */
+  font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

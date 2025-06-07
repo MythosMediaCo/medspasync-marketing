@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useAuth } from '../services/AuthContext.jsx';
+import { useAuth } from '../services/AuthContext.jsx'; // Explicit .jsx extension
 import toast from 'react-hot-toast';
 
 export const useWebSocket = (originalUrl, options = {}) => {

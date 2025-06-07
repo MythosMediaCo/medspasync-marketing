@@ -1,11 +1,12 @@
+// medspasync-frontend/tailwind.config.js
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default { // Use export default here too if Vite's default config uses it
   content: [
-    "./index.html",     # Adjusted for Vite's default index.html location
-    "./src/**/*.{js,jsx,ts,tsx}",
+    "./index.html",
+    "./src/**/*.{js,jsx}", // Ensure both .js and .jsx are covered
   ],
   theme: {
     extend: {},
   },
   plugins: [],
-}
+};

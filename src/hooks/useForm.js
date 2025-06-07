@@ -3,8 +3,7 @@ import { useState, useCallback, useMemo } from 'react';
 export const useForm = (initialValues = {}, validationSchema = null) => {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = {};
-  const [touched, setTouched] = {};
-  const [isSubmitting, setIsSubmitting] = useState(false);
+const [touched, setTouched] = useState({}); // Correct syntax for useState  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const setValue = useCallback((name, value) => {
     setValues(prev => ({ ...prev, [name]: value }));
