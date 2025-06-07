@@ -1,8 +1,4 @@
-// ========================================
-// File: src/components/ui/LoadingSpinner.jsx
-// Reusable Loading Component
-// ========================================
-
+// src/components/Ui/LoadingSpinner.jsx
 import React from 'react';
 
 const LoadingSpinner = ({ size = 'md', className = '' }) => {

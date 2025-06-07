@@ -1,136 +1,171 @@
 // src/utils/formatting.js
 
 /**
- * Format currency values
- * @param {number} amount - The amount to format
- * @param {string} currency - Currency code (default: 'USD')
- * @returns {string} Formatted currency string
- */
-export const formatCurrency = (amount, currency = 'USD') => {
-  if (typeof amount !== 'number') {
-    return '$0.00';
-  }
-  
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: currency,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(amount);
-};
-
-/**
- * Format time from Date object
- * @param {Date} date - Date object to format
- * @returns {string} Formatted time string
- */
-export const formatTime = (date) => {
-  if (!(date instanceof Date) || isNaN(date)) {
-    return new Date().toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
-    });
-  }
-  
-  return date.toLocaleTimeString('en-US', {
-    hour: 'numeric',
-    minute: '2-digit',
-    hour12: true
-  });
-};
-
-/**
- * Format date from Date object
- * @param {Date} date - Date object to format
- * @param {object} options - Intl.DateTimeFormat options
- * @returns {string} Formatted date string
- */
-export const formatDate = (date, options = {}) => {
-  if (!(date instanceof Date) || isNaN(date)) {
-    return 'Invalid Date';
-  }
-  
-  const defaultOptions = {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  };
-  
-  return date.toLocaleDateString('en-US', { ...defaultOptions, ...options });
-};
-
-/**
  * Generate initials from first and last name
- * @param {string} firstName - First name
- * @param {string} lastName - Last name (optional)
- * @returns {string} Initials (e.g., "JD")
+ * @param {string} firstName 
+ * @param {string} lastName 
+ * @returns {string} Initials (e.g., "JD" for "John Doe")
  */
 export const generateInitials = (firstName, lastName) => {
-  if (!firstName) return 'U';
-  
-  const first = firstName.charAt(0).toUpperCase();
-  const last = lastName ? lastName.charAt(0).toUpperCase() : '';
-  
+  if (!firstName && !lastName) return '?';
+  const first = firstName?.charAt(0)?.toUpperCase() || '';
+  const last = lastName?.charAt(0)?.toUpperCase() || '';
   return first + last;
 };
 
 /**
- * Format phone number
- * @param {string} phone - Phone number string
+ * Format currency amount
+ * @param {number} amount 
+ * @param {string} currency 
+ * @returns {string} Formatted currency (e.g., "$1,234.56")
+ */
+export const formatCurrency = (amount, currency = 'USD') => {
+  if (typeof amount !== 'number' || isNaN(amount)) return '$0.00';
+  
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: currency,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount);
+};
+
+/**
+ * Format phone number to standard US format
+ * @param {string} phone 
  * @returns {string} Formatted phone number
  */
 export const formatPhoneNumber = (phone) => {
   if (!phone) return '';
   
-  // Remove all non-digits
-  const digits = phone.replace(/\D/g, '');
+  // Remove all non-digit characters
+  const cleaned = phone.replace(/\D/g, '');
   
-  // Format as (XXX) XXX-XXXX
-  if (digits.length === 10) {
-    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+  // Check if it's a valid US phone number length
+  if (cleaned.length === 10) {
+    return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6)}`;
+  } else if (cleaned.length === 11 && cleaned[0] === '1') {
+    return `+1 (${cleaned.slice(1, 4)}) ${cleaned.slice(4, 7)}-${cleaned.slice(7)}`;
   }
   
-  return phone; // Return original if not 10 digits
+  return phone; // Return original if not a standard format
 };
 
 /**
- * Format percentage
- * @param {number} value - Number to format as percentage
- * @param {number} decimals - Number of decimal places (default: 1)
- * @returns {string} Formatted percentage string
+ * Format date to readable string
+ * @param {string|Date} date 
+ * @param {string} format 
+ * @returns {string} Formatted date
  */
-export const formatPercentage = (value, decimals = 1) => {
-  if (typeof value !== 'number') return '0%';
+export const formatDate = (date, format = 'short') => {
+  if (!date) return '';
   
-  return `${value.toFixed(decimals)}%`;
+  const dateObj = new Date(date);
+  if (isNaN(dateObj.getTime())) return '';
+  
+  const options = {
+    short: { year: 'numeric', month: 'short', day: 'numeric' },
+    long: { year: 'numeric', month: 'long', day: 'numeric' },
+    time: { hour: '2-digit', minute: '2-digit' },
+    datetime: { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric', 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    }
+  };
+  
+  return dateObj.toLocaleDateString('en-US', options[format] || options.short);
 };
 
 /**
  * Truncate text to specified length
- * @param {string} text - Text to truncate
- * @param {number} maxLength - Maximum length (default: 50)
- * @returns {string} Truncated text with ellipsis if needed
+ * @param {string} text 
+ * @param {number} maxLength 
+ * @returns {string} Truncated text with ellipsis
  */
-export const truncateText = (text, maxLength = 50) => {
-  if (!text || typeof text !== 'string') return '';
-  
-  if (text.length <= maxLength) return text;
-  
-  return text.slice(0, maxLength).trim() + '...';
+export const truncateText = (text, maxLength = 100) => {
+  if (!text || text.length <= maxLength) return text;
+  return text.substring(0, maxLength).trim() + '...';
 };
 
 /**
- * Format file size in bytes to human readable format
- * @param {number} bytes - File size in bytes
- * @returns {string} Formatted file size
+ * Capitalize first letter of each word
+ * @param {string} text 
+ * @returns {string} Title cased text
  */
-export const formatFileSize = (bytes) => {
-  if (bytes === 0) return '0 Bytes';
+export const toTitleCase = (text) => {
+  if (!text) return '';
+  return text.replace(/\w\S*/g, (txt) => 
+    txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+  );
+};
+
+/**
+ * Get status color class for styling
+ * @param {string} status 
+ * @param {string} type 
+ * @returns {object} Color classes for background and text
+ */
+export const getStatusColors = (status, type = 'client') => {
+  const colorMap = {
+    client: {
+      ACTIVE: { bg: 'bg-green-100', text: 'text-green-800' },
+      VIP: { bg: 'bg-yellow-100', text: 'text-yellow-800' },
+      INACTIVE: { bg: 'bg-gray-100', text: 'text-gray-800' },
+      PROSPECT: { bg: 'bg-blue-100', text: 'text-blue-800' },
+    },
+    appointment: {
+      SCHEDULED: { bg: 'bg-blue-100', text: 'text-blue-800' },
+      CONFIRMED: { bg: 'bg-green-100', text: 'text-green-800' },
+      COMPLETED: { bg: 'bg-purple-100', text: 'text-purple-800' },
+      CANCELLED: { bg: 'bg-red-100', text: 'text-red-800' },
+      NO_SHOW: { bg: 'bg-orange-100', text: 'text-orange-800' },
+    }
+  };
   
-  const k = 1024;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return colorMap[type]?.[status] || { bg: 'bg-gray-100', text: 'text-gray-800' };
+};
+
+/**
+ * Validate email format
+ * @param {string} email 
+ * @returns {boolean} True if valid email format
+ */
+export const isValidEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+/**
+ * Validate phone number format
+ * @param {string} phone 
+ * @returns {boolean} True if valid phone format
+ */
+export const isValidPhone = (phone) => {
+  const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+  const cleaned = phone.replace(/\D/g, '');
+  return cleaned.length >= 10 && cleaned.length <= 15;
+};
+
+/**
+ * Generate random color for avatars
+ * @param {string} seed 
+ * @returns {string} Tailwind color class
+ */
+export const getAvatarColor = (seed) => {
+  const colors = [
+    'bg-blue-500',
+    'bg-green-500',
+    'bg-purple-500',
+    'bg-pink-500',
+    'bg-indigo-500',
+    'bg-red-500',
+    'bg-yellow-500',
+    'bg-teal-500'
+  ];
   
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  const index = seed ? seed.charCodeAt(0) % colors.length : 0;
+  return colors[index];
 };

@@ -1,237 +1,117 @@
-// src/services/AuthContext.jsx - Safe version without infinite loops
-import React, { createContext, useContext, useReducer, useEffect, useCallback, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { authService } from './auth.js';
-import { storageService } from './storageService.js';
-import { toast } from 'react-hot-toast';
-import { STORAGE_KEYS } from '../utils/constants.js';
+// src/services/AuthContext.jsx
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { authAPI } from './api.js';
+import toast from 'react-hot-toast';
 
-const AuthContext = createContext();
+const AuthContext = createContext({});
 
-const initialState = {
-    user: null,
-    isAuthenticated: false,
-    isLoading: true,
-    error: null
-};
-
-const authReducer = (state, action) => {
-    switch (action.type) {
-        case 'SET_LOADING':
-            return { ...state, isLoading: action.payload };
-
-        case 'SET_USER':
-            return {
-                ...state,
-                user: action.payload,
-                isAuthenticated: !!action.payload,
-                isLoading: false,
-                error: null
-            };
-
-        case 'SET_ERROR':
-            return {
-                ...state,
-                error: action.payload,
-                isLoading: false
-            };
-
-        case 'LOGOUT':
-            return {
-                ...initialState,
-                isLoading: false
-            };
-
-        default:
-            return state;
-    }
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 };
 
 export const AuthProvider = ({ children }) => {
-    const [state, dispatch] = useReducer(authReducer, initialState);
-    const navigate = useNavigate();
-    const initializeRef = useRef(false);
+  const [user, setUser] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-    const checkAuthenticationStatus = useCallback(async () => {
-        // Prevent multiple simultaneous calls
-        if (initializeRef.current) return;
-        initializeRef.current = true;
-        
-        dispatch({ type: 'SET_LOADING', payload: true });
-        
+  // Initialize auth state on app load
+  useEffect(() => {
+    const initializeAuth = async () => {
+      const token = localStorage.getItem('auth_token');
+      if (token) {
         try {
-            const token = storageService.getAuthToken();
-            const userData = storageService.getUserData();
-            const lastActivity = storageService.getLastActivity();
-
-            if (token && lastActivity) {
-                const hoursSinceActivity = (Date.now() - parseInt(lastActivity)) / (1000 * 60 * 60);
-                if (hoursSinceActivity > 24) {
-                    console.warn('Session expired due to inactivity.');
-                    storageService.clearAll();
-                    dispatch({ type: 'SET_ERROR', payload: 'Your session has expired due to inactivity. Please log in again.' });
-                    dispatch({ type: 'SET_USER', payload: null });
-                    return;
-                }
-            }
-
-            if (authService.isAuthenticated()) {
-                if (userData) {
-                    dispatch({ type: 'SET_USER', payload: userData });
-                } else {
-                    try {
-                        const profileResponse = await authService.getProfile();
-                        dispatch({ type: 'SET_USER', payload: profileResponse.user });
-                    } catch (profileError) {
-                        console.error('Failed to get profile:', profileError);
-                        storageService.clearAll();
-                        dispatch({ type: 'SET_USER', payload: null });
-                    }
-                }
-                storageService.setLastActivity(Date.now().toString());
-            } else {
-                storageService.clearAll();
-                dispatch({ type: 'SET_USER', payload: null });
-            }
-        } catch (err) {
-            console.error('Auth initialization error or session invalid:', err);
-            storageService.clearAll();
-            dispatch({ type: 'SET_ERROR', payload: err.message || 'Authentication session invalid. Please log in.' });
-            dispatch({ type: 'SET_USER', payload: null });
-        } finally {
-            dispatch({ type: 'SET_LOADING', payload: false });
-            initializeRef.current = false;
-        }
-    }, []);
-
-    // Initialize authentication only once
-    useEffect(() => {
-        let mounted = true;
-        
-        const initialize = async () => {
-            if (mounted) {
-                await checkAuthenticationStatus();
-            }
-        };
-        
-        initialize();
-        
-        return () => {
-            mounted = false;
-        };
-    }, [checkAuthenticationStatus]);
-
-    // Handle storage changes (cross-tab logout)
-    useEffect(() => {
-        const handleStorageChange = (e) => {
-            if (e.key === STORAGE_KEYS.AUTH_TOKEN) {
-                if (e.newValue) {
-                    // Token added in another tab
-                    if (!state.isAuthenticated) {
-                        checkAuthenticationStatus();
-                    }
-                } else {
-                    // Token removed in another tab
-                    if (state.isAuthenticated) {
-                        dispatch({ type: 'LOGOUT' });
-                        toast.info('You have been logged out from another browser tab or window.');
-                        if (window.location.pathname.startsWith('/dashboard') || window.location.pathname.startsWith('/app')) {
-                            navigate('/login', { replace: true });
-                        }
-                    }
-                }
-            }
-        };
-
-        window.addEventListener('storage', handleStorageChange);
-
-        return () => {
-            window.removeEventListener('storage', handleStorageChange);
-        };
-    }, [checkAuthenticationStatus, navigate, state.isAuthenticated]);
-
-    const login = useCallback(async (credentials) => {
-        dispatch({ type: 'SET_LOADING', payload: true });
-        dispatch({ type: 'SET_ERROR', payload: null });
-        try {
-            const response = await authService.login(credentials);
-            dispatch({ type: 'SET_USER', payload: response.user });
-            storageService.setLastActivity(Date.now().toString());
-            toast.success(`Welcome back, ${response.user?.firstName || 'User'}!`);
-            navigate('/dashboard', { replace: true });
-            document.title = `MedSpaSync Pro - Dashboard`;
-            return response;
+          const response = await authAPI.me();
+          setUser(response.data.user);
+          setIsAuthenticated(true);
         } catch (error) {
-            console.error('Login error:', error);
-            const errorMessage = error.message || 'Login failed. Please check your credentials.';
-            dispatch({ type: 'SET_ERROR', payload: errorMessage });
-            throw error;
-        } finally {
-            dispatch({ type: 'SET_LOADING', payload: false });
+          console.error('Failed to validate token:', error);
+          localStorage.removeItem('auth_token');
+          setUser(null);
+          setIsAuthenticated(false);
         }
-    }, [navigate]);
-
-    const register = useCallback(async (userData) => {
-        dispatch({ type: 'SET_LOADING', payload: true });
-        dispatch({ type: 'SET_ERROR', payload: null });
-        try {
-            const response = await authService.register(userData);
-            dispatch({ type: 'SET_LOADING', payload: false });
-            toast.success('Registration successful! Please log in with your new account.');
-            return response;
-        } catch (error) {
-            console.error('Registration error:', error);
-            const errorMessage = error.message || 'Registration failed. Please try again.';
-            dispatch({ type: 'SET_ERROR', payload: errorMessage });
-            throw error;
-        } finally {
-            dispatch({ type: 'SET_LOADING', payload: false });
-        }
-    }, []);
-
-    const logout = useCallback(async () => {
-        dispatch({ type: 'SET_LOADING', payload: true });
-        dispatch({ type: 'SET_ERROR', payload: null });
-        try {
-            await authService.logout();
-            storageService.clearAll();
-            dispatch({ type: 'LOGOUT' });
-            toast.success('You have been successfully signed out.');
-            navigate('/', { replace: true });
-            document.title = `MedSpaSync Pro - Home`;
-        } catch (error) {
-            console.error('Logout failed:', error);
-            storageService.clearAll();
-            dispatch({ type: 'LOGOUT' });
-            toast.error('Logout failed, but you have been signed out locally.');
-        } finally {
-            dispatch({ type: 'SET_LOADING', payload: false });
-        }
-    }, [navigate]);
-
-    const clearError = useCallback(() => {
-        dispatch({ type: 'SET_ERROR', payload: null });
-    }, []);
-
-    const value = {
-        ...state,
-        login,
-        register,
-        logout,
-        clearError
+      }
+      setIsLoading(false);
     };
 
-    return (
-        <AuthContext.Provider value={value}>
-            {children}
-        </AuthContext.Provider>
-    );
-};
+    initializeAuth();
+  }, []);
 
-export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (!context) {
-        throw new Error('useAuth must be used within an AuthProvider');
+  const login = async (credentials) => {
+    try {
+      setIsLoading(true);
+      const response = await authAPI.login(credentials);
+      const { token, user: userData } = response.data;
+      
+      localStorage.setItem('auth_token', token);
+      setUser(userData);
+      setIsAuthenticated(true);
+      
+      toast.success(`Welcome back, ${userData.firstName}!`);
+      return { success: true };
+    } catch (error) {
+      const message = error.response?.data?.message || 'Login failed';
+      toast.error(message);
+      return { success: false, error: message };
+    } finally {
+      setIsLoading(false);
     }
-    return context;
+  };
+
+  const register = async (userData) => {
+    try {
+      setIsLoading(true);
+      const response = await authAPI.register(userData);
+      const { token, user: newUser } = response.data;
+      
+      localStorage.setItem('auth_token', token);
+      setUser(newUser);
+      setIsAuthenticated(true);
+      
+      toast.success(`Welcome to MedSpaSync Pro, ${newUser.firstName}!`);
+      return { success: true };
+    } catch (error) {
+      const message = error.response?.data?.message || 'Registration failed';
+      toast.error(message);
+      return { success: false, error: message };
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const logout = async () => {
+    try {
+      await authAPI.logout();
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      localStorage.removeItem('auth_token');
+      setUser(null);
+      setIsAuthenticated(false);
+      toast.success('Logged out successfully');
+    }
+  };
+
+  const updateUser = (updatedUser) => {
+    setUser(updatedUser);
+  };
+
+  const value = {
+    user,
+    isAuthenticated,
+    isLoading,
+    login,
+    register,
+    logout,
+    updateUser,
+  };
+
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
 };

@@ -1,8 +1,4 @@
-// ========================================
-// File: src/components/ui/StatusBadge.jsx
-// Reusable Status Badge Component
-// ========================================
-
+// src/components/Ui/StatusBadge.jsx
 import React from 'react';
 
 const StatusBadge = ({ status, type = 'client' }) => {
@@ -21,6 +17,10 @@ const StatusBadge = ({ status, type = 'client' }) => {
         CANCELLED: { bg: 'bg-red-100', text: 'text-red-800', label: 'Cancelled' },
         NO_SHOW: { bg: 'bg-orange-100', text: 'text-orange-800', label: 'No Show' },
       },
+      service: {
+        ACTIVE: { bg: 'bg-green-100', text: 'text-green-800', label: 'Active' },
+        INACTIVE: { bg: 'bg-gray-100', text: 'text-gray-800', label: 'Inactive' },
+      }
     };
 
     return configs[type]?.[status] || configs[type]?.ACTIVE || configs.client.ACTIVE;

@@ -1,11 +1,7 @@
-// ========================================
-// File: src/hooks/useClients.js
-// Enhanced React Query hooks for clients
-// ========================================
-
+// src/hooks/useClients.js
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { clientsAPI } from '../services/api';
-import { toast } from 'react-hot-toast';
+import { clientsAPI } from '../services/api.js'; // Explicit .js extension
+import toast from 'react-hot-toast'; // For displaying notifications
 
 // Query keys for better cache management
 export const clientKeys = {
@@ -21,8 +17,8 @@ export const clientKeys = {
 export const useClients = (params = {}) => {
   return useQuery({
     queryKey: clientKeys.list(params),
-    queryFn: () => clientsAPI.getAll(params).then(res => res.data),
-    keepPreviousData: true,
+    queryFn: () => clientsAPI.getAll(params), // clientsAPI returns data directly
+    keepPreviousData: true, // Keep previous data while fetching new data
     staleTime: 5 * 60 * 1000, // 5 minutes
     cacheTime: 10 * 60 * 1000, // 10 minutes
     onError: (error) => {
@@ -32,12 +28,12 @@ export const useClients = (params = {}) => {
   });
 };
 
-// Get single client
+// Get single client by ID
 export const useClient = (id, options = {}) => {
   return useQuery({
     queryKey: clientKeys.detail(id),
-    queryFn: () => clientsAPI.getById(id).then(res => res.data),
-    enabled: !!id,
+    queryFn: () => clientsAPI.getById(id), // clientsAPI returns data directly
+    enabled: !!id, // Only run query if ID exists
     staleTime: 5 * 60 * 1000,
     ...options,
     onError: (error) => {
@@ -47,24 +43,24 @@ export const useClient = (id, options = {}) => {
   });
 };
 
-// Get client history
+// Get client history by ID
 export const useClientHistory = (id) => {
   return useQuery({
     queryKey: clientKeys.history(id),
-    queryFn: () => clientsAPI.getHistory(id).then(res => res.data),
+    queryFn: () => clientsAPI.getHistory(id), // clientsAPI returns data directly
     enabled: !!id,
-    staleTime: 2 * 60 * 1000,
+    staleTime: 2 * 60 * 1000, // 2 minutes
   });
 };
 
 // Create client mutation
 export const useCreateClient = () => {
-  const queryClient = useQueryClient();
-  
+  const queryClient = useQueryClient(); // Access the query client
+
   return useMutation({
-    mutationFn: clientsAPI.create,
+    mutationFn: clientsAPI.create, // Use the create function from clientsAPI
     onSuccess: (data) => {
-      queryClient.invalidateQueries(clientKeys.lists());
+      queryClient.invalidateQueries(clientKeys.lists()); // Invalidate all client lists
       toast.success('Client created successfully');
     },
     onError: (error) => {
@@ -78,12 +74,12 @@ export const useCreateClient = () => {
 // Update client mutation
 export const useUpdateClient = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
-    mutationFn: ({ id, data }) => clientsAPI.update(id, data),
+    mutationFn: ({ id, data }) => clientsAPI.update(id, data), // Update function
     onSuccess: (data, variables) => {
-      queryClient.invalidateQueries(clientKeys.lists());
-      queryClient.invalidateQueries(clientKeys.detail(variables.id));
+      queryClient.invalidateQueries(clientKeys.lists()); // Invalidate lists
+      queryClient.invalidateQueries(clientKeys.detail(variables.id)); // Invalidate specific detail
       toast.success('Client updated successfully');
     },
     onError: (error) => {
@@ -97,12 +93,12 @@ export const useUpdateClient = () => {
 // Delete client mutation
 export const useDeleteClient = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
-    mutationFn: clientsAPI.delete,
+    mutationFn: clientsAPI.delete, // Delete function
     onSuccess: (data, id) => {
-      queryClient.invalidateQueries(clientKeys.lists());
-      queryClient.removeQueries(clientKeys.detail(id));
+      queryClient.invalidateQueries(clientKeys.lists()); // Invalidate lists
+      queryClient.removeQueries(clientKeys.detail(id)); // Remove specific detail from cache
       toast.success('Client deleted successfully');
     },
     onError: (error) => {
@@ -116,9 +112,9 @@ export const useDeleteClient = () => {
 // Update client status mutation
 export const useUpdateClientStatus = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
-    mutationFn: ({ id, status }) => clientsAPI.updateStatus(id, status),
+    mutationFn: ({ id, status }) => clientsAPI.updateStatus(id, status), // Update status function
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries(clientKeys.lists());
       queryClient.invalidateQueries(clientKeys.detail(variables.id));
@@ -127,6 +123,7 @@ export const useUpdateClientStatus = () => {
     onError: (error) => {
       const message = error.response?.data?.message || 'Failed to update status';
       toast.error(message);
+      console.error('useUpdateClientStatus error:', error);
     },
   });
 };

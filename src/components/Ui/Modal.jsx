@@ -1,38 +1,28 @@
-// src/components/Ui/Modal.jsx
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import { X } from 'lucide-react';
 
 const Modal = ({
-  isOpen = false,
+  isOpen,
   onClose,
   title,
   children,
   size = 'md',
-  type = 'default',
   showCloseButton = true,
   closeOnOverlayClick = true,
-  closeOnEscape = true,
+  className = '',
+  type = 'alert',
   confirmText = 'Confirm',
   cancelText = 'Cancel',
-  onConfirm,
-  className = ''
+  onConfirm
 }) => {
-  // Handle escape key press
-  const handleEscape = useCallback((e) => {
-    if (e.key === 'Escape' && closeOnEscape && onClose) {
-      onClose();
-    }
-  }, [closeOnEscape, onClose]);
-
-  // Handle overlay click
-  const handleOverlayClick = useCallback((e) => {
-    if (e.target === e.currentTarget && closeOnOverlayClick && onClose) {
-      onClose();
-    }
-  }, [closeOnOverlayClick, onClose]);
-
-  // Add/remove event listeners
   useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
       document.body.style.overflow = 'hidden';
@@ -42,117 +32,83 @@ const Modal = ({
       document.removeEventListener('keydown', handleEscape);
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen, handleEscape]);
+  }, [isOpen, onClose]);
 
-  // Don't render if not open
   if (!isOpen) return null;
 
-  // Size classes
-  const sizeClasses = {
-    sm: 'max-w-sm',
-    md: 'max-w-md',
-    lg: 'max-w-lg',
-    xl: 'max-w-xl',
-    '2xl': 'max-w-2xl',
+  const sizes = {
+    sm: 'max-w-md',
+    md: 'max-w-lg',
+    lg: 'max-w-2xl',
+    xl: 'max-w-4xl',
     full: 'max-w-full mx-4'
   };
 
-  // Type-specific styling
-  const getTypeClasses = () => {
-    switch (type) {
-      case 'confirm':
-        return 'border-l-4 border-orange-400';
-      case 'alert':
-        return 'border-l-4 border-blue-400';
-      case 'error':
-        return 'border-l-4 border-red-400';
-      case 'success':
-        return 'border-l-4 border-green-400';
-      default:
-        return '';
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget && closeOnOverlayClick) {
+      onClose();
     }
   };
 
-  return (
+  return ReactDOM.createPortal(
     <div className="fixed inset-0 z-50 overflow-y-auto">
-      {/* Backdrop */}
-      <div className="flex min-h-screen items-center justify-center p-4">
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
-          onClick={handleOverlayClick}
-          aria-hidden="true"
-        />
+      <div
+        className="flex min-h-screen items-center justify-center p-4"
+        onClick={handleOverlayClick}
+      >
+        <div className="fixed inset-0 bg-black opacity-50"></div>
 
-        {/* Modal Content */}
-        <div
-          className={`
-            relative w-full ${sizeClasses[size]} 
-            transform overflow-hidden rounded-2xl bg-white 
-            shadow-2xl transition-all
-            ${getTypeClasses()}
-            ${className}
-          `}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby={title ? "modal-title" : undefined}
-        >
-          {/* Header */}
+        <div className={`relative bg-white rounded-2xl shadow-xl w-full ${sizes[size]} ${className}`}>
           {(title || showCloseButton) && (
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               {title && (
-                <h3 id="modal-title" className="text-lg font-semibold text-gray-900">
-                  {title}
-                </h3>
+                <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
               )}
               {showCloseButton && (
                 <button
                   onClick={onClose}
-                  className="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-lg hover:bg-gray-100"
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
                   aria-label="Close modal"
                 >
-                  <X className="h-5 w-5" />
+                  <X className="h-6 w-6" />
                 </button>
               )}
             </div>
           )}
 
-          {/* Body */}
           <div className="p-6">
             {children}
+            {type === 'confirm' && (
+                <div className="flex flex-col space-y-3 mt-6">
+                    <button
+                        onClick={onConfirm}
+                        className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
+                    >
+                        {confirmText}
+                    </button>
+                    <button
+                        onClick={onClose}
+                        className="w-full bg-gray-100 text-gray-700 hover:bg-gray-200 py-3 px-4 rounded-lg font-medium transition-colors"
+                    >
+                        {cancelText}
+                    </button>
+                </div>
+            )}
+            {type === 'alert' && (
+                <div className="flex flex-col space-y-3 mt-6">
+                    <button
+                        onClick={onClose}
+                        className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
+                    >
+                        Close
+                    </button>
+                </div>
+            )}
           </div>
-
-          {/* Footer for confirm type */}
-          {type === 'confirm' && (
-            <div className="flex justify-end space-x-3 p-6 border-t border-gray-200 bg-gray-50">
-              <button
-                onClick={onClose}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                {cancelText}
-              </button>
-              <button
-                onClick={onConfirm}
-                className="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-lg hover:bg-red-700 transition-colors"
-              >
-                {confirmText}
-              </button>
-            </div>
-          )}
-
-          {/* Footer for alert type */}
-          {type === 'alert' && (
-            <div className="flex justify-center p-6 border-t border-gray-200 bg-gray-50">
-              <button
-                onClick={onClose}
-                className="px-6 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-lg hover:bg-indigo-700 transition-colors"
-              >
-                Got it
-              </button>
-            </div>
-          )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.getElementById('modal-root')
   );
 };
 
