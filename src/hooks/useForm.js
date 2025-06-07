@@ -25,13 +25,16 @@ export const useForm = (initialValues = {}, validationSchema = null) => {
     }));
 
     // Clear error for this field when user starts typing
-    if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
-    }
-  }, [errors]);
+    setErrors(prev => {
+      if (prev[name]) {
+        return {
+          ...prev,
+          [name]: ''
+        };
+      }
+      return prev;
+    });
+  }, []); // Remove errors dependency to prevent infinite loops
 
   /**
    * Validate all form fields
@@ -55,7 +58,7 @@ export const useForm = (initialValues = {}, validationSchema = null) => {
       
       try {
         // Validate form
-        const validationErrors = validate();
+        const validationErrors = validationSchema?.validate ? validationSchema.validate(values) : {};
         
         if (Object.keys(validationErrors).length > 0) {
           setErrors(validationErrors);
@@ -75,7 +78,7 @@ export const useForm = (initialValues = {}, validationSchema = null) => {
         setIsSubmitting(false);
       }
     };
-  }, [values, validate]);
+  }, [values, validationSchema]); // Remove validate dependency
 
   /**
    * Reset form to initial values
@@ -118,9 +121,9 @@ export const useForm = (initialValues = {}, validationSchema = null) => {
    * Check if form is valid
    */
   const isValid = useCallback(() => {
-    const validationErrors = validate();
+    const validationErrors = validationSchema?.validate ? validationSchema.validate(values) : {};
     return Object.keys(validationErrors).length === 0;
-  }, [validate]);
+  }, [values, validationSchema]); // Remove validate dependency
 
   /**
    * Get error for a specific field
@@ -147,7 +150,7 @@ export const useForm = (initialValues = {}, validationSchema = null) => {
     setErrors: setFormErrors,
     isValid,
     getFieldError,
-    hasFieldError,
-    validate
+    hasFieldError
+    // Remove validate from return to prevent external dependencies
   };
 };
