@@ -1,9 +1,10 @@
 // medspasync-frontend-main/src/hooks/useWebSocket.js
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '../services/AuthContext'; // Updated import path
+import toast from 'react-hot-toast'; // Import toast for user feedback
 
 export const useWebSocket = (url, options = {}) => {
-  const { user, isAuthenticated } = useAuth(); // Ensure isAuthenticated is also available
+  const { user, isAuthenticated, isLoading: authLoading } = useAuth(); // Get authLoading state
   const [socket, setSocket] = useState(null);
   const [lastMessage, setLastMessage] = useState(null);
   const [readyState, setReadyState] = useState(0); // 0: CONNECTING, 1: OPEN, 2: CLOSING, 3: CLOSED
@@ -16,7 +17,8 @@ export const useWebSocket = (url, options = {}) => {
     onError,
     shouldReconnect = true,
     reconnectAttempts = 5,
-    reconnectInterval = 3000
+    reconnectInterval = 3000,
+    requiresAuth = true // New option: set to false for public WebSockets
   } = options;
 
   const reconnectTimeoutId = useRef(null);
@@ -29,15 +31,28 @@ export const useWebSocket = (url, options = {}) => {
       reconnectTimeoutId.current = null;
     }
 
-    // Don't try to connect if user is not authenticated and URL requires a token
-    if (!isAuthenticated && url.includes('?token=')) { // Simple check, adapt if your WS auth differs
-      setConnectionStatus('Disconnected: Not Authenticated');
-      setReadyState(3); // CLOSED
-      return;
+    // IMPORTANT: Check authentication status and user data BEFORE attempting connection
+    if (requiresAuth && (!isAuthenticated || !user || authLoading)) {
+      setConnectionStatus('Waiting for authentication...');
+      setReadyState(3); // Closed state until auth is confirmed
+      console.log('WebSocket: Waiting for authentication before connecting.');
+      return; // Do not proceed with connection
     }
 
     try {
-      const wsUrl = user?.token ? `${url}?token=${user.token}` : url; // Append token if available
+      // Conditionally add token based on 'requiresAuth' and user availability
+      let wsUrl = url;
+      if (requiresAuth && user?.token) {
+        wsUrl = `${url}?token=${user.token}`;
+      } else if (requiresAuth && (!user || !user.token)) {
+          // If auth is required but no token, don't try to connect yet
+          setConnectionStatus('Disconnected: No Auth Token');
+          setReadyState(3);
+          console.warn('WebSocket: Attempted to connect to authenticated endpoint without a token.');
+          return;
+      }
+      // If requiresAuth is false, just use the provided URL without a token
+
       const ws = new WebSocket(wsUrl);
 
       ws.onopen = (event) => {
@@ -45,22 +60,27 @@ export const useWebSocket = (url, options = {}) => {
         setConnectionStatus('Open');
         reconnectCount.current = 0; // Reset reconnect count on successful connection
         if (onOpen) onOpen(event);
+        console.log('WebSocket: Connected successfully.');
       };
 
       ws.onclose = (event) => {
         setReadyState(ws.readyState);
         setConnectionStatus('Closed');
         if (onClose) onClose(event);
+        console.log('WebSocket: Connection closed.', event.code, event.reason);
 
+        // Attempt reconnect if enabled and within limits
         if (shouldReconnect && reconnectCount.current < reconnectAttempts) {
           reconnectCount.current++;
           setConnectionStatus(`Reconnecting (Attempt ${reconnectCount.current}/${reconnectAttempts})...`);
+          console.log(`WebSocket: Reconnecting (Attempt ${reconnectCount.current})...`);
           reconnectTimeoutId.current = setTimeout(() => {
             connect(); // Attempt to reconnect
           }, reconnectInterval);
         } else if (shouldReconnect && reconnectCount.current >= reconnectAttempts) {
           setConnectionStatus('Reconnection failed. Max attempts reached.');
-          console.warn('WebSocket: Max reconnection attempts reached.');
+          console.warn('WebSocket: Max reconnection attempts reached. Giving up.');
+          toast.error('WebSocket connection lost. Please refresh the page if issues persist.');
         }
       };
 
@@ -72,6 +92,7 @@ export const useWebSocket = (url, options = {}) => {
         } catch (parseError) {
           console.error('WebSocket: Failed to parse message:', parseError);
           if (onError) onError(new Error('Failed to parse WebSocket message'));
+          toast.error('Received malformed WebSocket message.');
         }
       };
 
@@ -79,7 +100,8 @@ export const useWebSocket = (url, options = {}) => {
         setConnectionStatus('Error');
         console.error('WebSocket error:', event);
         if (onError) onError(event);
-        // Close the socket to trigger onclose and potential reconnect
+        toast.error('WebSocket error encountered.');
+        // Closing the socket here will trigger the onclose handler, which handles reconnects
         ws.close();
       };
 
@@ -88,7 +110,7 @@ export const useWebSocket = (url, options = {}) => {
       console.error('WebSocket connection setup failed:', error);
       setConnectionStatus('Error');
       if (onError) onError(error);
-      // Attempt reconnect if the initial connection failed
+      // Attempt reconnect if the initial connection failed (e.g. invalid URL or initial network issue)
       if (shouldReconnect && reconnectCount.current < reconnectAttempts) {
         reconnectCount.current++;
         reconnectTimeoutId.current = setTimeout(() => {
@@ -97,34 +119,36 @@ export const useWebSocket = (url, options = {}) => {
         }, reconnectInterval);
       }
     }
-  }, [url, user, isAuthenticated, onOpen, onClose, onMessage, onError, shouldReconnect, reconnectAttempts, reconnectInterval]);
+  }, [url, user, isAuthenticated, authLoading, onOpen, onClose, onMessage, onError, shouldReconnect, reconnectAttempts, reconnectInterval, requiresAuth]);
+
 
   useEffect(() => {
-    // Connect when component mounts and user is authenticated, or if it's a public WebSocket
-    // Disconnect and reconnect if user/auth status changes (e.g., login/logout)
-    // Only connect if not already connected or explicitly told to reconnect
-    if (isAuthenticated || !url.includes('?token=')) { // Condition to attempt connection
+    // Only attempt to connect if authentication is not loading AND (it's authenticated OR it doesn't require auth)
+    // This prevents connection attempts while auth status is unknown (isLoading is true)
+    if (!authLoading && (isAuthenticated || !requiresAuth)) {
+      // If a socket exists but is closed or closing, or if no socket, try to connect
       if (!socket || socket.readyState === WebSocket.CLOSED || socket.readyState === WebSocket.CLOSING) {
         connect();
       }
-    } else {
-      // If user logs out and socket exists, close it
-      if (socket && socket.readyState === WebSocket.OPEN) {
-        disconnect();
-      }
+    } else if (!authLoading && requiresAuth && !isAuthenticated) {
+        // If authLoading is false, but it requires auth and isn't authenticated, disconnect if connected
+        if (socket && socket.readyState === WebSocket.OPEN) {
+            disconnect(); // Ensure it's disconnected
+        }
+        setConnectionStatus('Disconnected: Not Authenticated');
+        setReadyState(3);
     }
 
-
+    // Cleanup function
     return () => {
-      // Cleanup on unmount
       if (reconnectTimeoutId.current) {
         clearTimeout(reconnectTimeoutId.current);
       }
       if (socket) {
-        socket.close(); // Cleanly close WebSocket connection
+        socket.close(1000, 'Component unmounted or forced disconnect'); // 1000 is normal closure
       }
     };
-  }, [user, isAuthenticated, url, connect]); // Removed socket from dependencies as it causes infinite loop with `connect`
+  }, [user, isAuthenticated, authLoading, url, connect, disconnect, requiresAuth, socket]); // Added socket to dependencies of useEffect for proper cleanup control
 
   const sendMessage = useCallback((message) => {
     if (socket && socket.readyState === WebSocket.OPEN) {
@@ -141,7 +165,8 @@ export const useWebSocket = (url, options = {}) => {
       reconnectTimeoutId.current = null;
     }
     if (socket) {
-      socket.close(1000, 'Component unmounted or forced disconnect'); // 1000 is normal closure
+      // Attempt to close cleanly, setting a code and reason
+      socket.close(1000, 'Explicit disconnect by client'); // 1000 is normal closure
       setSocket(null); // Clear socket state
       setConnectionStatus('Disconnected');
       setReadyState(3); // CLOSED
