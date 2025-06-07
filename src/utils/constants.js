@@ -1,5 +1,4 @@
-// medspasync-frontend-main/src/utils/constants.js
-export const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000'; // Default to localhost for dev
+export const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 export const API_ENDPOINTS = {
     AUTH: {
@@ -39,7 +38,7 @@ export const STORAGE_KEYS = {
     AUTH_TOKEN: 'medspasync_auth_token',
     REFRESH_TOKEN: 'medspasync_refresh_token',
     USER_DATA: 'medspasync_user_data',
-    LAST_ACTIVITY: 'medspasync_last_activity', // Added for session management
+    LAST_ACTIVITY: 'medspasync_last_activity',
     THEME: 'medspasync_theme',
     SETTINGS: 'medspasync_settings'
 };

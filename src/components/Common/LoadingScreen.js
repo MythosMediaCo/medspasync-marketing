@@ -1,4 +1,3 @@
-// medspasync-pro/src/components/Common/LoadingScreen.js
 import React from 'react';
 
 const LoadingScreen = ({ message = "Loading your medical spa management platform..." }) => (

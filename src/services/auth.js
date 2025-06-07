@@ -1,103 +1,104 @@
-// medspasync-pro/src/services/auth.js
-import apiService from './api'; // Your API client
-import storageService from './storage'; // Your local storage service
-import { API_ENDPOINTS } from '../utils/constants'; // API endpoint constants
+import axios from 'axios';
+import { API_BASE_URL } from '../utils/constants';
+import { storageService } from './storage';
+import toast from 'react-hot-toast';
 
-class AuthService {
-  // Handles user login
-  async login(credentials) {
-    try {
-      const response = await apiService.post(API_ENDPOINTS.AUTH.LOGIN, credentials);
+class ApiService {
+  constructor() {
+    this.client = axios.create({
+      baseURL: API_BASE_URL,
+      timeout: 15000,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true,
+    });
 
-      // Store tokens and user data upon successful login
-      if (response.token) {
-        storageService.setAuthToken(response.token);
-        if (response.refreshToken) {
-          storageService.setRefreshToken(response.refreshToken);
+    this.setupInterceptors();
+  }
+
+  setupInterceptors() {
+    this.client.interceptors.request.use(
+      (config) => {
+        const token = storageService.getAuthToken();
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
         }
-        if (response.user) {
-          storageService.setUserData(response.user);
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
+      }
+    );
+
+    this.client.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        const originalRequest = error.config;
+
+        if (error.response?.status === 401 && !originalRequest._retry) {
+          originalRequest._retry = true;
+
+          try {
+            const refreshToken = storageService.getRefreshToken();
+            if (refreshToken) {
+              const refreshResponse = await axios.post(`${API_BASE_URL}/api/auth/refresh`, {
+                refreshToken
+              });
+
+              const { token } = refreshResponse.data;
+              storageService.setAuthToken(token);
+
+              originalRequest.headers.Authorization = `Bearer ${token}`;
+              return this.client(originalRequest);
+            }
+          } catch (refreshError) {
+            console.error('Token refresh failed:', refreshError);
+            storageService.clearAll();
+            toast.error('Your session has expired. Please log in again.');
+            window.location.href = '/login';
+            return Promise.reject(refreshError);
+          }
         }
+
+        if (!error.response) {
+          toast.error('Network error. Please check your connection.');
+        } else {
+          const message = error.response.data?.message || error.message || 'An unexpected error occurred';
+          if (!originalRequest.hideToast) {
+            toast.error(message);
+          }
+        }
+
+        return Promise.reject(error);
       }
-      return response;
-    } catch (error) {
-      // Re-throw specific error message for handling in UI (e.g., incorrect credentials)
-      throw new Error(error.response?.data?.message || 'Login failed');
-    }
+    );
   }
 
-  // Handles user registration
-  async register(userData) {
-    try {
-      const response = await apiService.post(API_ENDPOINTS.AUTH.REGISTER, userData);
-      return response;
-    } catch (error) {
-      // Re-throw specific error message for handling in UI
-      throw new Error(error.response?.data?.message || 'Registration failed');
-    }
+  async get(url, config = {}) {
+    const response = await this.client.get(url, config);
+    return response.data;
   }
 
-  // Handles user logout
-  async logout() {
-    try {
-      const refreshToken = storageService.getRefreshToken();
-      if (refreshToken) {
-        // Send refresh token to backend to invalidate it
-        await apiService.post(API_ENDPOINTS.AUTH.LOGOUT, { refreshToken });
-      }
-    } catch (error) {
-      console.error('Backend logout error:', error);
-      // Even if backend logout fails, clear client-side storage for security
-    } finally {
-      storageService.clearAll(); // Always clear client-side data on logout attempt
-    }
+  async post(url, data = {}, config = {}) {
+    const response = await this.client.post(url, data, config);
+    return response.data;
   }
 
-  // Attempts to refresh the access token using the refresh token
-  async refreshToken() {
-    try {
-      const refreshToken = storageService.getRefreshToken();
-      if (!refreshToken) {
-        throw new Error('No refresh token available. User must re-authenticate.');
-      }
-
-      const response = await apiService.post(API_ENDPOINTS.AUTH.REFRESH, {
-        refreshToken
-      });
-
-      if (response.token) {
-        storageService.setAuthToken(response.token); // Store the new access token
-      }
-      return response;
-    } catch (error) {
-      // If refresh fails, clear all auth data to force re-login
-      storageService.clearAll();
-      throw error;
-    }
+  async put(url, data = {}, config = {}) {
+    const response = await this.client.put(url, data, config);
+    return response.data;
   }
 
-  // Fetches the authenticated user's profile from the backend
-  async getProfile() {
-    try {
-      const response = await apiService.get(API_ENDPOINTS.AUTH.PROFILE);
-      if (response.user) {
-        storageService.setUserData(response.user); // Update cached user data
-      }
-      return response;
-    } catch (error) {
-      throw new Error(error.response?.data?.message || 'Failed to fetch user profile');
-    }
+  async patch(url, data = {}, config = {}) {
+    const response = await this.client.patch(url, data, config);
+    return response.data;
   }
 
-  // Checks if a user is currently authenticated based on token presence
-  isAuthenticated() {
-    return storageService.isAuthenticated();
-  }
-
-  // Gets the currently stored user data
-  getCurrentUser() {
-    return storageService.getUserData();
+  async delete(url, config = {}) {
+    const response = await this.client.delete(url, config);
+    return response.data;
   }
 }
 
-export default new AuthService();
+export default new ApiService();

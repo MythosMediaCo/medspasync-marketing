@@ -1,4 +1,3 @@
-// medspasync-pro/src/components/Common/ErrorBoundary.js
 import React from 'react';
 
 class ErrorBoundary extends React.Component {
@@ -8,19 +7,15 @@ class ErrorBoundary extends React.Component {
     }
 
     static getDerivedStateFromError(error) {
-        // Update state so the next render will show the fallback UI.
         return { hasError: true, error };
     }
 
     componentDidCatch(error, errorInfo) {
-        // You can also log the error to an error reporting service
         console.error('MedSpaSync Pro Error Boundary Caught:', error, errorInfo);
-        // Example: Sentry.captureException(error, { extra: errorInfo });
     }
 
     render() {
         if (this.state.hasError) {
-            // Fallback UI when an error occurs
             return (
                 <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
                     <div className="max-w-lg w-full bg-white rounded-2xl shadow-xl p-8 text-center">
@@ -51,8 +46,8 @@ class ErrorBoundary extends React.Component {
 
                             <button
                                 onClick={() => {
-                                    localStorage.clear(); // Clear all local storage data
-                                    window.location.href = '/'; // Redirect to home (hard refresh)
+                                    localStorage.clear();
+                                    window.location.href = '/';
                                 }}
                                 className="w-full bg-gray-100 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors"
                             >

@@ -1,7 +1,6 @@
-cat << 'EOF' > src/services/api.js
 import axios from 'axios';
 import { API_BASE_URL } from '../utils/constants';
-import { storageService } from './storage'; # IMPORTANT: Changed to named import
+import { storageService } from './storage'; # IMPORTANT: This is the named import
 import toast from 'react-hot-toast';
 
 class ApiService {
@@ -103,4 +102,3 @@ class ApiService {
 }
 
 export default new ApiService();
-EOF

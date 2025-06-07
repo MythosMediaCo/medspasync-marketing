@@ -1,7 +1,6 @@
-// medspasync-pro/src/components/Ui/Modal.js
 import React, { useEffect } from 'react';
-import ReactDOM from 'react-dom'; // Import ReactDOM for createPortal
-import { X } from 'lucide-react'; // Make sure you have lucide-react installed
+import ReactDOM from 'react-dom';
+import { X } from 'lucide-react';
 
 const Modal = ({
   isOpen,
@@ -12,8 +11,7 @@ const Modal = ({
   showCloseButton = true,
   closeOnOverlayClick = true,
   className = '',
-  // New props for confirmation type modals
-  type = 'alert', // 'alert' or 'confirm'
+  type = 'alert',
   confirmText = 'Confirm',
   cancelText = 'Cancel',
   onConfirm
@@ -27,12 +25,12 @@ const Modal = ({
 
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'hidden'; // Prevent scrolling on body
+      document.body.style.overflow = 'hidden';
     }
 
     return () => {
       document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'unset'; // Restore scrolling
+      document.body.style.overflow = 'unset';
     };
   }, [isOpen, onClose]);
 
@@ -58,12 +56,9 @@ const Modal = ({
         className="flex min-h-screen items-center justify-center p-4"
         onClick={handleOverlayClick}
       >
-        {/* Overlay */}
         <div className="fixed inset-0 bg-black opacity-50"></div>
 
-        {/* Modal */}
         <div className={`relative bg-white rounded-2xl shadow-xl w-full ${sizes[size]} ${className}`}>
-          {/* Header */}
           {(title || showCloseButton) && (
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               {title && (
@@ -81,7 +76,6 @@ const Modal = ({
             </div>
           )}
 
-          {/* Content */}
           <div className="p-6">
             {children}
             {type === 'confirm' && (
@@ -114,7 +108,7 @@ const Modal = ({
         </div>
       </div>
     </div>,
-    document.getElementById('modal-root') // This assumes you have <div id="modal-root"></div> in your public/index.html
+    document.getElementById('modal-root')
   );
 };
 

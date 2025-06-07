@@ -1,4 +1,3 @@
-cat << 'EOF' > src/services/storage.js
 import { STORAGE_KEYS } from '../utils/constants';
 
 class StorageService {
@@ -50,6 +49,4 @@ class StorageService {
     }
 }
 
-# IMPORTANT: Changed to a named export
 export const storageService = new StorageService();
-EOF

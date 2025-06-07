@@ -1,14 +1,13 @@
-// medspasync-pro/src/pages/LoginPage.js
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Modal from '../components/Ui/Modal'; // Use your Modal component
+import Modal from '../components/Ui/Modal';
 import { useForm } from '../hooks/useForm';
 import { validationSchemas } from '../utils/validation';
-import { useAuth } from '../services/AuthContext'; // Use the AuthContext
+import { useAuth } from '../services/AuthContext';
 
 const LoginPage = React.memo(() => {
     const navigate = useNavigate();
-    const { login, error: authError, clearError } = useAuth(); // Get login function and auth error from AuthContext
+    const { login, error: authError, clearError } = useAuth();
     const [showPassword, setShowPassword] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [modalConfig, setModalConfig] = useState({});
@@ -19,25 +18,21 @@ const LoginPage = React.memo(() => {
         handleChange,
         handleSubmit,
         isSubmitting,
-        setValues, // We'll need this for auto-filling demo creds
-        setErrors, // We'll need this to clear form errors on auto-fill
-        reset // We'll need this to reset form
+        setValues,
+        setErrors,
+        reset
     } = useForm({ email: '', password: '', rememberMe: false }, validationSchemas.login);
 
-    // Clear form errors and auth error on mount
     useEffect(() => {
-        reset(); // Reset form state
-        clearError(); // Clear global auth error
+        reset();
+        clearError();
     }, [clearError, reset]);
 
-    // Handle form submission using useForm's handleSubmit
     const onSubmit = useCallback(async (formData) => {
         try {
             await login(formData);
-            // navigate to dashboard happens within AuthContext on successful login
         } catch (err) {
-            // Error handling is managed by AuthContext and displayed by Toast/App's ErrorBoundary
-            // Specific field errors are already handled by useForm validation
+            // Error handled by AuthContext
         }
     }, [login]);
 
@@ -47,8 +42,8 @@ const LoginPage = React.memo(() => {
             email: 'admin@medspasync.com',
             password: 'admin123'
         }));
-        setErrors({}); // Clear any validation errors
-        clearError(); // Clear global auth error
+        setErrors({});
+        clearError();
     }, [setValues, setErrors, clearError]);
 
     const handleForgotPasswordClick = useCallback(() => {
@@ -66,7 +61,6 @@ const LoginPage = React.memo(() => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-white to-purple-100 flex items-center justify-center px-4">
             <div className="max-w-md w-full">
-                {/* Header */}
                 <div className="text-center mb-8">
                     <button
                         onClick={() => navigate('/')}
@@ -82,9 +76,7 @@ const LoginPage = React.memo(() => {
                     <p className="text-gray-600">Sign in to your MedSpaSync Pro account</p>
                 </div>
 
-                {/* Login Card */}
                 <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
-                    {/* Auth Error Message from Context */}
                     {authError && (
                         <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6" role="alert">
                             <div className="flex items-center">
@@ -94,8 +86,7 @@ const LoginPage = React.memo(() => {
                         </div>
                     )}
 
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate> {/* Added noValidate to prevent default HTML validation */}
-                        {/* Email Field */}
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                                 Email Address
@@ -124,7 +115,6 @@ const LoginPage = React.memo(() => {
                             )}
                         </div>
 
-                        {/* Password Field */}
                         <div>
                             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                                 Password
@@ -164,7 +154,6 @@ const LoginPage = React.memo(() => {
                             )}
                         </div>
 
-                        {/* Remember Me & Forgot Password */}
                         <div className="flex items-center justify-between">
                             <div className="flex items-center">
                                 <input
@@ -190,7 +179,6 @@ const LoginPage = React.memo(() => {
                             </button>
                         </div>
 
-                        {/* Submit Button */}
                         <button
                             type="submit"
                             disabled={isSubmitting}
@@ -210,7 +198,6 @@ const LoginPage = React.memo(() => {
                         </button>
                     </form>
 
-                    {/* Demo Credentials */}
                     <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
                         <p className="text-sm text-gray-700 font-medium mb-2">🎯 Demo Credentials:</p>
                         <button
@@ -226,7 +213,6 @@ const LoginPage = React.memo(() => {
                         </button>
                     </div>
 
-                    {/* Sign Up Link */}
                     <div className="mt-6 text-center">
                         <p className="text-sm text-gray-600">
                             Don't have an account?{' '}
@@ -241,7 +227,6 @@ const LoginPage = React.memo(() => {
                     </div>
                 </div>
 
-                {/* API Status (as a static element, no change) */}
                 <div className="mt-6 text-center">
                     <div className="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-800 text-xs font-medium">
                         <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>

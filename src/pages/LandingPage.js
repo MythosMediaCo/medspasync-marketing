@@ -1,9 +1,8 @@
-// medspasync-pro/src/pages/LandingPage.js
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const LandingPage = React.memo(() => {
-    const navigate = useNavigate(); // Use React Router's useNavigate hook
+    const navigate = useNavigate();
 
     const handleGetStarted = useCallback(() => {
         navigate('/register');
@@ -15,11 +14,9 @@ const LandingPage = React.memo(() => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-white to-purple-100">
-            {/* Enhanced Header */}
             <header className="bg-white/95 backdrop-blur-md shadow-sm sticky top-0 z-40">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-16">
-                        {/* Use navigate for SPA-friendly internal routing */}
                         <div className="flex items-center cursor-pointer" onClick={() => navigate('/')}>
                             <div className="h-10 w-10 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
                                 <span className="text-white font-bold text-lg">M</span>
@@ -45,7 +42,6 @@ const LandingPage = React.memo(() => {
                 </div>
             </header>
 
-            {/* Hero Section */}
             <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] px-4">
                 <div className="max-w-6xl mx-auto text-center">
                     <div className="animate-float">
@@ -85,7 +81,6 @@ const LandingPage = React.memo(() => {
                         ✨ No credit card required • 🚀 Setup in 5 minutes • 💎 Premium features included
                     </div>
 
-                    {/* Features Grid */}
                     <div className="max-w-4xl mx-auto">
                         <div className="grid md:grid-cols-3 gap-8">
                             <div className="bg-white/90 backdrop-blur-sm p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
@@ -114,7 +109,6 @@ const LandingPage = React.memo(() => {
                         </div>
                     </div>
 
-                    {/* Social Proof */}
                     <div className="mt-20 text-center">
                         <p className="text-gray-500 text-sm mb-6">Trusted by medical spas worldwide</p>
                         <div className="flex justify-center items-center space-x-8 opacity-60">
