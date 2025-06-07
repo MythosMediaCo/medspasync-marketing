@@ -200,4 +200,3 @@ const authReducer = (state, action) => {
         }
         return context;
     };
-EOF
