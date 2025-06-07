@@ -1,85 +1,55 @@
-// medspasync-pro/src/utils/constants.js
+cat << 'EOF' > src/services/storage.js
+import { STORAGE_KEYS } from '../utils/constants';
 
-// Base URL for your API. Uses environment variable REACT_APP_API_URL if set, otherwise defaults to localhost.
-// IMPORTANT: Update this for production deployments!
-export const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-
-// Centralized API Endpoints for better management and less magic strings
-export const API_ENDPOINTS = {
-    AUTH: {
-        LOGIN: '/api/auth/login',
-        REGISTER: '/api/auth/register',
-        REFRESH: '/api/auth/refresh',
-        LOGOUT: '/api/auth/logout',
-        PROFILE: '/api/auth/profile'
-    },
-    CLIENTS: {
-        LIST: '/api/clients',
-        CREATE: '/api/clients',
-        UPDATE: '/api/clients',
-        DELETE: '/api/clients',
-        SEARCH: '/api/clients/search' // Example search endpoint
-    },
-    APPOINTMENTS: {
-        LIST: '/api/appointments',
-        CREATE: '/api/appointments',
-        UPDATE: '/api/appointments',
-        DELETE: '/api/appointments',
-        TODAY: '/api/appointments/today' // Example endpoint for today's appointments
-    },
-    PAYMENTS: {
-        LIST: '/api/payments',
-        CREATE: '/api/payments',
-        PROCESS: '/api/payments/process',
-        RECONCILE: '/api/payments/reconcile' // Example reconciliation endpoint
-    },
-    DASHBOARD: {
-        STATS: '/api/dashboard/stats',
-        RECENT_ACTIVITY: '/api/dashboard/recent'
+class StorageService {
+    setAuthToken(token) {
+        localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token);
     }
-};
+    getAuthToken() {
+        return localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
+    }
+    setRefreshToken(token) {
+        localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, token);
+    }
+    getRefreshToken() {
+        return localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
+    }
+    setUserData(userData) {
+        localStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(userData));
+    }
+    getUserData() {
+        const userData = localStorage.getItem(STORAGE_KEYS.USER_DATA);
+        return userData ? JSON.parse(userData) : null;
+    }
+    setLastActivity(timestamp) {
+        localStorage.setItem(STORAGE_KEYS.LAST_ACTIVITY, timestamp);
+    }
+    getLastActivity() {
+        return localStorage.getItem(STORAGE_KEYS.LAST_ACTIVITY);
+    }
+    setSettings(settings) {
+        localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
+    }
+    getSettings() {
+        const settings = localStorage.getItem(STORAGE_KEYS.SETTINGS);
+        return settings ? JSON.parse(settings) : {};
+    }
+    setTheme(theme) {
+        localStorage.setItem(STORAGE_KEYS.THEME, theme);
+    }
+    getTheme() {
+        return localStorage.getItem(STORAGE_KEYS.THEME) || 'light';
+    }
+    clearAll() {
+        Object.values(STORAGE_KEYS).forEach(key => {
+            localStorage.removeItem(key);
+        });
+    }
+    isAuthenticated() {
+        return !!this.getAuthToken();
+    }
+}
 
-// Keys used for storing data in localStorage. Centralized to prevent typos.
-export const STORAGE_KEYS = {
-    AUTH_TOKEN: 'medspasync_auth_token',
-    REFRESH_TOKEN: 'medspasync_refresh_token',
-    USER_DATA: 'medspasync_user_data',
-    LAST_ACTIVITY: 'medspasync_last_activity', // For client-side session tracking
-    THEME: 'medspasync_theme',
-    SETTINGS: 'medspasync_settings'
-};
-
-// Defined user roles for role-based access control
-export const USER_ROLES = {
-    ADMIN: 'admin',
-    MANAGER: 'manager',
-    STAFF: 'staff',
-    RECEPTIONIST: 'receptionist'
-};
-
-// Defined statuses for appointments
-export const APPOINTMENT_STATUS = {
-    PENDING: 'pending',
-    CONFIRMED: 'confirmed',
-    IN_PROGRESS: 'in-progress',
-    COMPLETED: 'completed',
-    CANCELLED: 'cancelled',
-    NO_SHOW: 'no-show'
-};
-
-// Defined statuses for payments
-export const PAYMENT_STATUS = {
-    PENDING: 'pending',
-    PROCESSING: 'processing',
-    COMPLETED: 'completed',
-    FAILED: 'failed',
-    REFUNDED: 'refunded'
-};
-
-// Defined statuses for clients
-export const CLIENT_STATUS = {
-    ACTIVE: 'active',
-    INACTIVE: 'inactive',
-    VIP: 'vip',
-    BLOCKED: 'blocked'
-};
+# IMPORTANT: Changed to a named export
+export const storageService = new StorageService();
+EOF
