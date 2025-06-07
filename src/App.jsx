@@ -1,10 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import ErrorBoundary from './components/Common/ErrorBoundary.jsxx'; // Explicit .jsx extension
-import LoadingScreen from './components/Common/LoadingScreen.jsxx'; // Explicit .jsx extension
+import ErrorBoundary from './components/Common/ErrorBoundary.jsx'; // Explicit .jsx extension
+import LoadingScreen from './components/Common/LoadingScreen.jsx'; // Explicit .jsx extension
 
 // Auth Components & Context
-import { AuthProvider, useAuth } from './services/AuthContext.jsxx'; // Explicit .jsx extension
+import { AuthProvider, useAuth } from './services/AuthContext.jsx'; // Explicit .jsx extension
 import ProtectedRoute from './components/auth/ProtectedRoute.jsx';   // Explicit .jsx extension
 import PublicRoute from './components/auth/PublicRoute.jsx';     // Explicit .jsx extension
 
