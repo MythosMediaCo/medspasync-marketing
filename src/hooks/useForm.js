@@ -62,35 +62,28 @@ export const useForm = (initialValues = {}, validationSchema = null) => {
       setIsSubmitting(true);
       
       try {
-        // Get current values and validate
-        setValues(currentValues => {
-          const validationErrors = validateForm(currentValues);
-          
-          if (Object.keys(validationErrors).length > 0) {
-            setErrors(validationErrors);
-            setIsSubmitting(false);
-            return currentValues;
-          }
+        // Validate current values
+        const validationErrors = validateForm(values);
+        
+        if (Object.keys(validationErrors).length > 0) {
+          setErrors(validationErrors);
+          setIsSubmitting(false);
+          return;
+        }
 
-          // Clear any previous errors
-          setErrors({});
+        // Clear any previous errors
+        setErrors({});
 
-          // Call the submit handler asynchronously
-          onSubmit(currentValues).catch(error => {
-            console.error('Form submission error:', error);
-          }).finally(() => {
-            setIsSubmitting(false);
-          });
-          
-          return currentValues;
-        });
+        // Call the submit handler
+        await onSubmit(values);
         
       } catch (error) {
         console.error('Form submission error:', error);
+      } finally {
         setIsSubmitting(false);
       }
     };
-  }, [validateForm]);
+  }, [values, validateForm]);
 
   /**
    * Reset form to initial values
