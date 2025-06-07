@@ -1,94 +1,143 @@
-import * as yup from 'yup';
+// src/utils/validation.js
 
+/**
+ * Validation schemas for forms
+ */
+
+// Email validation regex
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Password validation regex (at least 6 characters)
+const PASSWORD_REGEX = /^.{6,}$/;
+
+/**
+ * Validate email format
+ * @param {string} email - Email to validate
+ * @returns {string|null} Error message or null if valid
+ */
+const validateEmail = (email) => {
+  if (!email) return 'Email is required';
+  if (!EMAIL_REGEX.test(email)) return 'Please enter a valid email address';
+  return null;
+};
+
+/**
+ * Validate password
+ * @param {string} password - Password to validate
+ * @returns {string|null} Error message or null if valid
+ */
+const validatePassword = (password) => {
+  if (!password) return 'Password is required';
+  if (!PASSWORD_REGEX.test(password)) return 'Password must be at least 6 characters long';
+  return null;
+};
+
+/**
+ * Validate required field
+ * @param {string} value - Value to validate
+ * @param {string} fieldName - Name of the field for error message
+ * @returns {string|null} Error message or null if valid
+ */
+const validateRequired = (value, fieldName) => {
+  if (!value || value.trim() === '') return `${fieldName} is required`;
+  return null;
+};
+
+/**
+ * Validate passwords match
+ * @param {string} password - Original password
+ * @param {string} confirmPassword - Confirmation password
+ * @returns {string|null} Error message or null if valid
+ */
+const validatePasswordsMatch = (password, confirmPassword) => {
+  if (!confirmPassword) return 'Please confirm your password';
+  if (password !== confirmPassword) return 'Passwords do not match';
+  return null;
+};
+
+/**
+ * Login form validation schema
+ */
 export const validationSchemas = {
-  login: yup.object({
-    email: yup
-      .string()
-      .email('Please enter a valid email address')
-      .required('Email is required'),
-    password: yup
-      .string()
-      .min(6, 'Password must be at least 6 characters')
-      .required('Password is required')
-  }),
-
-  register: yup.object({
-    firstName: yup
-      .string()
-      .min(2, 'First name must be at least 2 characters')
-      .required('First name is required'),
-    lastName: yup
-      .string()
-      .min(2, 'Last name must be at least 2 characters')
-      .required('Last name is required'),
-    email: yup
-      .string()
-      .email('Please enter a valid email address')
-      .required('Email is required'),
-    password: yup
-      .string()
-      .min(8, 'Password must be at least 8 characters')
-      .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-        'Password must contain at least one uppercase, one lowercase, one number, and one special character'
-      )
-      .required('Password is required'),
-    confirmPassword: yup
-      .string()
-      .oneOf([yup.ref('password'), null], 'Passwords must match')
-      .required('Please confirm your password'),
-    spaName: yup
-      .string()
-      .min(2, 'Spa name must be at least 2 characters')
-      .required('Medical Spa Name is required'),
-    agreeToTerms: yup
-      .boolean()
-      .oneOf([true], 'You must agree to the terms and conditions')
-      .required('You must agree to the terms and conditions')
-  }),
-
-  client: yup.object({
-    firstName: yup.string().required('First name is required'),
-    lastName: yup.string().required('Last name is required'),
-    email: yup.string().email('Invalid email').required('Email is required'),
-    phone: yup.string().matches(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/, 'Invalid phone number').required('Phone number is required'),
-    dateOfBirth: yup.date().nullable().max(new Date(), 'Date of birth cannot be in the future').required('Date of birth is required')
-  }),
-
-  appointment: yup.object({
-    clientId: yup.string().required('Client is required'),
-    serviceId: yup.string().required('Service is required'),
-    date: yup.date().required('Date is required').min(new Date(new Date().setHours(0,0,0,0)), 'Appointment date cannot be in the past'),
-    time: yup.string().required('Time is required'),
-    duration: yup.number().min(15, 'Minimum duration is 15 minutes').required('Duration is required')
-  })
+  login: {
+    validate: (values) => {
+      const errors = {};
+      
+      const emailError = validateEmail(values.email);
+      if (emailError) errors.email = emailError;
+      
+      const passwordError = validatePassword(values.password);
+      if (passwordError) errors.password = passwordError;
+      
+      return errors;
+    }
+  },
+  
+  register: {
+    validate: (values) => {
+      const errors = {};
+      
+      const firstNameError = validateRequired(values.firstName, 'First name');
+      if (firstNameError) errors.firstName = firstNameError;
+      
+      const lastNameError = validateRequired(values.lastName, 'Last name');
+      if (lastNameError) errors.lastName = lastNameError;
+      
+      const spaNameError = validateRequired(values.spaName, 'Medical spa name');
+      if (spaNameError) errors.spaName = spaNameError;
+      
+      const emailError = validateEmail(values.email);
+      if (emailError) errors.email = emailError;
+      
+      const passwordError = validatePassword(values.password);
+      if (passwordError) errors.password = passwordError;
+      
+      const confirmPasswordError = validatePasswordsMatch(values.password, values.confirmPassword);
+      if (confirmPasswordError) errors.confirmPassword = confirmPasswordError;
+      
+      if (!values.agreeToTerms) {
+        errors.agreeToTerms = 'You must agree to the terms and conditions';
+      }
+      
+      return errors;
+    }
+  }
 };
 
-export const validatePassword = (password) => {
-  const requirements = {
-    length: password.length >= 8,
-    uppercase: /[A-Z]/.test(password),
-    lowercase: /[a-z]/.test(password),
-    numbers: /\d/.test(password),
-    special: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)
-  };
-
-  const score = Object.values(requirements).filter(Boolean).length;
-
-  return {
-    requirements,
-    score,
-    isValid: score === 5,
-    strength: score <= 2 ? 'weak' : (score <= 4 ? 'medium' : 'strong')
-  };
+/**
+ * Individual validation functions for reuse
+ */
+export const validators = {
+  email: validateEmail,
+  password: validatePassword,
+  required: validateRequired,
+  passwordsMatch: validatePasswordsMatch
 };
 
-export const validateEmail = (email) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
-
-export const validatePhone = (phone) => {
-  const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
-  return phoneRegex.test(String(phone).replace(/\s/g, ''));
+/**
+ * Validate a single field
+ * @param {string} fieldName - Name of the field to validate
+ * @param {any} value - Value to validate
+ * @param {object} allValues - All form values (for cross-field validation)
+ * @returns {string|null} Error message or null if valid
+ */
+export const validateField = (fieldName, value, allValues = {}) => {
+  switch (fieldName) {
+    case 'email':
+      return validateEmail(value);
+    case 'password':
+      return validatePassword(value);
+    case 'confirmPassword':
+      return validatePasswordsMatch(allValues.password, value);
+    case 'firstName':
+      return validateRequired(value, 'First name');
+    case 'lastName':
+      return validateRequired(value, 'Last name');
+    case 'spaName':
+      return validateRequired(value, 'Medical spa name');
+    case 'agreeToTerms':
+      return value ? null : 'You must agree to the terms and conditions';
+    default:
+      return null;
+  }
 };

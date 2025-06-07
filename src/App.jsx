@@ -5,12 +5,12 @@ import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './services/AuthContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 
-// Import your page components (adjust paths as needed)
+// Import your existing page components
+import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
-import Dashboard from './pages/Dashboard';
-// import AdminPanel from './pages/AdminPanel';
-// import ReportsPage from './pages/ReportsPage';
+import DashboardPage from './pages/DashboardPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
   return (
@@ -46,6 +46,7 @@ function App() {
           {/* Your app routes */}
           <Routes>
             {/* Public routes */}
+            <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             
@@ -54,36 +55,13 @@ function App() {
               path="/dashboard" 
               element={
                 <ProtectedRoute>
-                  <Dashboard />
+                  <DashboardPage />
                 </ProtectedRoute>
               } 
             />
             
-            {/* Example: Admin-only route */}
-            {/* <Route 
-              path="/admin" 
-              element={
-                <ProtectedRoute requiredRoles={['admin']}>
-                  <AdminPanel />
-                </ProtectedRoute>
-              } 
-            /> */}
-            
-            {/* Example: Manager or Admin route */}
-            {/* <Route 
-              path="/reports" 
-              element={
-                <ProtectedRoute requiredRoles={['admin', 'manager']}>
-                  <ReportsPage />
-                </ProtectedRoute>
-              } 
-            /> */}
-            
-            {/* Redirect root to dashboard if authenticated, otherwise to login */}
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
-            
-            {/* Catch all route */}
-            <Route path="*" element={<Navigate to="/login" replace />} />
+            {/* 404 - catch all route */}
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </div>
       </AuthProvider>

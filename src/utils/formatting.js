@@ -1,86 +1,136 @@
+// src/utils/formatting.js
+
+/**
+ * Format currency values
+ * @param {number} amount - The amount to format
+ * @param {string} currency - Currency code (default: 'USD')
+ * @returns {string} Formatted currency string
+ */
 export const formatCurrency = (amount, currency = 'USD') => {
+  if (typeof amount !== 'number') {
+    return '$0.00';
+  }
+  
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: currency,
     minimumFractionDigits: 0,
-    maximumFractionDigits: 2
+    maximumFractionDigits: 0,
   }).format(amount);
 };
 
+/**
+ * Format time from Date object
+ * @param {Date} date - Date object to format
+ * @returns {string} Formatted time string
+ */
+export const formatTime = (date) => {
+  if (!(date instanceof Date) || isNaN(date)) {
+    return new Date().toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
+  }
+  
+  return date.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
+  });
+};
+
+/**
+ * Format date from Date object
+ * @param {Date} date - Date object to format
+ * @param {object} options - Intl.DateTimeFormat options
+ * @returns {string} Formatted date string
+ */
 export const formatDate = (date, options = {}) => {
+  if (!(date instanceof Date) || isNaN(date)) {
+    return 'Invalid Date';
+  }
+  
   const defaultOptions = {
     year: 'numeric',
     month: 'short',
     day: 'numeric'
   };
-  const dateObj = date instanceof Date ? date : new Date(date);
-  if (isNaN(dateObj.getTime())) {
-    return 'Invalid Date';
-  }
-  return new Intl.DateTimeFormat('en-US', { ...defaultOptions, ...options }).format(dateObj);
+  
+  return date.toLocaleDateString('en-US', { ...defaultOptions, ...options });
 };
 
-export const formatTime = (date) => {
-  const dateObj = date instanceof Date ? date : new Date(date);
-  if (isNaN(dateObj.getTime())) {
-    return 'Invalid Time';
-  }
-  return new Intl.DateTimeFormat('en-US', {
-    hour: 'numeric',
-    minute: '2-digit',
-    hour12: true
-  }).format(dateObj);
-};
-
-export const formatPhoneNumber = (phone) => {
-  const cleaned = String(phone).replace(/\D/g, '');
-  const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
-
-  if (match) {
-    return `(${match[1]}) ${match[2]}-${match[3]}`;
-  }
-  return phone;
-};
-
-export const truncateText = (text, maxLength = 50) => {
-  if (!text || text.length <= maxLength) return text;
-  return text.substring(0, maxLength) + '...';
-};
-
-export const capitalizeFirst = (str) => {
-  if (!str) return '';
-  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-};
-
+/**
+ * Generate initials from first and last name
+ * @param {string} firstName - First name
+ * @param {string} lastName - Last name (optional)
+ * @returns {string} Initials (e.g., "JD")
+ */
 export const generateInitials = (firstName, lastName) => {
-  const firstInitial = firstName?.charAt(0) || '';
-  const lastInitial = lastName?.charAt(0) || '';
-  return `${firstInitial}${lastInitial}`.toUpperCase();
+  if (!firstName) return 'U';
+  
+  const first = firstName.charAt(0).toUpperCase();
+  const last = lastName ? lastName.charAt(0).toUpperCase() : '';
+  
+  return first + last;
 };
 
-export const calculateAge = (dateOfBirth) => {
-  const today = new Date();
-  const birthDate = new Date(dateOfBirth);
-  if (isNaN(birthDate.getTime())) {
-    return null;
+/**
+ * Format phone number
+ * @param {string} phone - Phone number string
+ * @returns {string} Formatted phone number
+ */
+export const formatPhoneNumber = (phone) => {
+  if (!phone) return '';
+  
+  // Remove all non-digits
+  const digits = phone.replace(/\D/g, '');
+  
+  // Format as (XXX) XXX-XXXX
+  if (digits.length === 10) {
+    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
   }
-  let age = today.getFullYear() - birthDate.getFullYear();
-  const monthDiff = today.getMonth() - birthDate.getMonth();
-
-  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-    age--;
-  }
-  return age;
+  
+  return phone; // Return original if not 10 digits
 };
 
-export const debounce = (func, wait) => {
-  let timeout;
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
+/**
+ * Format percentage
+ * @param {number} value - Number to format as percentage
+ * @param {number} decimals - Number of decimal places (default: 1)
+ * @returns {string} Formatted percentage string
+ */
+export const formatPercentage = (value, decimals = 1) => {
+  if (typeof value !== 'number') return '0%';
+  
+  return `${value.toFixed(decimals)}%`;
+};
+
+/**
+ * Truncate text to specified length
+ * @param {string} text - Text to truncate
+ * @param {number} maxLength - Maximum length (default: 50)
+ * @returns {string} Truncated text with ellipsis if needed
+ */
+export const truncateText = (text, maxLength = 50) => {
+  if (!text || typeof text !== 'string') return '';
+  
+  if (text.length <= maxLength) return text;
+  
+  return text.slice(0, maxLength).trim() + '...';
+};
+
+/**
+ * Format file size in bytes to human readable format
+ * @param {number} bytes - File size in bytes
+ * @returns {string} Formatted file size
+ */
+export const formatFileSize = (bytes) => {
+  if (bytes === 0) return '0 Bytes';
+  
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 };
