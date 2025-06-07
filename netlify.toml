@@ -1,0 +1,3 @@
+[build]
+  command = "npm run build"
+  publish = "dist" # This tells Netlify your build output is in the 'dist' folder
