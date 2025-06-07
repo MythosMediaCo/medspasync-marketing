@@ -1,12 +1,14 @@
 // medspasync-frontend/tailwind.config.js
 /** @type {import('tailwindcss').Config} */
-export default { // Use export default here too if Vite's default config uses it
+export default { // Use export default for ESM compatibility
   content: [
     "./index.html",
-    "./src/**/*.{js,jsx}", // Ensure both .js and .jsx are covered
+    "./src/**/*.{js,jsx}", // Ensure both .js and .jsx files are scanned
   ],
   theme: {
-    extend: {},
+    extend: {
+      // Customizations for your theme (colors, fonts, etc.) would go here
+    },
   },
-  plugins: [],
+  plugins: [], // Any Tailwind plugins would be listed here
 };
