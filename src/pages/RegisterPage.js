@@ -1,4 +1,4 @@
-// medspasync-frontend-main/src/pages/RegisterPage.js
+// medspasync-pro/src/pages/RegisterPage.js
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../components/Ui/Modal'; // Use your Modal component
@@ -56,7 +56,7 @@ const RegisterPage = React.memo(() => {
                 <div className="max-w-md w-full text-center">
                     <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
                         <div className="mx-auto w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6">
-                            <span className="text-3xl">✅</span>
+                            <span className="text-3xl" role="img" aria-label="Success">✅</span>
                         </div>
                         <h1 className="text-2xl font-bold text-gray-900 mb-3">
                             Welcome to MedSpaSync Pro!
@@ -100,14 +100,14 @@ const RegisterPage = React.memo(() => {
                 {/* Registration Card */}
                 <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
                     {authError && ( // Display global auth error if any
-                        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6" role="alert">
                             <div className="flex items-center">
-                                <span className="text-red-600 mr-2">⚠️</span>
+                                <span className="text-red-600 mr-2" role="img" aria-label="Error">⚠️</span>
                                 <p className="text-red-600 text-sm font-medium">{authError}</p>
                             </div>
                         </div>
                     )}
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5"> {/* Use useForm's handleSubmit */}
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
                         {/* Name Fields */}
                         <div className="grid grid-cols-2 gap-4">
                             <div>
@@ -129,7 +129,7 @@ const RegisterPage = React.memo(() => {
                                     aria-describedby={errors.firstName ? "firstName-error" : undefined}
                                 />
                                 {errors.firstName && (
-                                    <p id="firstName-error" className="mt-1 text-sm text-red-600">{errors.firstName}</p>
+                                    <p id="firstName-error" className="mt-1 text-sm text-red-600" role="alert">{errors.firstName}</p>
                                 )}
                             </div>
 
@@ -152,7 +152,7 @@ const RegisterPage = React.memo(() => {
                                     aria-describedby={errors.lastName ? "lastName-error" : undefined}
                                 />
                                 {errors.lastName && (
-                                    <p id="lastName-error" className="mt-1 text-sm text-red-600">{errors.lastName}</p>
+                                    <p id="lastName-error" className="mt-1 text-sm text-red-600" role="alert">{errors.lastName}</p>
                                 )}
                             </div>
                         </div>
@@ -177,7 +177,7 @@ const RegisterPage = React.memo(() => {
                                 aria-describedby={errors.spaName ? "spaName-error" : undefined}
                             />
                             {errors.spaName && (
-                                <p id="spaName-error" className="mt-1 text-sm text-red-600">{errors.spaName}</p>
+                                <p id="spaName-error" className="mt-1 text-sm text-red-600" role="alert">{errors.spaName}</p>
                             )}
                         </div>
 
@@ -201,7 +201,7 @@ const RegisterPage = React.memo(() => {
                                 aria-describedby={errors.email ? "registerEmail-error" : undefined}
                             />
                             {errors.email && (
-                                <p id="registerEmail-error" className="mt-1 text-sm text-red-600">{errors.email}</p>
+                                <p id="registerEmail-error" className="mt-1 text-sm text-red-600" role="alert">{errors.email}</p>
                             )}
                         </div>
 
@@ -225,7 +225,7 @@ const RegisterPage = React.memo(() => {
                                 aria-describedby={errors.password ? "registerPassword-error" : undefined}
                             />
                             {errors.password && (
-                                <p id="registerPassword-error" className="mt-1 text-sm text-red-600">{errors.password}</p>
+                                <p id="registerPassword-error" className="mt-1 text-sm text-red-600" role="alert">{errors.password}</p>
                             )}
                         </div>
 
@@ -249,7 +249,7 @@ const RegisterPage = React.memo(() => {
                                 aria-describedby={errors.confirmPassword ? "confirmPassword-error" : undefined}
                             />
                             {errors.confirmPassword && (
-                                <p id="confirmPassword-error" className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
+                                <p id="confirmPassword-error" className="mt-1 text-sm text-red-600" role="alert">{errors.confirmPassword}</p>
                             )}
                         </div>
 
@@ -273,7 +273,7 @@ const RegisterPage = React.memo(() => {
                             </label>
                         </div>
                         {errors.agreeToTerms && (
-                            <p id="agreeToTerms-error" className="mt-1 text-sm text-red-600">{errors.agreeToTerms}</p>
+                            <p id="agreeToTerms-error" className="mt-1 text-sm text-red-600" role="alert">{errors.agreeToTerms}</p>
                         )}
 
 

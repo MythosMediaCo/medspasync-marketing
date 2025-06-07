@@ -1,25 +1,25 @@
-// medspasync-frontend-main/src/services/api.js
+// medspasync-pro/src/services/api.js
 import axios from 'axios';
-import { API_BASE_URL } from '../utils/constants';
-import storageService from './storage';
-import toast from 'react-hot-toast'; // Ensure react-hot-toast is installed
+import { API_BASE_URL } from '../utils/constants'; // Your API base URL
+import storageService from './storage'; // Service for local storage interactions
+import toast from 'react-hot-toast'; // For displaying global notifications
 
 class ApiService {
   constructor() {
     this.client = axios.create({
       baseURL: API_BASE_URL,
-      timeout: 15000, // Increased timeout slightly
+      timeout: 15000, // Request timeout in milliseconds
       headers: {
         'Content-Type': 'application/json',
       },
-      withCredentials: true, // If your backend uses cookies for sessions/CSRF
+      withCredentials: true, // Include cookies (if your backend uses them for sessions/CSRF)
     });
 
-    this.setupInterceptors();
+    this.setupInterceptors(); // Configure Axios request and response interceptors
   }
 
   setupInterceptors() {
-    // Request interceptor to add auth token
+    // Request Interceptor: Add Authorization token to headers
     this.client.interceptors.request.use(
       (config) => {
         const token = storageService.getAuthToken();
@@ -29,68 +29,66 @@ class ApiService {
         return config;
       },
       (error) => {
-        return Promise.reject(error);
+        return Promise.reject(error); // Pass request errors down the chain
       }
     );
 
-    // Response interceptor for error handling and token refresh
+    // Response Interceptor: Handle global errors, especially 401 Unauthorized for token refresh
     this.client.interceptors.response.use(
-      (response) => response,
+      (response) => response, // On successful response, just return it
       async (error) => {
         const originalRequest = error.config;
 
-        // Handle 401 errors (unauthorized) and attempt token refresh
-        // Ensure this only happens once per request to avoid infinite loops
+        // Check for 401 Unauthorized errors and if it's not a retry request
         if (error.response?.status === 401 && !originalRequest._retry) {
-          originalRequest._retry = true;
+          originalRequest._retry = true; // Mark request as retried to prevent infinite loops
 
           try {
             const refreshToken = storageService.getRefreshToken();
             if (refreshToken) {
-              // IMPORTANT: This call should NOT use `this.client` directly
-              // to avoid triggering the interceptor again for the refresh call.
-              // Create a separate instance or directly use axios for this specific call.
-              // For simplicity in this example, I'll use axios directly for refresh call.
+              // Attempt to refresh the token using a direct axios call to avoid recursion in interceptors
               const refreshResponse = await axios.post(`${API_BASE_URL}/api/auth/refresh`, {
                 refreshToken
               });
 
               const { token } = refreshResponse.data;
-              storageService.setAuthToken(token);
+              storageService.setAuthToken(token); // Store the new access token
 
-              // Retry original request with new token
+              // Retry the original failed request with the new token
               originalRequest.headers.Authorization = `Bearer ${token}`;
-              return this.client(originalRequest); // Re-run the original request with new token
+              return this.client(originalRequest); // Re-run the original request
             }
           } catch (refreshError) {
             console.error('Token refresh failed:', refreshError);
-            // Refresh failed, clear all auth data and redirect to login
+            // If refresh fails, clear all authentication data and redirect to login
             storageService.clearAll();
             toast.error('Your session has expired. Please log in again.');
-            window.location.href = '/login'; // Full reload to clear app state
+            // Using window.location.href to force a full page reload and clear app state
+            window.location.href = '/login'; 
             return Promise.reject(refreshError);
           }
         }
 
-        // Handle other errors (not 401 or refresh failed)
+        // Handle other network or API errors
         if (!error.response) {
-          // Network error (no response from server)
+          // Network error (e.g., no internet connection, server down)
           toast.error('Network error. Please check your connection.');
         } else {
-          // API error with response (e.g., 400, 403, 404, 500)
+          // API error with a response (e.g., 400 Bad Request, 403 Forbidden, 500 Internal Server Error)
           const message = error.response.data?.message || error.message || 'An unexpected error occurred';
-          // Avoid showing duplicate toasts if a specific component is handling an error already
-          if (!originalRequest.hideToast) { // Add a flag to config to hide default toast
+          // Prevent showing duplicate toasts if a specific component is handling an error already
+          if (!originalRequest.hideToast) { // Custom flag to suppress global toast
             toast.error(message);
           }
         }
 
-        return Promise.reject(error);
+        return Promise.reject(error); // Re-throw the error for component-level handling
       }
     );
   }
 
-  // Generic HTTP methods
+  // --- Generic HTTP Methods ---
+
   async get(url, config = {}) {
     const response = await this.client.get(url, config);
     return response.data;

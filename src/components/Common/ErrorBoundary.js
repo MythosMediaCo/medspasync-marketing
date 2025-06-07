@@ -1,4 +1,4 @@
-// medspasync-frontend-main/src/components/Common/ErrorBoundary.js
+// medspasync-pro/src/components/Common/ErrorBoundary.js
 import React from 'react';
 
 class ErrorBoundary extends React.Component {
@@ -8,22 +8,24 @@ class ErrorBoundary extends React.Component {
     }
 
     static getDerivedStateFromError(error) {
+        // Update state so the next render will show the fallback UI.
         return { hasError: true, error };
     }
 
     componentDidCatch(error, errorInfo) {
-        // In a production app, you would log error to an error reporting service
-        console.error('MedSpaSync Pro Error:', error, errorInfo); // Keep for development debugging
+        // You can also log the error to an error reporting service
+        console.error('MedSpaSync Pro Error Boundary Caught:', error, errorInfo);
         // Example: Sentry.captureException(error, { extra: errorInfo });
     }
 
     render() {
         if (this.state.hasError) {
+            // Fallback UI when an error occurs
             return (
                 <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
                     <div className="max-w-lg w-full bg-white rounded-2xl shadow-xl p-8 text-center">
                         <div className="mx-auto w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mb-6">
-                            <span className="text-3xl">⚠️</span>
+                            <span className="text-3xl" role="img" aria-label="Warning">⚠️</span>
                         </div>
 
                         <h1 className="text-2xl font-bold text-gray-900 mb-4">
@@ -33,8 +35,8 @@ class ErrorBoundary extends React.Component {
                         <p className="text-gray-600 mb-6">
                             We encountered an unexpected error. Please refresh the page to continue.
                             {this.state.error && (
-                                <span className="block mt-2 text-red-500 text-sm">
-                                    Error: {this.state.error.message || 'Unknown error'}
+                                <span className="block mt-2 text-red-500 text-sm font-mono break-words">
+                                    Error Details: {this.state.error.message || 'Unknown error'}
                                 </span>
                             )}
                         </p>
@@ -50,7 +52,7 @@ class ErrorBoundary extends React.Component {
                             <button
                                 onClick={() => {
                                     localStorage.clear(); // Clear all local storage data
-                                    window.location.href = '/'; // Redirect to home
+                                    window.location.href = '/'; // Redirect to home (hard refresh)
                                 }}
                                 className="w-full bg-gray-100 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors"
                             >

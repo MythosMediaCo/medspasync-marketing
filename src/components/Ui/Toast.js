@@ -1,4 +1,4 @@
-// medspasync-frontend-main/src/components/Ui/Toast.js
+// medspasync-pro/src/components/Ui/Toast.js
 import React from 'react';
 import { Toaster } from 'react-hot-toast';
 

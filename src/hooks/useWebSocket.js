@@ -1,13 +1,13 @@
-// src/hooks/useWebSocket.js
+// medspasync-pro/src/hooks/useWebSocket.js
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '../services/AuthContext';
 import toast from 'react-hot-toast';
 
-export const useWebSocket = (originalUrl, options = {}) => { // Changed param name to originalUrl
+export const useWebSocket = (originalUrl, options = {}) => {
   const { user, isAuthenticated, isLoading: authLoading } = useAuth();
   const [socket, setSocket] = useState(null);
   const [lastMessage, setLastMessage] = useState(null);
-  const [readyState, setReadyState] = useState(0);
+  const [readyState, setReadyState] = useState(WebSocket.CONNECTING); // Initial state
   const [connectionStatus, setConnectionStatus] = useState('Connecting');
 
   const {
@@ -18,87 +18,97 @@ export const useWebSocket = (originalUrl, options = {}) => { // Changed param na
     shouldReconnect = true,
     reconnectAttempts = 5,
     reconnectInterval = 3000,
-    requiresAuth = true
+    requiresAuth = true // Option to control if auth is needed for connection
   } = options;
 
   const reconnectTimeoutId = useRef(null);
   const reconnectCount = useRef(0);
+  const isMounted = useRef(false); // To prevent state updates on unmounted component
 
-  // Function to get the correct WebSocket URL for Codespaces
+  // Helper to construct Codespace-compatible WebSocket URL
   const getCodespaceWsUrl = useCallback((baseHttpUrl, wsPath) => {
     try {
       const urlObj = new URL(baseHttpUrl);
-      // Replace http/https with ws/wss
       urlObj.protocol = urlObj.protocol === 'https:' ? 'wss:' : 'ws:';
-      // Remove the port if it's explicitly stated and Codespaces handles it
-      if (urlObj.port === '3000' || urlObj.port === '8080') { // Assuming typical dev ports
-        urlObj.port = ''; // Clear port if it's one Codespaces manages
+      // Remove the port if it's explicitly stated and Codespaces manages it (e.g., 3000, 8080)
+      if (urlObj.port === '3000' || urlObj.port === '8080' || urlObj.port === '5000') { // Added 5000 for backend
+        urlObj.port = '';
       }
-      // Append the path, ensuring no double slashes
-      return `<span class="math-inline">\{urlObj\.href\.replace\(/\\/</span>/, '')}<span class="math-inline">\{wsPath\.startsWith\('/'\) ? '' \: '/'\}</span>{wsPath}`;
+      return `${urlObj.href.replace(/\/$/, '')}${wsPath.startsWith('/') ? '' : '/'}${wsPath}`;
     } catch (e) {
       console.error("Failed to construct Codespace WebSocket URL:", e);
-      return `${originalUrl.replace(/^http/, 'ws')}`; // Fallback or use original transformed
+      return originalUrl.replace(/^http/, 'ws'); // Fallback to a simple transformation
     }
   }, [originalUrl]);
 
-
   const connect = useCallback(() => {
+    if (!isMounted.current) return; // Prevent connecting if component is unmounted
+
     if (reconnectTimeoutId.current) {
       clearTimeout(reconnectTimeoutId.current);
       reconnectTimeoutId.current = null;
     }
 
+    // Guard against connecting if auth is required but not ready
     if (requiresAuth && (!isAuthenticated || !user || authLoading)) {
       setConnectionStatus('Waiting for authentication...');
-      setReadyState(3);
+      setReadyState(WebSocket.CLOSED); // Explicitly closed if waiting
       console.log('WebSocket: Waiting for authentication before connecting.');
       return;
     }
 
     try {
       let wsUrl = originalUrl;
-      // Dynamically adjust URL if running in Codespaces (or similar proxy environment)
-      // You might set an environment variable like process.env.CODESPACES to detect this
-      // For now, assuming you are in Codespaces if URL looks like its forwarded
-      if (window.location.hostname.endsWith('.app.github.dev')) {
-         wsUrl = getCodespaceWsUrl(window.location.href, '/ws'); // Pass current page URL and WS path
+      // Adjust URL for Codespaces/proxied environments
+      if (window.location.hostname.endsWith('.app.github.dev') || window.location.hostname.includes('codesandbox.io')) { // Generic check
+         // Assumes that if the app is on a codespace URL, the WS endpoint is relative or similar
+         // You might need to refine the `wsPath` depending on your backend
+         wsUrl = getCodespaceWsUrl(window.location.href, originalUrl.startsWith('/') ? originalUrl : `/${originalUrl.split('://')[1].split('/')[1] || ''}`);
       } else {
          // For local development, assume originalUrl (e.g., ws://localhost:8080/ws)
          wsUrl = originalUrl.replace(/^http/, 'ws');
       }
 
+      // Append token if authentication is required and user has a token
       if (requiresAuth && user?.token) {
-        wsUrl = `<span class="math-inline">\{wsUrl\}?token\=</span>{user.token}`;
+        wsUrl = `${wsUrl}?token=${user.token}`;
       } else if (requiresAuth && (!user || !user.token)) {
+          // This case should ideally be caught by the earlier `if (requiresAuth && ...)` block,
+          // but as a failsafe, prevent connection if no token despite requiring auth.
           setConnectionStatus('Disconnected: No Auth Token');
-          setReadyState(3);
+          setReadyState(WebSocket.CLOSED);
           console.warn('WebSocket: Attempted to connect to authenticated endpoint without a token.');
           return;
       }
 
       const ws = new WebSocket(wsUrl);
+      setSocket(ws);
+      setReadyState(WebSocket.CONNECTING);
+      setConnectionStatus('Connecting...');
 
       ws.onopen = (event) => {
-        setReadyState(ws.readyState);
+        if (!isMounted.current) return ws.close(); // Close if component unmounted prematurely
+        setReadyState(WebSocket.OPEN);
         setConnectionStatus('Open');
-        reconnectCount.current = 0;
+        reconnectCount.current = 0; // Reset reconnect count on successful connection
         if (onOpen) onOpen(event);
         console.log('WebSocket: Connected successfully to', wsUrl);
       };
 
       ws.onclose = (event) => {
-        setReadyState(ws.readyState);
+        if (!isMounted.current && event.code !== 1000) return; // Ignore if unmounted and not normal closure
+        setReadyState(WebSocket.CLOSED);
         setConnectionStatus('Closed');
         if (onClose) onClose(event);
         console.log('WebSocket: Connection closed.', event.code, event.reason);
 
-        if (shouldReconnect && reconnectCount.current < reconnectAttempts) {
+        // Attempt reconnect if enabled and within limits
+        if (shouldReconnect && reconnectCount.current < reconnectAttempts && !event.wasClean) { // Only reconnect if not a clean close
           reconnectCount.current++;
-          setConnectionStatus(`Reconnecting (Attempt <span class="math-inline">\{reconnectCount\.current\}/</span>{reconnectAttempts})...`);
+          setConnectionStatus(`Reconnecting (Attempt ${reconnectCount.current}/${reconnectAttempts})...`);
           console.log(`WebSocket: Reconnecting (Attempt ${reconnectCount.current})...`);
           reconnectTimeoutId.current = setTimeout(() => {
-            connect();
+            if (isMounted.current) connect(); // Only reconnect if still mounted
           }, reconnectInterval);
         } else if (shouldReconnect && reconnectCount.current >= reconnectAttempts) {
           setConnectionStatus('Reconnection failed. Max attempts reached.');
@@ -108,6 +118,7 @@ export const useWebSocket = (originalUrl, options = {}) => { // Changed param na
       };
 
       ws.onmessage = (event) => {
+        if (!isMounted.current) return;
         try {
           const message = JSON.parse(event.data);
           setLastMessage(message);
@@ -120,51 +131,62 @@ export const useWebSocket = (originalUrl, options = {}) => { // Changed param na
       };
 
       ws.onerror = (event) => {
+        if (!isMounted.current) return;
         setConnectionStatus('Error');
         console.error('WebSocket error:', event);
         if (onError) onError(event);
         toast.error('WebSocket error encountered.');
+        // Closing the socket here will trigger the onclose handler, which handles reconnects
         ws.close();
       };
 
-      setSocket(ws);
     } catch (error) {
       console.error('WebSocket connection setup failed:', error);
       setConnectionStatus('Error');
       if (onError) onError(error);
+      // Attempt reconnect if the initial connection failed
       if (shouldReconnect && reconnectCount.current < reconnectAttempts) {
         reconnectCount.current++;
         reconnectTimeoutId.current = setTimeout(() => {
-          setConnectionStatus(`Reconnecting (Attempt <span class="math-inline">\{reconnectCount\.current\}/</span>{reconnectAttempts})...`);
-          connect();
+          if (isMounted.current) connect();
         }, reconnectInterval);
       }
     }
-  }, [originalUrl, user, isAuthenticated, authLoading, onOpen, onClose, onMessage, onError, shouldReconnect, reconnectAttempts, reconnectInterval, requiresAuth, getCodespaceWsUrl]); // Added getCodespaceWsUrl dependency
+  }, [originalUrl, user, isAuthenticated, authLoading, onOpen, onClose, onMessage, onError, shouldReconnect, reconnectAttempts, reconnectInterval, requiresAuth, getCodespaceWsUrl]);
 
 
   useEffect(() => {
-    if (!authLoading && (isAuthenticated || !requiresAuth)) {
-      if (!socket || socket.readyState === WebSocket.CLOSED || socket.readyState === WebSocket.CLOSING) {
-        connect();
-      }
-    } else if (!authLoading && requiresAuth && !isAuthenticated) {
+    isMounted.current = true; // Set mounted flag
+
+    // Only attempt to connect if authentication is not loading
+    if (!authLoading) {
+      // Connect if authentication is not required, OR if it is required AND isAuthenticated
+      if (!requiresAuth || isAuthenticated) {
+        // Only connect if not already connected or in a closing state
+        if (!socket || socket.readyState === WebSocket.CLOSED || socket.readyState === WebSocket.CLOSING) {
+          connect();
+        }
+      } else {
+        // If authLoading is false, but it requires auth and isn't authenticated, disconnect if connected
         if (socket && socket.readyState === WebSocket.OPEN) {
-            disconnect();
+          disconnect(); // Ensure it's disconnected
         }
         setConnectionStatus('Disconnected: Not Authenticated');
-        setReadyState(3);
+        setReadyState(WebSocket.CLOSED);
+      }
     }
 
+    // Cleanup function: Closes the WebSocket and clears timeout on unmount
     return () => {
+      isMounted.current = false; // Unset mounted flag
       if (reconnectTimeoutId.current) {
         clearTimeout(reconnectTimeoutId.current);
       }
       if (socket) {
-        socket.close(1000, 'Component unmounted or forced disconnect');
+        socket.close(1000, 'Component unmounted'); // 1000 for normal closure
       }
     };
-  }, [user, isAuthenticated, authLoading, originalUrl, connect, disconnect, requiresAuth, socket]);
+  }, [user, isAuthenticated, authLoading, originalUrl, connect, disconnect, requiresAuth, socket]); // Include socket in deps to ensure cleanup runs on current instance
 
   const sendMessage = useCallback((message) => {
     if (socket && socket.readyState === WebSocket.OPEN) {
@@ -184,7 +206,7 @@ export const useWebSocket = (originalUrl, options = {}) => { // Changed param na
       socket.close(1000, 'Explicit disconnect by client');
       setSocket(null);
       setConnectionStatus('Disconnected');
-      setReadyState(3);
+      setReadyState(WebSocket.CLOSED);
     }
   }, [socket]);
 

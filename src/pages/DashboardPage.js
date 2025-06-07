@@ -1,9 +1,9 @@
-// medspasync-frontend-main/src/pages/DashboardPage.js
+// medspasync-pro/src/pages/DashboardPage.js
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../components/Ui/Modal'; // Use your Modal component
 import { useAuth } from '../services/AuthContext'; // Use the AuthContext
-import { formatCurrency, formatTime } from '../utils/formatting'; // Import utility functions
+import { formatCurrency, formatTime, generateInitials } from '../utils/formatting'; // Import utility functions
 
 const DashboardPage = React.memo(() => {
     const navigate = useNavigate();
@@ -17,14 +17,11 @@ const DashboardPage = React.memo(() => {
     useEffect(() => {
         const timer = setInterval(() => {
             setCurrentTime(new Date());
-        }, 1000);
-        return () => clearInterval(timer);
+        }, 1000); // Update every second
+        return () => clearInterval(timer); // Cleanup timer on unmount
     }, []);
 
-    // No need to pass formatTime and formatCurrency as props anymore,
-    // they are imported directly.
-
-    // Memoized static data for demo. In production, this would be fetched from API.
+    // Memoized static data for demo. In production, this would be fetched from API using useAPI hook.
     const stats = useMemo(() => ({
         totalRevenue: 45620,
         appointmentsToday: 12,
@@ -35,10 +32,10 @@ const DashboardPage = React.memo(() => {
     }), []);
 
     const recentAppointments = useMemo(() => [
-        { id: 1, client: 'Sarah Johnson', service: 'Botox Treatment', time: '10:30 AM', status: 'confirmed', avatar: 'SJ' },
-        { id: 2, client: 'Michael Chen', service: 'Laser Hair Removal', time: '11:15 AM', status: 'in-progress', avatar: 'MC' },
-        { id: 3, client: 'Emma Williams', service: 'Chemical Peel', time: '2:00 PM', status: 'pending', avatar: 'EW' },
-        { id: 4, client: 'David Brown', service: 'Facial Treatment', time: '3:30 PM', status: 'confirmed', avatar: 'DB' }
+        { id: 1, client: 'Sarah Johnson', service: 'Botox Treatment', time: '10:30 AM', status: 'confirmed' },
+        { id: 2, client: 'Michael Chen', service: 'Laser Hair Removal', time: '11:15 AM', status: 'in-progress' },
+        { id: 3, client: 'Emma Williams', service: 'Chemical Peel', time: '2:00 PM', status: 'pending' },
+        { id: 4, client: 'David Brown', service: 'Facial Treatment', time: '3:30 PM', status: 'confirmed' }
     ], []);
 
     const topServices = useMemo(() => [
@@ -88,6 +85,7 @@ const DashboardPage = React.memo(() => {
             onClose: () => setShowModal(false),
             showCloseButton: true,
             closeOnOverlayClick: true,
+            type: 'alert',
             size: 'sm'
         });
         setShowModal(true);
@@ -100,6 +98,7 @@ const DashboardPage = React.memo(() => {
             onClose: () => setShowModal(false),
             showCloseButton: true,
             closeOnOverlayClick: true,
+            type: 'alert',
             size: 'sm'
         });
         setShowModal(true);
@@ -132,8 +131,9 @@ const DashboardPage = React.memo(() => {
                                 onClick={handleNotificationsClick}
                                 className="relative p-2 text-gray-400 hover:text-gray-600 transition-colors"
                                 title="Notifications"
+                                aria-label="Notifications"
                             >
-                                <span className="text-xl">🔔</span>
+                                <span className="text-xl" role="img" aria-label="Bell icon">🔔</span>
                                 {notifications > 0 && (
                                     <span className="absolute -top-1 -right-1 h-5 w-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center animate-pulse">
                                         {notifications}
@@ -145,16 +145,18 @@ const DashboardPage = React.memo(() => {
                                 onClick={handleSettingsClick}
                                 className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
                                 title="Settings"
+                                aria-label="Settings"
                             >
-                                <span className="text-xl">⚙️</span>
+                                <span className="text-xl" role="img" aria-label="Settings icon">⚙️</span>
                             </button>
 
                             <button
                                 onClick={handleLogoutClick}
                                 className="p-2 text-gray-400 hover:text-red-500 transition-colors"
                                 title="Sign Out"
+                                aria-label="Sign Out"
                             >
-                                <span className="text-xl">🚪</span>
+                                <span className="text-xl" role="img" aria-label="Door icon">🚪</span>
                             </button>
                         </div>
                     </div>
@@ -180,8 +182,9 @@ const DashboardPage = React.memo(() => {
                                         ? 'border-indigo-500 text-indigo-600'
                                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                 }`}
+                                aria-current={activeTab === tab.id ? 'page' : undefined}
                             >
-                                <span>{tab.icon}</span>
+                                <span role="img" aria-label={tab.label + " icon"}>{tab.icon}</span>
                                 <span>{tab.label}</span>
                             </button>
                         ))}
@@ -204,7 +207,7 @@ const DashboardPage = React.memo(() => {
                                         Welcome to your {user?.spaName || 'medical spa'} dashboard
                                     </p>
                                 </div>
-                                <div className="text-6xl opacity-20">
+                                <div className="text-6xl opacity-20" role="img" aria-label="Spa icon">
                                     💆‍♀️
                                 </div>
                             </div>
@@ -218,12 +221,12 @@ const DashboardPage = React.memo(() => {
                                         <p className="text-sm font-medium text-gray-600">Total Revenue</p>
                                         <p className="text-2xl font-bold text-gray-900">{formatCurrency(stats.totalRevenue)}</p>
                                         <p className="text-sm text-green-600 flex items-center">
-                                            <span className="mr-1">📈</span>
+                                            <span className="mr-1" role="img" aria-label="Chart showing growth">📈</span>
                                             +{stats.monthlyGrowth}% this month
                                         </p>
                                     </div>
                                     <div className="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center">
-                                        <span className="text-2xl">💰</span>
+                                        <span className="text-2xl" role="img" aria-label="Money bag">💰</span>
                                     </div>
                                 </div>
                             </div>
@@ -238,7 +241,7 @@ const DashboardPage = React.memo(() => {
                                         </p>
                                     </div>
                                     <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                                        <span className="text-2xl">📅</span>
+                                        <span className="text-2xl" role="img" aria-label="Calendar">📅</span>
                                     </div>
                                 </div>
                             </div>
@@ -251,7 +254,7 @@ const DashboardPage = React.memo(() => {
                                         <p className="text-sm text-purple-600">+23 new this month</p>
                                     </div>
                                     <div className="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                                        <span className="text-2xl">👥</span>
+                                        <span className="text-2xl" role="img" aria-label="Users">👥</span>
                                     </div>
                                 </div>
                             </div>
@@ -261,10 +264,10 @@ const DashboardPage = React.memo(() => {
                                     <div>
                                         <p className="text-sm font-medium text-gray-600">Growth Rate</p>
                                         <p className="text-2xl font-bold text-gray-900">{stats.monthlyGrowth}%</p>
-                                        <p className="text-sm text-orange-600">Above target 🎯</p>
+                                        <p className="text-sm text-orange-600">Above target <span role="img" aria-label="Target">🎯</span></p>
                                     </div>
                                     <div className="h-12 w-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                                        <span className="text-2xl">📈</span>
+                                        <span className="text-2xl" role="img" aria-label="Chart showing growth">📈</span>
                                     </div>
                                 </div>
                             </div>
@@ -277,7 +280,7 @@ const DashboardPage = React.memo(() => {
                                 <div className="p-6 border-b border-gray-200">
                                     <div className="flex items-center justify-between">
                                         <h3 className="text-lg font-semibold text-gray-900 flex items-center">
-                                            <span className="mr-2">📋</span>
+                                            <span className="mr-2" role="img" aria-label="Clipboard">📋</span>
                                             Today's Schedule
                                         </h3>
                                         <button
@@ -294,7 +297,7 @@ const DashboardPage = React.memo(() => {
                                             <div key={apt.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
                                                 <div className="flex items-center space-x-3">
                                                     <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white font-medium text-sm">
-                                                        {apt.avatar}
+                                                        {generateInitials(apt.client.split(' ')[0], apt.client.split(' ')[1])}
                                                     </div>
                                                     <div>
                                                         <p className="font-medium text-gray-900">{apt.client}</p>
@@ -315,7 +318,7 @@ const DashboardPage = React.memo(() => {
                             <div className="bg-white rounded-xl shadow-sm border border-gray-200">
                                 <div className="p-6 border-b border-gray-200">
                                     <h3 className="text-lg font-semibold text-gray-900 flex items-center">
-                                        <span className="mr-2">🏆</span>
+                                        <span className="mr-2" role="img" aria-label="Trophy">🏆</span>
                                         Top Services
                                     </h3>
                                 </div>
@@ -339,6 +342,7 @@ const DashboardPage = React.memo(() => {
                                                         <div
                                                             className="h-2 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full transition-all"
                                                             style={{ width: `${(service.revenue / 12400) * 100}%` }}
+                                                            aria-label={`Revenue progress for ${service.service}`}
                                                         ></div>
                                                     </div>
                                                 </div>
@@ -351,11 +355,11 @@ const DashboardPage = React.memo(() => {
                     </div>
                 )}
 
-                {/* Other Tabs */}
+                {/* Other Tabs Placeholder */}
                 {activeTab !== 'overview' && (
                     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
                         <div className="mb-6">
-                            <span className="text-6xl">🚧</span>
+                            <span className="text-6xl" role="img" aria-label="Construction cones">🚧</span>
                         </div>
                         <h3 className="text-2xl font-bold text-gray-900 mb-4">
                             {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Module
@@ -377,13 +381,14 @@ const DashboardPage = React.memo(() => {
                 )}
             </main>
 
-            {/* Success Message */}
+            {/* Success Message (Fixed position) */}
             <div className="fixed bottom-6 right-6 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg shadow-lg">
                 <div className="flex items-center space-x-2">
-                    <span>✅</span>
+                    <span role="img" aria-label="Checkmark">✅</span>
                     <span className="text-sm font-medium">Enhanced Dashboard Ready!</span>
                 </div>
             </div>
+            {/* Modal component for pop-ups */}
             <Modal isOpen={showModal} {...modalConfig} />
         </div>
     );

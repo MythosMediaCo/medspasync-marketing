@@ -1,4 +1,3 @@
-// medspasync-frontend-main/src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ErrorBoundary from './components/Common/ErrorBoundary';
@@ -19,9 +18,9 @@ import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import NotFoundPage from './pages/NotFoundPage';
 
-// Component that renders the main app content after auth context is ready
+// AppContent handles rendering after AuthProvider is ready
 function AppContent() {
-    const { isLoading } = useAuth(); // Only need isLoading here for initial load
+    const { isLoading } = useAuth(); // Global loading state from AuthContext
 
     // Show a global loading screen during initial authentication check
     if (isLoading) {
@@ -30,9 +29,9 @@ function AppContent() {
 
     return (
         <div className="App min-h-screen bg-gray-50">
-            <Toast /> {/* Global toast container */}
+            <Toast /> {/* Global toast notification container */}
             <Routes>
-                {/* Public Routes */}
+                {/* Public Routes - Accessible to all, but redirects authenticated users */}
                 <Route
                     path="/"
                     element={<PublicRoute><LandingPage /></PublicRoute>}
@@ -46,12 +45,12 @@ function AppContent() {
                     element={<PublicRoute><RegisterPage /></PublicRoute>}
                 />
 
-                {/* Protected Routes */}
+                {/* Protected Routes - Requires authentication and optionally specific roles */}
                 <Route
                     path="/dashboard"
                     element={<ProtectedRoute requiredRoles={['admin', 'manager', 'staff', 'receptionist']}><DashboardPage /></ProtectedRoute>}
                 />
-                {/* Add other protected routes here later, e.g.: */}
+                {/* Example of other protected routes with role-based access */}
                 {/* <Route
                     path="/appointments"
                     element={<ProtectedRoute requiredRoles={['admin', 'manager', 'staff']}><AppointmentsPage /></ProtectedRoute>}
@@ -65,14 +64,14 @@ function AppContent() {
                     element={<ProtectedRoute requiredRoles={['admin']}><SettingsPage /></ProtectedRoute>}
                 /> */}
 
-                {/* 404 Fallback */}
+                {/* 404 Fallback Route - Catches all undefined paths */}
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>
         </div>
     );
 }
 
-// Main App Component with Router and AuthProvider
+// Main App component: Sets up Router, ErrorBoundary, and AuthProvider
 function App() {
     return (
         <ErrorBoundary>

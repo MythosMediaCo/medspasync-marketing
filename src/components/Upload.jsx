@@ -1,4 +1,4 @@
-// medspasync-frontend-main/src/components/Upload.jsx
+// medspasync-pro/src/components/Upload.jsx
 import React from 'react';
 
 export default function Upload() {

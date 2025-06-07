@@ -1,13 +1,13 @@
-// medspasync-frontend-main/src/components/auth/PublicRoute.js
+// medspasync-pro/src/components/auth/PublicRoute.js
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../../services/AuthContext'; // Updated import path
+import { useAuth } from '../../services/AuthContext'; // Using the unified AuthContext
 import { Loader2 } from 'lucide-react'; // Make sure you have lucide-react installed
 
 const PublicRoute = ({ children, redirectTo = '/dashboard' }) => {
-    const { isAuthenticated, isLoading } = useAuth();
+    const { isAuthenticated, isLoading } = useAuth(); // Use isLoading from AuthContext
 
-    // Show loading spinner while checking authentication
+    // Show loading spinner while AuthContext is checking authentication status
     if (isLoading) {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -19,11 +19,12 @@ const PublicRoute = ({ children, redirectTo = '/dashboard' }) => {
         );
     }
 
-    // Redirect to dashboard if already authenticated
+    // Redirect to specified path (default: /dashboard) if already authenticated
     if (isAuthenticated) {
         return <Navigate to={redirectTo} replace />;
     }
 
+    // If not authenticated, render the children (public page)
     return children;
 };
 

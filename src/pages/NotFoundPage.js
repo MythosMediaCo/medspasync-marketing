@@ -1,21 +1,21 @@
-// medspasync-frontend-main/src/pages/NotFoundPage.js
+// medspasync-pro/src/pages/NotFoundPage.js
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../services/AuthContext'; // To check auth status
+import { useAuth } from '../services/AuthContext'; // To check authentication status
 
 const NotFoundPage = React.memo(() => {
     const navigate = useNavigate();
-    const { isAuthenticated } = useAuth(); // Get auth status from AuthContext
+    const { isAuthenticated } = useAuth(); // Get authentication status from AuthContext
 
     const handleGoHome = useCallback(() => {
-        navigate(isAuthenticated ? '/dashboard' : '/');
+        navigate(isAuthenticated ? '/dashboard' : '/'); // Navigate to dashboard if authenticated, else home
     }, [isAuthenticated, navigate]);
 
     return (
         <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
             <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
                 <div className="mx-auto w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-6">
-                    <span className="text-3xl">🔍</span>
+                    <span className="text-3xl" role="img" aria-label="Magnifying glass">🔍</span>
                 </div>
                 <h1 className="text-2xl font-bold text-gray-900 mb-4">Page Not Found</h1>
                 <p className="text-gray-600 mb-6">

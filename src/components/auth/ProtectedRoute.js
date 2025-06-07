@@ -1,14 +1,14 @@
-// medspasync-frontend-main/src/components/auth/ProtectedRoute.js
+// medspasync-pro/src/components/auth/ProtectedRoute.js
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../services/AuthContext'; // Updated import path
+import { useAuth } from '../../services/AuthContext'; // Using the unified AuthContext
 import { Loader2 } from 'lucide-react'; // Make sure you have lucide-react installed
 
 const ProtectedRoute = ({ children, requiredRoles = [] }) => {
-    const { isAuthenticated, isLoading, user } = useAuth();
+    const { isAuthenticated, isLoading, user } = useAuth(); // Use isLoading from AuthContext
     const location = useLocation();
 
-    // Show loading spinner while checking authentication
+    // Show loading spinner while AuthContext is checking authentication status
     if (isLoading) {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -28,10 +28,11 @@ const ProtectedRoute = ({ children, requiredRoles = [] }) => {
 
     // Check role-based access if required roles are specified
     if (requiredRoles.length > 0 && user) {
-        const userRole = user.role || 'staff'; // Default role if not set
+        const userRole = user.role || 'staff'; // Default role if not set by backend
         const hasRequiredRole = requiredRoles.includes(userRole);
 
         if (!hasRequiredRole) {
+            // Display an access denied message
             return (
                 <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
                     <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
@@ -57,6 +58,7 @@ const ProtectedRoute = ({ children, requiredRoles = [] }) => {
         }
     }
 
+    // If authenticated and has required role (or no roles required), render children
     return children;
 };
 

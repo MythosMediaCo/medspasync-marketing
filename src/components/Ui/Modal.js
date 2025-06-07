@@ -1,4 +1,4 @@
-// medspasync-frontend-main/src/components/Ui/Modal.js
+// medspasync-pro/src/components/Ui/Modal.js
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom'; // Import ReactDOM for createPortal
 import { X } from 'lucide-react'; // Make sure you have lucide-react installed
