@@ -1,104 +1,89 @@
-import axios from 'axios';
-import { API_BASE_URL } from '../utils/constants.js';
+import apiService from './api.js';
 import { storageService } from './storage.js';
 import toast from 'react-hot-toast';
 
-class ApiService {
-  constructor() {
-    this.client = axios.create({
-      baseURL: API_BASE_URL,
-      timeout: 15000,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      withCredentials: true,
-    });
-
-    this.setupInterceptors();
-  }
-
-  setupInterceptors() {
-    this.client.interceptors.request.use(
-      (config) => {
-        const token = storageService.getAuthToken();
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`;
+class AuthService {
+  async login(credentials) {
+    try {
+      const response = await apiService.post(AuthService.API_ENDPOINTS.AUTH.LOGIN, credentials); // Note: Should use API_ENDPOINTS from constants, not AuthService.API_ENDPOINTS
+      if (response.token) {
+        storageService.setAuthToken(response.token);
+        if (response.refreshToken) {
+          storageService.setRefreshToken(response.refreshToken);
         }
-        return config;
-      },
-      (error) => {
-        return Promise.reject(error);
+        if (response.user) {
+          storageService.setUserData(response.user);
+        }
       }
-    );
+      return response;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Login failed');
+    }
+  }
 
-    this.client.interceptors.response.use(
-      (response) => response,
-      async (error) => {
-        const originalRequest = error.config;
+  async register(userData) {
+    try {
+      const response = await apiService.post(AuthService.API_ENDPOINTS.AUTH.REGISTER, userData); // Note: Should use API_ENDPOINTS from constants
+      return response;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Registration failed');
+    }
+  }
 
-        if (error.response?.status === 401 && !originalRequest._retry) {
-          originalRequest._retry = true;
-
-          try {
-            const refreshToken = storageService.getRefreshToken();
-            if (refreshToken) {
-              const refreshResponse = await axios.post(`${API_BASE_URL}/api/auth/refresh`, {
-                refreshToken
-              });
-
-              const { token } = refreshResponse.data;
-              storageService.setAuthToken(token);
-
-              originalRequest.headers.Authorization = `Bearer ${token}`;
-              return this.client(originalRequest);
-            }
-          } catch (refreshError) {
-            console.error('Token refresh failed:', refreshError);
-            storageService.clearAll();
-            toast.error('Your session has expired. Please log in again.');
-            window.location.href = '/login';
-            return Promise.reject(refreshError);
-          }
-        }
-
-        if (!error.response) {
-          toast.error('Network error. Please check your connection.');
-        } else {
-          const message = error.response.data?.message || error.message || 'An unexpected error occurred';
-          if (!originalRequest.hideToast) {
-            toast.error(message);
-          }
-        }
-
-        return Promise.reject(error);
+  async logout() {
+    try {
+      const refreshToken = storageService.getRefreshToken();
+      if (refreshToken) {
+        await apiService.post(AuthService.API_ENDPOINTS.AUTH.LOGOUT, { refreshToken }); // Note: Should use API_ENDPOINTS from constants
       }
-    );
+    } catch (error) {
+      console.error('Backend logout error:', error);
+    } finally {
+      storageService.clearAll();
+    }
   }
 
-  async get(url, config = {}) {
-    const response = await this.client.get(url, config);
-    return response.data;
+  async refreshToken() {
+    try {
+      const refreshToken = storageService.getRefreshToken();
+      if (!refreshToken) {
+        throw new Error('No refresh token available. User must re-authenticate.');
+      }
+
+      const response = await apiService.post(AuthService.API_ENDPOINTS.AUTH.REFRESH, { // Note: Should use API_ENDPOINTS from constants
+        refreshToken
+      });
+
+      if (response.token) {
+        storageService.setAuthToken(response.token);
+      }
+      return response;
+    } catch (error) {
+      storageService.clearAll();
+      throw error;
+    }
   }
 
-  async post(url, data = {}, config = {}) {
-    const response = await this.client.post(url, data, config);
-    return response.data;
+  async getProfile() {
+    try {
+      const response = await apiService.get(AuthService.API_ENDPOINTS.AUTH.PROFILE); // Note: Should use API_ENDPOINTS from constants
+      if (response.user) {
+        storageService.setUserData(response.user);
+      }
+      return response;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Failed to fetch user profile');
+    }
   }
 
-  async put(url, data = {}, config = {}) {
-    const response = await this.client.put(url, data, config);
-    return response.data;
+  isAuthenticated() {
+    return storageService.isAuthenticated();
   }
 
-  async patch(url, data = {}, config = {}) {
-    const response = await this.client.patch(url, data, config);
-    return response.data;
-  }
-
-  async delete(url, config = {}) {
-    const response = await this.client.delete(url, config);
-    return response.data;
+  getCurrentUser() {
+    return storageService.getUserData();
   }
 }
 
+// This line needs to be clearly after the class definition
 export const authService = new AuthService();
