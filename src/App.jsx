@@ -15,73 +15,53 @@ import Toast from './components/Ui/Toast.jsx';
 import LandingPage from './pages/LandingPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
-import DashboardPage from './pages/Dashboard.jsx'; // Dashboard is now in its own file
-import ClientsPage from './pages/ClientsPage.jsx'; // New client management page
-import AppointmentsPage from './pages/AppointmentsPage.jsx'; // New appointments page
-import ServicesPage from './pages/ServicesPage.jsx'; // New services page
+import DashboardPage from './pages/Dashboard.jsx';
+import ClientsPage from './pages/ClientsPage.jsx';
+import AppointmentsPage from './pages/AppointmentsPage.jsx';
+import ServicesPage from './pages/ServicesPage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
+import DemoReconciliation from './pages/DemoReconciliation.jsx';
 
 function AppContent() {
-    const { isLoading } = useAuth();
+  const { isLoading } = useAuth();
 
-    if (isLoading) {
-        return <LoadingScreen message="Initializing application, please wait..." />;
-    }
+  if (isLoading) {
+    return <LoadingScreen message="Initializing application, please wait..." />;
+  }
 
-    return (
-        <div className="App min-h-screen bg-gray-50">
-            <Toast />
-            <Routes>
-                {/* Public Routes */}
-                <Route
-                    path="/"
-                    element={<PublicRoute><LandingPage /></PublicRoute>}
-                />
-                <Route
-                    path="/login"
-                    element={<PublicRoute><LoginPage /></PublicRoute>}
-                />
-                <Route
-                    path="/register"
-                    element={<PublicRoute><RegisterPage /></PublicRoute>}
-                />
+  return (
+    <div className="App min-h-screen bg-gray-50">
+      <Toast />
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<PublicRoute><LandingPage /></PublicRoute>} />
+        <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
+        <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
+        <Route path="/demo" element={<PublicRoute><DemoReconciliation /></PublicRoute>} />
 
-                {/* Protected Routes */}
-                <Route
-                    path="/dashboard"
-                    element={<ProtectedRoute requiredRoles={['admin', 'manager', 'staff', 'receptionist']}><DashboardPage /></ProtectedRoute>}
-                />
-                <Route
-                    path="/clients"
-                    element={<ProtectedRoute requiredRoles={['admin', 'manager', 'receptionist']}><ClientsPage /></ProtectedRoute>}
-                />
-                <Route
-                    path="/appointments"
-                    element={<ProtectedRoute requiredRoles={['admin', 'manager', 'staff', 'receptionist']}><AppointmentsPage /></ProtectedRoute>}
-                />
-                <Route
-                    path="/services"
-                    element={<ProtectedRoute requiredRoles={['admin', 'manager']}><ServicesPage /></ProtectedRoute>}
-                />
-                {/* Add other protected routes here */}
+        {/* Protected Routes */}
+        <Route path="/dashboard" element={<ProtectedRoute requiredRoles={['admin', 'manager', 'staff', 'receptionist']}><DashboardPage /></ProtectedRoute>} />
+        <Route path="/clients" element={<ProtectedRoute requiredRoles={['admin', 'manager', 'receptionist']}><ClientsPage /></ProtectedRoute>} />
+        <Route path="/appointments" element={<ProtectedRoute requiredRoles={['admin', 'manager', 'staff', 'receptionist']}><AppointmentsPage /></ProtectedRoute>} />
+        <Route path="/services" element={<ProtectedRoute requiredRoles={['admin', 'manager']}><ServicesPage /></ProtectedRoute>} />
 
-                {/* 404 Fallback Route */}
-                <Route path="*" element={<NotFoundPage />} />
-            </Routes>
-        </div>
-    );
+        {/* 404 Fallback */}
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </div>
+  );
 }
 
 function App() {
-    return (
-        <ErrorBoundary>
-            <Router>
-                <AuthProvider>
-                    <AppContent />
-                </AuthProvider>
-            </Router>
-        </ErrorBoundary>
-    );
+  return (
+    <ErrorBoundary>
+      <Router>
+        <AuthProvider>
+          <AppContent />
+        </AuthProvider>
+      </Router>
+    </ErrorBoundary>
+  );
 }
 
 export default App;
