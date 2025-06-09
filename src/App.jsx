@@ -21,6 +21,7 @@ import AppointmentsPage from './pages/AppointmentsPage.jsx';
 import ServicesPage from './pages/ServicesPage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
 import DemoReconciliation from './pages/DemoReconciliation.jsx';
+import ReconciliationRunner from './components/ReconciliationRunner';
 
 function AppContent() {
   const { isLoading } = useAuth();
@@ -44,6 +45,7 @@ function AppContent() {
         <Route path="/clients" element={<ProtectedRoute requiredRoles={['admin', 'manager', 'receptionist']}><ClientsPage /></ProtectedRoute>} />
         <Route path="/appointments" element={<ProtectedRoute requiredRoles={['admin', 'manager', 'staff', 'receptionist']}><AppointmentsPage /></ProtectedRoute>} />
         <Route path="/services" element={<ProtectedRoute requiredRoles={['admin', 'manager']}><ServicesPage /></ProtectedRoute>} />
+        <Route path="/reconciliation" element={<ProtectedRoute requiredRoles={['admin', 'manager']}><ReconciliationRunner /></ProtectedRoute>} />
 
         {/* 404 Fallback */}
         <Route path="*" element={<NotFoundPage />} />

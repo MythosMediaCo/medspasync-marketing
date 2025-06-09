@@ -1,6 +1,12 @@
 import React from 'react';
 
 const PricingPage = () => {
+  const handleContactClick = () => {
+    if (window.location) {
+      window.location.href = '/contact';
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white py-12 px-4">
       <div className="max-w-4xl mx-auto text-center">
@@ -25,7 +31,13 @@ const PricingPage = () => {
         </div>
 
         <p className="text-sm text-gray-500 italic">
-          Need custom billing or want to onboard multiple locations? Contact us directly.
+          Need custom billing or want to onboard multiple locations?{' '}
+          <span
+            onClick={handleContactClick}
+            className="text-indigo-600 hover:underline cursor-pointer"
+          >
+            Contact us directly
+          </span>.
         </p>
       </div>
     </div>
