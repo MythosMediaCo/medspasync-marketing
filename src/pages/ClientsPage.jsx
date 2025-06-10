@@ -268,7 +268,6 @@ const ClientsPage = React.memo(() => {
         />
 
         <DeleteConfirmModal
-          client={selectedClient} // Client to delete
           isOpen={showDeleteModal}
           onClose={() => {
             setShowDeleteModal(false);
@@ -276,6 +275,12 @@ const ClientsPage = React.memo(() => {
           }}
           onConfirm={handleDeleteClient}
           isLoading={deleteClientMutation.isLoading}
+          title="Delete Client"
+          message={selectedClient ? (
+            <>Are you sure you want to delete <strong>{selectedClient.firstName} {selectedClient.lastName}</strong>? This action cannot be undone and will remove all associated appointment history.</>
+          ) : (
+            'Are you sure you want to delete this client? This action cannot be undone and will remove all associated appointment history.'
+          )}
         />
       </div>
     </div>

@@ -2,17 +2,21 @@ import React from 'react';
 import Modal from './Ui/Modal.jsx'; // Explicit .jsx extension
 import LoadingSpinner from './Ui/LoadingSpinner.jsx'; // Explicit .jsx extension
 
-// Delete Confirmation Modal (Reusable for any deletion)
-const DeleteConfirmModal = React.memo(({ client, isOpen, onClose, onConfirm, isLoading }) => {
+// Generic Delete Confirmation Modal with customizable title and message
+const DeleteConfirmModal = React.memo(({
+  isOpen,
+  onClose,
+  onConfirm,
+  isLoading,
+  title = 'Delete Item',
+  message = 'Are you sure you want to delete this item? This action cannot be undone.'
+}) => {
   if (!isOpen) return null; // Render nothing if not open
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Confirm Deletion" showCloseButton={true}>
-      <h3 className="text-lg font-semibold text-gray-900 mb-2">Delete Client</h3>
-      <p className="text-gray-600 mb-6">
-        Are you sure you want to delete <strong>{client?.firstName} {client?.lastName}</strong>? 
-        This action cannot be undone and will remove all associated appointment history.
-      </p>
+      <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
+      <p className="text-gray-600 mb-6">{message}</p>
       <div className="flex gap-3">
         <button
           type="button"

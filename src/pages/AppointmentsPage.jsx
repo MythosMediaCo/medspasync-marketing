@@ -592,7 +592,6 @@ const AppointmentsPage = React.memo(() => {
         />
 
         <DeleteConfirmModal
-          item={selectedAppointment}
           isOpen={showDeleteModal}
           onClose={() => {
             setShowDeleteModal(false);
@@ -601,7 +600,7 @@ const AppointmentsPage = React.memo(() => {
           onConfirm={handleDeleteAppointment}
           isLoading={deleteAppointmentMutation.isLoading}
           title="Delete Appointment"
-          message={selectedAppointment ? 
+          message={selectedAppointment ?
             `Are you sure you want to delete this appointment for ${selectedAppointment.client?.firstName} ${selectedAppointment.client?.lastName} on ${format(parseISO(selectedAppointment.dateTime), 'MMM d, h:mm a')}? This action cannot be undone.` :
             'Are you sure you want to delete this appointment?'
           }
