@@ -14,7 +14,7 @@ A comprehensive spa management system built with React, featuring client managem
 1. **Clone and install dependencies**
    ```bash
    git clone <repository-url>
-   cd medspa-management-app
+   cd medspasync-frontend
    npm install
    ```
 
