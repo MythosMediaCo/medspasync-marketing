@@ -12,7 +12,7 @@ import {
 import ClientCard from '../components/ClientCard.jsx';
 import ClientFormModal from '../components/ClientFormModal.jsx';
 import DeleteConfirmModal from '../components/DeleteConfirmModal.jsx';
-import { LoadingCard } from '../components/Common/LoadingScreen.jsx'; // Explicit .jsx extension
+import LoadingCard from '../components/Common/LoadingScreen.jsx'; // Explicit .jsx extension
 import { format } from 'date-fns'; // For date formatting
 import toast from 'react-hot-toast'; // For toast messages
 import { useDebounce } from '../hooks/useDebounce.js'; // Use the useDebounce hook
