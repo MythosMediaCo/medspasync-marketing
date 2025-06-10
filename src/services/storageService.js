@@ -180,4 +180,6 @@ class StorageService {
     }
 }
 
-export const storageService = new StorageService();
+const storageService = new StorageService();
+export default storageService;
+export { storageService };
