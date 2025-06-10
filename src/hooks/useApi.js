@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import apiService from '../services/api.js'; // Explicit .js extension
+import api from '../services/api.js'; // Centralized axios instance
 import toast from 'react-hot-toast';
 
 export const useAPI = (url, options = {}) => {
@@ -19,7 +19,7 @@ export const useAPI = (url, options = {}) => {
     setError(null);
 
     try {
-      const response = await apiService.get(overrideUrl, overrideOptions);
+      const response = await api.get(overrideUrl, overrideOptions);
       setData(response);
       if (onSuccess) {
         onSuccess(response);

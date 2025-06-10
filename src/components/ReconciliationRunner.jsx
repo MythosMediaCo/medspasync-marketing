@@ -1,8 +1,8 @@
 // components/ReconciliationRunner.jsx
 import React, { useState } from 'react';
-import axios from 'axios';
 import { saveAs } from 'file-saver';
 import toast from 'react-hot-toast';
+import api from '../services/api.js';
 
 function ReconciliationRunner() {
   const [file1, setFile1] = useState(null);
@@ -24,7 +24,7 @@ function ReconciliationRunner() {
 
     setLoading(true);
     try {
-      const res = await axios.post('/api/reconciliation/run', formData);
+      const res = await api.post('/reconciliation/run', formData);
       setResults(res.data);
       toast.success('Reconciliation complete');
     } catch (err) {
@@ -37,7 +37,7 @@ function ReconciliationRunner() {
 
   const handleExportPDF = async () => {
     try {
-      const res = await axios.get('/api/reconciliation/export-latest', {
+      const res = await api.get('/analytics/pdf', {
         responseType: 'blob',
       });
       const blob = new Blob([res.data], { type: 'application/pdf' });
