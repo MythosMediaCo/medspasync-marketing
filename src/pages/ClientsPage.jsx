@@ -106,6 +106,12 @@ const ClientsPage = React.memo(() => {
     setShowDeleteModal(true);
   }, []);
 
+  // Fixed: Added missing handleSearchChange function
+  const handleSearchChange = useCallback((value) => {
+    setSearchQuery(value);
+    setCurrentPage(1); // Reset to first page when search changes
+  }, []);
+
   // Extract clients and pagination data from API response
   const clients = clientsData?.data?.clients || [];
   const pagination = clientsData?.data?.pagination || {};
@@ -285,6 +291,6 @@ const ClientsPage = React.memo(() => {
       </div>
     </div>
   );
-};
+});
 
 export default ClientsPage;
