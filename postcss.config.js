@@ -2,8 +2,8 @@
 // This file must use ES module syntax (export default) for Vite
 export default {
   plugins: {
-    // This is the correct plugin name for Tailwind CSS v4 (PostCSS plugin)
-    '@tailwindcss/postcss': {},
+    // Tailwind CSS PostCSS plugin
+    tailwindcss: {},
     // Autoprefixer is typically included for vendor prefixes
     autoprefixer: {},
   },
