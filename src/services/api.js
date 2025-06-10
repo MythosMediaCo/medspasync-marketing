@@ -5,7 +5,7 @@
 
 import axios from 'axios';
 // Use the correct path to the storage service utilities
-import { storageService } from './storageService.js';
+import storageService from './storageService.js';
 import toast from 'react-hot-toast'; // For displaying notifications
 
 // Auto-detect backend URL based on environment
