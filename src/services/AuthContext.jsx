@@ -1,52 +1,61 @@
-// src/services/AuthContext.jsx
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import { authService } from './auth.js';
+import storageService from './storageService.js';
 import toast from 'react-hot-toast';
 
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => storageService.getUserData());
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) return setIsLoading(false);
-
-        const response = await axios.get('/api/auth/me', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-
-        setUser(response.data);
-      } catch (err) {
-        console.error(err);
-        localStorage.removeItem('token');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchUser();
+  const initialize = useCallback(async () => {
+    const token = storageService.getAuthToken();
+    if (!token) {
+      setIsLoading(false);
+      return;
+    }
+    try {
+      const res = await authService.getProfile();
+      setUser(res.user);
+    } catch (err) {
+      storageService.clearAll();
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    initialize();
+  }, [initialize]);
 
   const login = async (credentials) => {
     try {
-      const response = await axios.post('/api/auth/login', credentials);
-      localStorage.setItem('token', response.data.token);
-      setUser(response.data.user);
+      const res = await authService.login(credentials);
+      setUser(res.user);
       toast.success('Login successful');
       return true;
     } catch (err) {
-      toast.error(err.response?.data?.error || 'Login failed');
+      toast.error(err.message);
       return false;
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem('token');
+  const logout = async () => {
+    await authService.logout();
     setUser(null);
     toast.success('Logged out');
+  };
+
+  const refreshToken = async () => {
+    try {
+      const res = await authService.refreshToken();
+      return res.token;
+    } catch (err) {
+      setUser(null);
+      throw err;
+    }
   };
 
   return (
@@ -56,11 +65,13 @@ export const AuthProvider = ({ children }) => {
         isLoading,
         login,
         logout,
+        refreshToken,
         isAuthenticated: !!user,
         role: user?.role,
         practiceId: user?.practiceId,
         subscriptionTier: user?.subscriptionTier || 'starter'
-      }}>
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

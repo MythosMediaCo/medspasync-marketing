@@ -98,5 +98,7 @@ export const CLIENT_STATUS = {
     BLOCKED: 'blocked'
 };
 
+import logger from './logger.js';
+
 // Debug logging to see what URL is being used
-console.log('API_BASE_URL:', API_BASE_URL);
+logger.log('API_BASE_URL:', API_BASE_URL);

@@ -190,5 +190,6 @@ export const analyticsAPI = {
 // Export the Axios instance itself as a default export if needed for specific use cases (e.g., direct download)
 // If you explicitly need the raw axios instance, you might use `export default api;`
 // However, it's generally cleaner to use the named API objects (clientsAPI, authAPI, etc.).
-// For now, we'll keep it as a named export for consistency with the rest of the file.
-// export default api; // Removed default export to prevent conflicts. Use named exports.
+// For now, we'll export the axios instance as the default for hooks like useAPI
+// that expect a default export.
+export default api;
