@@ -163,13 +163,13 @@ const LandingPage = React.memo(() => {
           {/* Real Uptime Badge */}
           <div className="mt-6 flex justify-center">
             <a
-              href="https://stats.uptimerobot.com/YOUR_STATUS_PAGE"
+              href="https://stats.uptimerobot.com/9mEaClE07F"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-medium bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow"
             >
               <img
-                src="https://status.uptimerobot.com/api/badge/YOUR_BADGE_KEY.svg"
+                src="https://status.uptimerobot.com/api/badge/9mEaClE07F.svg"
                 alt="Uptime status"
                 className="h-4"
               />
