@@ -1,10 +1,23 @@
 import React, { useCallback, useEffect, useState, useContext } from 'react';
-// Fix for jwt-decode import - try both import patterns
-import { jwtDecode } from 'jwt-decode'; // New way (v4+)
-// OR if the above doesn't work, use:
-// import jwtDecode from 'jwt-decode'; // Old way (v3 and below)
-
 import { AuthContext } from '../contexts/AuthContext';
+
+// Native JWT decode function (no external dependency)
+const decodeJWT = (token) => {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  } catch (error) {
+    console.warn('JWT decode failed:', error);
+    return null;
+  }
+};
 
 const LandingPage = React.memo(() => {
   const handleGetStarted = useCallback(() => {
@@ -40,13 +53,13 @@ const LandingPage = React.memo(() => {
     const token = localStorage.getItem('token');
     try {
       if (token) {
-        const decoded = jwtDecode(token);
+        const decoded = decodeJWT(token);
         setUserName(decoded?.name || '');
       } else if (contextUser?.name) {
         setUserName(contextUser.name);
       }
     } catch (error) {
-      console.warn('JWT decode failed:', error);
+      console.warn('Token decode failed:', error);
       setUserName('');
     }
   }, [contextUser]);
@@ -135,15 +148,13 @@ const LandingPage = React.memo(() => {
             </nav>
           </div>
 
-          {/* Status Badge - Only show if you have UptimeRobot setup */}
-          {process.env.NODE_ENV === 'production' && (
-            <div className="mt-6 flex justify-center">
-              <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
-                All Systems Operational
-              </div>
+          {/* Status Badge */}
+          <div className="mt-6 flex justify-center">
+            <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+              <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+              All Systems Operational
             </div>
-          )}
+          </div>
 
           <div className="mt-2 text-xs text-gray-400 dark:text-gray-500">
             Version {version}
