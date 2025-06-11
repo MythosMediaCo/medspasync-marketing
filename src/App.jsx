@@ -2,8 +2,8 @@ import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { useAuth } from './services/AuthContext.jsx';
 import PublicRoute from './components/auth/PublicRoute.jsx';
-import PublicRoute from './components/Auth/PublicRoute.jsx';
-import Toast from './components/Common/Toast.jsx';
+import LoadingScreen from './components/Common/LoadingScreen.jsx';
+import Toast from './components/Ui/Toast.jsx';
 
 import LandingPage from './pages/LandingPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
