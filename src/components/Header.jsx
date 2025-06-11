@@ -1,29 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../services/AuthContext.jsx';
+import ThemeToggle from './ThemeToggle.jsx';
 
-const TopNav = () => {
+const Header = () => {
   const navigate = useNavigate();
   const { isAuthenticated, firstName, logout } = useAuth();
-
-  const [darkMode, setDarkMode] = useState(() => {
-    const stored = localStorage.getItem('darkMode');
-    if (stored) return stored === 'true';
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
-  });
-
   const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const root = document.documentElement;
-    if (darkMode) {
-      root.classList.add('dark');
-      localStorage.setItem('darkMode', 'true');
-    } else {
-      root.classList.remove('dark');
-      localStorage.setItem('darkMode', 'false');
-    }
-  }, [darkMode]);
 
   const handleLogout = async () => {
     await logout();
@@ -33,9 +16,7 @@ const TopNav = () => {
   return (
     <header className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        <div
-          className="flex items-center cursor-pointer"
-          onClick={() => navigate('/')}
+        <div className="flex items-center cursor-pointer" onClick={() => navigate('/')}
         >
           <div className="h-9 w-9 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center shadow">
             <span className="text-white font-bold text-md">M</span>
@@ -43,13 +24,7 @@ const TopNav = () => {
           <span className="ml-3 text-lg font-semibold tracking-tight">MedSpaSync Pro</span>
         </div>
         <div className="relative flex items-center space-x-4">
-          <button
-            onClick={() => setDarkMode(!darkMode)}
-            className="text-sm px-3 py-1 border rounded-lg border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-            aria-label={`Switch to ${darkMode ? 'light' : 'dark'} mode`}
-          >
-            {darkMode ? '☀️ Light' : '🌙 Dark'}
-          </button>
+          <ThemeToggle />
           {isAuthenticated ? (
             <div className="relative">
               <button
@@ -97,4 +72,4 @@ const TopNav = () => {
   );
 };
 
-export default TopNav;
+export default Header;

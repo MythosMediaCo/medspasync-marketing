@@ -1,10 +1,10 @@
 import React from 'react';
-import TopNav from '../components/TopNav.jsx';
+import Header from '../components/Header.jsx';
 
 const SupportPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-slate-50 to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 dark:text-gray-100 text-gray-800">
-      <TopNav />
+      <Header />
       <main className="max-w-3xl mx-auto px-6 py-12">
         <header className="text-center mb-12">
           <h1 className="text-3xl md:text-4xl font-bold mb-4">Support &amp; Help Center</h1>

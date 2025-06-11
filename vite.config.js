@@ -18,16 +18,13 @@ function stripUseClient() {
 }
 
 export default defineConfig({
-  plugins: [
-    react(),
-    stripUseClient(),
-    process.env.ANALYZE && visualizer({ open: true, gzipSize: true })
-  ].filter(Boolean),
+  plugins: [react(), stripUseClient(), visualizer()],
   build: {
-    sourcemap: true
+    sourcemap: true,
+    minify: 'terser'
   },
   define: {
-    'process.env.NODE_ENV': JSON.stringify('production')
+    'process.env': process.env
   },
-  base: '/medspasync-frontend/'
+  base: '/'
 });

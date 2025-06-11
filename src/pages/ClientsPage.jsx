@@ -1,6 +1,6 @@
 // src/pages/ClientsPage.jsx
 import React, { useState, useMemo, useCallback } from 'react';
-import TopNav from '../components/TopNav.jsx';
+import Header from '../components/Header.jsx';
 import { useAuth } from '../services/AuthContext.jsx';
 import { Plus, Search, Users } from 'lucide-react'; // Removed unused icons (Phone, Mail, Calendar, MoreVertical, Edit, Trash2)
 import {
@@ -138,7 +138,7 @@ const ClientsPage = React.memo(() => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30 p-6">
-      <TopNav />
+      <Header />
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">

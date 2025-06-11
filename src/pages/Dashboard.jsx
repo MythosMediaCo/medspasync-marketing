@@ -11,7 +11,7 @@ import ClientCard from '../components/ClientCard.jsx';
 import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from 'date-fns';
 import { formatCurrency } from '../utils/formatting.js';
 import { Link } from 'react-router-dom';
-import TopNav from '../components/TopNav.jsx';
+import Header from '../components/Header.jsx';
 
 // Metric Card Component
 function MetricCard(props) {
@@ -229,7 +229,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30">
-      <TopNav />
+      <Header />
       <div className="max-w-7xl mx-auto p-6">
         {/* Header */}
         <div className="mb-8">
