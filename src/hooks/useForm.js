@@ -35,7 +35,7 @@ export const useForm = (initialValues = {}, validationSchema = null) => {
     // Clear error for this field when user starts typing
     setErrors(prev => {
       if (prev[name]) {
-        const { [name]: removed, ...rest } = prev;
+        const { [name]: _removed, ...rest } = prev;
         return rest;
       }
       return prev;
