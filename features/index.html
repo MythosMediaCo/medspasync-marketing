@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Features | MedSpaSync Pro</title>
+  <meta name="description" content="Explore MedSpaSync Pro features." />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" />
+  <link rel="stylesheet" href="/assets/style.css" />
+</head>
+<body class="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-inter">
+  <header class="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur border-b border-slate-200 dark:border-slate-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+      <a href="/" class="text-2xl font-bold text-indigo-500">MedSpaSync Pro</a>
+      <nav class="space-x-6 text-sm font-medium">
+        <a href="/features/" class="hover:text-indigo-500">Features</a>
+        <a href="/pricing/" class="hover:text-indigo-500">Pricing</a>
+        <a href="/about/" class="hover:text-indigo-500">About</a>
+        <a href="/support/" class="hover:text-indigo-500">Support</a>
+        <a href="/contact/" class="hover:text-indigo-500">Contact</a>
+        <button id="themeToggle" class="ml-4 p-2 rounded-full border border-slate-300 dark:border-slate-600" aria-label="Toggle dark mode">🌓</button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 py-20">
+    <h1 class="text-4xl font-bold mb-12 text-center">Product Features</h1>
+    <div class="grid gap-8 md:grid-cols-3">
+      <div class="p-6 rounded-2xl shadow bg-white dark:bg-slate-800">
+        <div class="text-4xl mb-4">🧠</div>
+        <h3 class="text-xl font-semibold mb-2">AI-Matched Redemptions</h3>
+        <p>Automatically match Alle and Aspire transactions with lightning-fast precision.</p>
+      </div>
+      <div class="p-6 rounded-2xl shadow bg-white dark:bg-slate-800">
+        <div class="text-4xl mb-4">🧾</div>
+        <h3 class="text-xl font-semibold mb-2">Real-Time PDF Reports</h3>
+        <p>Generate polished reconciliation reports instantly — ready for auditors.</p>
+      </div>
+      <div class="p-6 rounded-2xl shadow bg-white dark:bg-slate-800">
+        <div class="text-4xl mb-4">📊</div>
+        <h3 class="text-xl font-semibold mb-2">Dashboard Analytics</h3>
+        <p>Track savings and reconciliation trends with intuitive visual dashboards.</p>
+      </div>
+      <div class="p-6 rounded-2xl shadow bg-white dark:bg-slate-800">
+        <div class="text-4xl mb-4">📁</div>
+        <h3 class="text-xl font-semibold mb-2">Drag-and-Drop Uploads</h3>
+        <p>Upload reports effortlessly with our intuitive drag-and-drop interface.</p>
+      </div>
+      <div class="p-6 rounded-2xl shadow bg-white dark:bg-slate-800">
+        <div class="text-4xl mb-4">🔐</div>
+        <h3 class="text-xl font-semibold mb-2">HIPAA-Conscious Design</h3>
+        <p>Your data is protected with best-in-class security and compliance practices.</p>
+      </div>
+      <div class="p-6 rounded-2xl shadow bg-white dark:bg-slate-800">
+        <div class="text-4xl mb-4">🧬</div>
+        <h3 class="text-xl font-semibold mb-2">Built by MedSpa Operators</h3>
+        <p>Created by industry veterans who understand your unique workflow.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="bg-slate-100 dark:bg-slate-800 py-6 text-center text-sm">
+    <p>&copy; 2025 MedSpaSync Pro • <a class="underline" href="/privacy/">Privacy</a> • <a class="underline" href="/terms/">Terms</a></p>
+  </footer>
+
+  <script>
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    }
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const html = document.documentElement;
+      if (html.classList.contains('dark')) { html.classList.remove('dark'); localStorage.theme = 'light'; } else { html.classList.add('dark'); localStorage.theme = 'dark'; }
+    });
+  </script>
+</body>
+</html>
