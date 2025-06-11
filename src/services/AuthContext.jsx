@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState, useCallback } fr
 import { authService } from './auth.js';
 import storageService from './storageService.js';
 import toast from 'react-hot-toast';
+import { decodeJWT } from '../utils/jwt.js';
 
 const AuthContext = createContext(null);
 
@@ -19,6 +20,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await authService.getProfile();
       setUser(res.user);
+      storageService.updateLastActivity();
     } catch (err) {
       storageService.clearAll();
       console.error(err);
@@ -36,6 +38,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await authService.login(credentials);
       setUser(res.user);
+      storageService.updateLastActivity();
       toast.success('Login successful');
       return true;
     } catch (err) {
@@ -52,6 +55,7 @@ export const AuthProvider = ({ children }) => {
       if (res.user) {
         setUser(res.user);
       }
+      storageService.updateLastActivity();
       toast.success('Registration successful');
       return true;
     } catch (err) {
@@ -72,12 +76,49 @@ export const AuthProvider = ({ children }) => {
   const refreshToken = async () => {
     try {
       const res = await authService.refreshToken();
+      storageService.updateLastActivity();
       return res.token;
     } catch (err) {
       setUser(null);
       throw err;
     }
   };
+
+  // Track user activity and session validity
+  useEffect(() => {
+    const activityEvents = ['mousemove', 'mousedown', 'keydown', 'touchstart'];
+    const updateActivity = () => storageService.updateLastActivity();
+
+    activityEvents.forEach((evt) => window.addEventListener(evt, updateActivity));
+
+    const checkIdleAndToken = async () => {
+      const last = parseInt(storageService.getLastActivity(), 10);
+      if (user && last && Date.now() - last > 15 * 60 * 1000) {
+        await logout();
+        toast.error('Logged out due to inactivity');
+        return;
+      }
+
+      const token = storageService.getAuthToken();
+      const decoded = decodeJWT(token);
+      if (decoded?.exp && decoded.exp * 1000 - Date.now() < 2 * 60 * 1000) {
+        try {
+          await refreshToken();
+        } catch (err) {
+          await logout();
+          toast.error('Session expired. Please log in again.');
+        }
+      }
+    };
+
+    const interval = setInterval(checkIdleAndToken, 60 * 1000);
+    return () => {
+      activityEvents.forEach((evt) =>
+        window.removeEventListener(evt, updateActivity)
+      );
+      clearInterval(interval);
+    };
+  }, [user]);
 
   return (
     <AuthContext.Provider

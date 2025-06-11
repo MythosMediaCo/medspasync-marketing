@@ -80,25 +80,41 @@ api.interceptors.response.use(
       try {
         const refreshToken = storageService.getRefreshToken();
         if (refreshToken) {
-          // Attempt to refresh the token using a direct axios call (bypassing this interceptor)
-          const refreshResponse = await axios.post(`${API_BASE_URL}/api/auth/refresh`, {
-            refreshToken
-          });
-
-          const { token } = refreshResponse.data;
-          storageService.setAuthToken(token); // Store the new access token
-
-          // Retry the original failed request with the new token
+          const refreshResponse = await axios.post(`${API_BASE_URL}/api/auth/refresh`, { refreshToken });
+          const { token, refreshToken: newRefresh } = refreshResponse.data;
+          storageService.setAuthToken(token);
+          if (newRefresh) {
+            storageService.setRefreshToken(newRefresh);
+          }
           originalRequest.headers.Authorization = `Bearer ${token}`;
-          return api(originalRequest); // Use the 'api' instance to retry
+          return api(originalRequest);
         }
       } catch (refreshError) {
         console.error('Token refresh failed:', refreshError);
-        // If refresh fails, clear all authentication data and redirect to login
-        storageService.clearAll();
-        toast.error('Your session has expired. Please log in again.');
-        window.location.href = '/login'; // Force full reload
-        return Promise.reject(refreshError);
+
+        if (refreshError.response?.status === 401) {
+          storageService.clearAll();
+          toast.error('Your session has expired. Please log in again.');
+          window.location.href = '/login';
+          return Promise.reject(refreshError);
+        }
+
+        try {
+          await new Promise((res) => setTimeout(res, 3000));
+          const rt = storageService.getRefreshToken();
+          if (!rt) throw refreshError;
+          const retryResp = await axios.post(`${API_BASE_URL}/api/auth/refresh`, { refreshToken: rt });
+          const { token: retryToken, refreshToken: retryRefresh } = retryResp.data;
+          storageService.setAuthToken(retryToken);
+          if (retryRefresh) {
+            storageService.setRefreshToken(retryRefresh);
+          }
+          originalRequest.headers.Authorization = `Bearer ${retryToken}`;
+          return api(originalRequest);
+        } catch (retryError) {
+          toast.error('Unable to refresh session. Please try again.');
+          return Promise.reject(retryError);
+        }
       }
     }
 

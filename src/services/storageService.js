@@ -103,6 +103,11 @@ class StorageService {
         }
     }
 
+    // Convenience method to update the LAST_ACTIVITY key with the current time
+    updateLastActivity() {
+        return this.setLastActivity(Date.now());
+    }
+
     setSettings(settings) {
         if (!this.isAvailable) return false;
         try {
