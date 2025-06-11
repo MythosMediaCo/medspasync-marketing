@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../services/AuthContext.jsx';
 import LoadingScreen from '../components/Common/LoadingScreen.jsx';
 import UptimeStatusBadge from '../components/Common/UptimeStatusBadge.jsx';
-import TopNav from '../components/TopNav.jsx';
+import Header from '../components/Header.jsx';
 
 const LandingPage = React.memo(() => {
   const navigate = useNavigate();
@@ -56,7 +56,7 @@ const LandingPage = React.memo(() => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-slate-50 to-gray-100 text-gray-800 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 dark:text-gray-100 transition-colors duration-300">
-      <TopNav />
+      <Header />
 
       <main className="flex items-center justify-center min-h-[calc(100vh-4rem)] px-6">
         <div className="max-w-md w-full text-center">

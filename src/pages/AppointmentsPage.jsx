@@ -4,7 +4,7 @@
 // ========================================
 
 import React, { useState, useMemo } from 'react';
-import TopNav from '../components/TopNav.jsx';
+import Header from '../components/Header.jsx';
 import { useAuth } from '../services/AuthContext.jsx';
 import { Calendar, Plus, Search, Users, Phone, Mail, Clock, User, DollarSign, MoreVertical } from 'lucide-react';
 import { 
@@ -446,7 +446,7 @@ const AppointmentsPage = React.memo(() => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30 p-6">
-      <TopNav />
+      <Header />
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
