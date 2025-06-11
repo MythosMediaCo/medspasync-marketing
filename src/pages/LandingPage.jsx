@@ -3,6 +3,7 @@ import { useAuth } from '../services/AuthContext.jsx';
 import storageService from '../services/storageService.js';
 import { decodeJWT } from '../utils/jwt.js';
 import LoadingScreen from '../components/Common/LoadingScreen.jsx';
+import UptimeStatusBadge from '../components/Common/UptimeStatusBadge.jsx';
 
 const LandingPage = React.memo(() => {
   const handleGetStarted = useCallback(() => {
@@ -149,21 +150,8 @@ const LandingPage = React.memo(() => {
             </nav>
           </div>
 
-          {/* Real Uptime Badge */}
           <div className="mt-6 flex justify-center">
-            <a
-              href="https://stats.uptimerobot.com/9mEaClE07F"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-medium bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow"
-            >
-              <img
-                src="https://status.uptimerobot.com/api/badge/9mEaClE07F.svg"
-                alt="Uptime status"
-                className="h-4"
-              />
-              <span>Status</span>
-            </a>
+            <UptimeStatusBadge statusPageId="9mEaClE07F" />
           </div>
 
           <div className="mt-2 text-xs text-gray-400 dark:text-gray-500">
