@@ -1,14 +1,10 @@
 // medspasync-frontend/tailwind.config.js
 /** @type {import('tailwindcss').Config} */
-export default { // Use export default for ESM compatibility
-  content: [
-    "./index.html",
-    "./src/**/*.{js,jsx}", // Ensure both .js and .jsx files are scanned
-  ],
+export default {
+  darkMode: 'class',
+  content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {
-    extend: {
-      // Customizations for your theme (colors, fonts, etc.) would go here
-    },
+    extend: {},
   },
-  plugins: [], // Any Tailwind plugins would be listed here
+  plugins: [],
 };
