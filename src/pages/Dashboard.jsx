@@ -11,6 +11,7 @@ import ClientCard from '../components/ClientCard.jsx';
 import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from 'date-fns';
 import { formatCurrency } from '../utils/formatting.js';
 import { Link } from 'react-router-dom';
+import TopNav from '../components/TopNav.jsx';
 
 // Metric Card Component
 const MetricCard = ({ title, value, change, trend, icon: Icon, gradient, isLoading, onClick }) => (
@@ -164,7 +165,7 @@ const TopClients = ({ clients, isLoading }) => {
 
 // Main Dashboard Component
 const Dashboard = () => {
-  const { user } = useAuth();
+  const { firstName } = useAuth();
   const [dateRange, setDateRange] = useState('week');
   
   // Calculate date ranges
@@ -225,13 +226,14 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30">
+      <TopNav />
       <div className="max-w-7xl mx-auto p-6">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
-                Welcome back, {user?.firstName}! 👋
+                {firstName ? `Welcome back, ${firstName}! 👋` : 'Welcome back!'}
               </h1>
               <p className="text-gray-600 mt-1">Here's what's happening at your spa today.</p>
             </div>

@@ -4,6 +4,8 @@
 // ========================================
 
 import React, { useState, useMemo, useCallback } from 'react';
+import TopNav from '../components/TopNav.jsx';
+import { useAuth } from '../services/AuthContext.jsx';
 import { Calendar, Plus, Search, Users, Phone, Mail, Clock, User, DollarSign, MoreVertical } from 'lucide-react';
 import { 
   useAppointments, 
@@ -331,6 +333,7 @@ const AppointmentFormModal = React.memo(({ appointment, isOpen, onClose, onSubmi
 // Main Appointments Page
 const AppointmentsPage = React.memo(() => {
   const [statusFilter, setStatusFilter] = useState('all');
+  const { firstName, practiceName } = useAuth();
   const [dateFilter, setDateFilter] = useState('all');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -443,11 +446,14 @@ const AppointmentsPage = React.memo(() => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30 p-6">
+      <TopNav />
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Appointments</h1>
+            <h1 className="text-3xl font-bold text-gray-900">
+              {practiceName ? `Appointments for ${practiceName}` : 'Appointments'}
+            </h1>
             <p className="text-gray-600 mt-1">Manage your appointment schedule</p>
           </div>
           <button 

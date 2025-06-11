@@ -8,6 +8,7 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => storageService.getUserData());
+  const [firstName, setFirstName] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -32,6 +33,21 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     initialize();
   }, [initialize]);
+
+  // Derive first name from user data or token
+  useEffect(() => {
+    let name = '';
+    if (user?.firstName) {
+      name = user.firstName;
+    } else if (user?.name) {
+      name = user.name.split(' ')[0];
+    } else {
+      const token = storageService.getAuthToken();
+      const decoded = decodeJWT(token);
+      name = decoded?.given_name || decoded?.name?.split(' ')[0] || '';
+    }
+    setFirstName(name);
+  }, [user]);
 
   const login = async (credentials) => {
     setError(null);
@@ -134,7 +150,9 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated: !!user,
         role: user?.role,
         practiceId: user?.practiceId,
-        subscriptionTier: user?.subscriptionTier || 'starter'
+        subscriptionTier: user?.subscriptionTier || 'starter',
+        firstName,
+        practiceName: user?.practiceName || user?.practice?.name
       }}
     >
       {children}
