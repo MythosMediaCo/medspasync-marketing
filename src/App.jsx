@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import ErrorBoundary from './components/UI/ErrorBoundary.jsx';
+import ErrorBoundary from './components/Ui/ErrorBoundary.jsx';
 import LoadingScreen from './components/Common/LoadingScreen.jsx';
 
 // Auth Components & Context
