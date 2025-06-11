@@ -1,5 +1,9 @@
 import React, { useCallback, useEffect, useState, useContext } from 'react';
-import jwtDecode from 'jwt-decode';
+// Fix for jwt-decode import - try both import patterns
+import { jwtDecode } from 'jwt-decode'; // New way (v4+)
+// OR if the above doesn't work, use:
+// import jwtDecode from 'jwt-decode'; // Old way (v3 and below)
+
 import { AuthContext } from '../contexts/AuthContext';
 
 const LandingPage = React.memo(() => {
@@ -41,7 +45,8 @@ const LandingPage = React.memo(() => {
       } else if (contextUser?.name) {
         setUserName(contextUser.name);
       }
-    } catch {
+    } catch (error) {
+      console.warn('JWT decode failed:', error);
       setUserName('');
     }
   }, [contextUser]);
@@ -64,7 +69,8 @@ const LandingPage = React.memo(() => {
           <div className="flex items-center space-x-4">
             <button
               onClick={() => setDarkMode(!darkMode)}
-              className="text-sm px-3 py-1 border rounded-lg border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700"
+              className="text-sm px-3 py-1 border rounded-lg border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              aria-label={`Switch to ${darkMode ? 'light' : 'dark'} mode`}
             >
               {darkMode ? '☀️ Light' : '🌙 Dark'}
             </button>
@@ -109,7 +115,7 @@ const LandingPage = React.memo(() => {
             </button>
             <button
               onClick={handleGetStarted}
-              className="w-full border-2 border-indigo-600 text-indigo-600 px-6 py-3 rounded-xl font-semibold text-lg hover:bg-indigo-50 dark:hover:bg-gray-800 transition"
+              className="w-full border-2 border-indigo-600 text-indigo-600 dark:text-indigo-400 px-6 py-3 rounded-xl font-semibold text-lg hover:bg-indigo-50 dark:hover:bg-gray-800 transition"
             >
               Register
             </button>
@@ -129,17 +135,18 @@ const LandingPage = React.memo(() => {
             </nav>
           </div>
 
-          <div className="mt-6 flex justify-center">
-            <iframe
-              src="https://stats.uptimerobot.com/badge/your-badge-id"
-              title="Uptime Status"
-              frameBorder="0"
-              className="h-6"
-            ></iframe>
-          </div>
+          {/* Status Badge - Only show if you have UptimeRobot setup */}
+          {process.env.NODE_ENV === 'production' && (
+            <div className="mt-6 flex justify-center">
+              <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+                All Systems Operational
+              </div>
+            </div>
+          )}
 
           <div className="mt-2 text-xs text-gray-400 dark:text-gray-500">
-            Version {version} • All systems operational
+            Version {version}
           </div>
         </div>
       </main>
