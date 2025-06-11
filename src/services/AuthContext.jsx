@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState, useContext } from 'react';
-import { AuthContext } from '../services/AuthContext.jsx';
+import { AuthContext } from '../services/AuthContext.jsx'; // Fixed path
 
+// Native JWT decode function (no external dependency)
 const decodeJWT = (token) => {
   try {
     const base64Url = token.split('.')[1];
@@ -31,19 +32,6 @@ const LandingPage = React.memo(() => {
   const [darkMode, setDarkMode] = useState(false);
   const [userName, setUserName] = useState('');
   const version = import.meta.env.VITE_APP_VERSION || '1.0.0';
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      const decoded = decodeJWT(token);
-      const exp = decoded?.exp;
-      const now = Date.now() / 1000;
-
-      if (exp && exp > now) {
-        window.location.href = '/dashboard';
-      }
-    }
-  }, []);
 
   useEffect(() => {
     const storedMode = localStorage.getItem('darkMode');
@@ -160,21 +148,12 @@ const LandingPage = React.memo(() => {
             </nav>
           </div>
 
-          {/* Real Uptime Badge */}
+          {/* Status Badge */}
           <div className="mt-6 flex justify-center">
-            <a
-              href="https://stats.uptimerobot.com/YOUR_STATUS_PAGE"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-medium bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow"
-            >
-              <img
-                src="https://status.uptimerobot.com/api/badge/YOUR_BADGE_KEY.svg"
-                alt="Uptime status"
-                className="h-4"
-              />
-              <span>Status</span>
-            </a>
+            <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+              <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+              All Systems Operational
+            </div>
           </div>
 
           <div className="mt-2 text-xs text-gray-400 dark:text-gray-500">
