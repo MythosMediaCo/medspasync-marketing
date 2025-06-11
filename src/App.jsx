@@ -1,21 +1,15 @@
-import React, { Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import ErrorBoundary from './components/Ui/ErrorBoundary.jsx';
+import { lazy, Suspense } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import { useAuth } from './services/AuthContext.jsx';
 import LoadingScreen from './components/Common/LoadingScreen.jsx';
+import PublicRoute from './components/Auth/PublicRoute.jsx';
+import Toast from './components/Common/Toast.jsx';
 
-// Auth Components & Context
-import { AuthProvider, useAuth } from './services/AuthContext.jsx';
-import ProtectedRoute from './components/auth/ProtectedRoute.jsx';
-import PublicRoute from './components/auth/PublicRoute.jsx';
-
-// UI Components
-import Toast from './components/Ui/Toast.jsx';
-
-// Page Components
 import LandingPage from './pages/LandingPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
-import NotFoundPage from './pages/NotFoundPage.jsx';
+import SupportPage from './pages/SupportPage.jsx';
+import DocsPage from './pages/DocsPage.jsx';
 
 const DashboardPage = lazy(() => import('./pages/Dashboard.jsx'));
 const ClientsPage = lazy(() => import('./pages/ClientsPage.jsx'));
@@ -39,6 +33,8 @@ function AppContent() {
         <Route path="/" element={<PublicRoute><LandingPage /></PublicRoute>} />
         <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
         <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
+        <Route path="/support" element={<PublicRoute><SupportPage /></PublicRoute>} />
+        <Route path="/docs" element={<PublicRoute><DocsPage /></PublicRoute>} />
         <Route
           path="/demo"
           element={
@@ -49,76 +45,10 @@ function AppContent() {
             </PublicRoute>
           }
         />
-
-        {/* Protected Routes */}
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute requiredRoles={['admin', 'manager', 'staff', 'receptionist']}>
-              <Suspense fallback={<LoadingScreen />}>
-                <DashboardPage />
-              </Suspense>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/clients"
-          element={
-            <ProtectedRoute requiredRoles={['admin', 'manager', 'receptionist']}>
-              <Suspense fallback={<LoadingScreen />}>
-                <ClientsPage />
-              </Suspense>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/appointments"
-          element={
-            <ProtectedRoute requiredRoles={['admin', 'manager', 'staff', 'receptionist']}>
-              <Suspense fallback={<LoadingScreen />}>
-                <AppointmentsPage />
-              </Suspense>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/services"
-          element={
-            <ProtectedRoute requiredRoles={['admin', 'manager']}>
-              <Suspense fallback={<LoadingScreen />}>
-                <ServicesPage />
-              </Suspense>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/reconciliation"
-          element={
-            <ProtectedRoute requiredRoles={['admin', 'manager']}>
-              <Suspense fallback={<LoadingScreen />}>
-                <ReconciliationRunner />
-              </Suspense>
-            </ProtectedRoute>
-          }
-        />
-
-        {/* 404 Fallback */}
-        <Route path="*" element={<NotFoundPage />} />
+        {/* Additional authenticated/private routes can be added below */}
       </Routes>
     </div>
   );
 }
 
-function App() {
-  return (
-    <ErrorBoundary>
-      <Router>
-        <AuthProvider>
-          <AppContent />
-        </AuthProvider>
-      </Router>
-    </ErrorBoundary>
-  );
-}
-
-export default App;
+export default AppContent;
