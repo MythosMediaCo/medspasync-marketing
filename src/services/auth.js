@@ -88,11 +88,16 @@ class AuthService {
             if (response.token) {
                 storageService.setAuthToken(response.token);
             }
+            if (response.refreshToken) {
+                storageService.setRefreshToken(response.refreshToken);
+            }
 
             return response;
         } catch (error) {
             console.error('Token refresh failed:', error);
-            storageService.clearAll();
+            if (error.response?.status === 401) {
+                storageService.clearAll();
+            }
             throw new Error(error.response?.data?.message || error.message || 'Token refresh failed');
         }
     }
