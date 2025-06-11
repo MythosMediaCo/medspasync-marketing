@@ -18,6 +18,31 @@ export const AuthProvider = ({ children }) => {
       setIsLoading(false);
       return;
     }
+
+    const decoded = decodeJWT(token);
+    const now = Date.now() / 1000;
+    if (decoded?.exp && decoded.exp - now < 120) {
+      try {
+        const newToken = await authService.refreshToken();
+        storageService.setAuthToken(newToken.token || newToken);
+      } catch {
+        storageService.clearAll();
+        setUser(null);
+        setIsLoading(false);
+        return;
+      }
+    } else if (decoded?.exp && decoded.exp <= now) {
+      try {
+        const newToken = await authService.refreshToken();
+        storageService.setAuthToken(newToken.token || newToken);
+      } catch {
+        storageService.clearAll();
+        setUser(null);
+        setIsLoading(false);
+        return;
+      }
+    }
+
     try {
       const res = await authService.getProfile();
       setUser(res.user);
