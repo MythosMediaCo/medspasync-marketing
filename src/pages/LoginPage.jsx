@@ -4,10 +4,11 @@ import Modal from '../components/Ui/Modal.jsx';
 import { useForm } from '../hooks/useForm.js';
 import { validationSchemas } from '../utils/validation.js';
 import { useAuth } from '../services/AuthContext.jsx';
+import LoadingScreen from '../components/Common/LoadingScreen.jsx';
 
 const LoginPage = React.memo(() => {
     const navigate = useNavigate();
-    const { login, error: authError, clearError } = useAuth();
+    const { login, error: authError, clearError, isAuthenticated, isLoading } = useAuth();
     const [showPassword, setShowPassword] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [modalConfig, setModalConfig] = useState({});
@@ -28,13 +29,22 @@ const LoginPage = React.memo(() => {
         clearError();
     }, [clearError, reset]);
 
+    useEffect(() => {
+        if (!isLoading && isAuthenticated) {
+            navigate('/dashboard', { replace: true });
+        }
+    }, [isAuthenticated, isLoading, navigate]);
+
     const onSubmit = useCallback(async (formData) => {
         try {
-            await login(formData);
+            const success = await login(formData);
+            if (success) {
+                navigate('/dashboard');
+            }
         } catch (err) {
             // Error handled by AuthContext
         }
-    }, [login]);
+    }, [login, navigate]);
 
     const fillDemoCredentials = useCallback(() => {
         setValues(prev => ({
@@ -57,6 +67,10 @@ const LoginPage = React.memo(() => {
         });
         setShowModal(true);
     }, []);
+
+    if (isLoading) {
+        return <LoadingScreen message="Loading user session..." />;
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-white to-purple-100 flex items-center justify-center px-4">
