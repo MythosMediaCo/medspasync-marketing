@@ -1,178 +1,127 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MedSpaSync Pro | Recover $5,000+ Monthly with Zero Manual Reconciliation</title>
-    <meta name="description" content="Automated Alle & Aspire reconciliation for medical spas. Save 12+ hours monthly, reduce audit risk, and reclaim thousands in missed revenue.">
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 0;
-            color: #333;
-            background: #f9f9fc;
-        }
-        .header {
-            background: #fff;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .logo {
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: #667eea;
-        }
-        nav a {
-            margin-left: 1.5rem;
-            color: #444;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        nav a:hover {
-            color: #667eea;
-        }
-        .hero {
-            text-align: center;
-            padding: 6rem 2rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        .hero h1 {
-            font-size: 2.75rem;
-            margin-bottom: 1rem;
-        }
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto 2rem;
-            opacity: 0.9;
-        }
-        .cta-btn {
-            background: white;
-            color: #667eea;
-            padding: 1rem 2rem;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 1rem;
-            text-decoration: none;
-            display: inline-block;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        .features {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            padding: 4rem 2rem;
-            background: #fff;
-        }
-        .feature {
-            max-width: 300px;
-            margin: 1rem;
-            background: #f1f3f8;
-            border-radius: 10px;
-            padding: 2rem;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.05);
-        }
-        .feature h3 {
-            margin-top: 0;
-            color: #333;
-        }
-        .footer {
-            text-align: center;
-            padding: 2rem;
-            background: #333;
-            color: #fff;
-        }
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2rem;
-            }
-            .features {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedSpaSync Pro | Reconciliation Done Right</title>
+  <meta name="description" content="Automate your Alle and Aspire reward tracking and reclaim lost revenue." />
+  <meta property="og:title" content="MedSpaSync Pro" />
+  <meta property="og:description" content="Automated Alle & Aspire reconciliation for medical spas." />
+  <meta property="og:image" content="/assets/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="MedSpaSync Pro" />
+  <meta name="twitter:description" content="Automate your Alle and Aspire reward tracking and reclaim lost revenue." />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" />
+  <link rel="stylesheet" href="/assets/style.css" />
+  <script>
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
 </head>
-<body>
-    <header class="header">
-        <div class="logo">🏥 MedSpaSync Pro</div>
-        <nav>
-            <a href="#features">Features</a>
-            <a href="#roi">ROI Calculator</a>
-            <a href="login.html">Login</a>
-        </nav>
-    </header>
+<body class="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-inter">
+  <header class="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur border-b border-slate-200 dark:border-slate-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+      <a href="/" class="text-2xl font-bold text-indigo-500">MedSpaSync Pro</a>
+      <nav class="space-x-6 text-sm font-medium">
+        <a href="/features/" class="hover:text-indigo-500">Features</a>
+        <a href="/pricing/" class="hover:text-indigo-500">Pricing</a>
+        <a href="/about/" class="hover:text-indigo-500">About</a>
+        <a href="/support/" class="hover:text-indigo-500">Support</a>
+        <a href="/contact/" class="hover:text-indigo-500">Contact</a>
+        <button id="themeToggle" class="ml-4 p-2 rounded-full border border-slate-300 dark:border-slate-600" aria-label="Toggle dark mode">🌓</button>
+      </nav>
+    </div>
+  </header>
 
-    <section class="hero">
-        <h1>Stop Losing Revenue on Rewards Reconciliation</h1>
-        <p>Automate your Allē & Aspire reconciliation. Save hours of staff time, avoid costly errors, and recover $2K–$5K per month — guaranteed.</p>
-        <a href="login.html" class="cta-btn">Start Free Trial</a>
-    </section>
+  <section class="text-center py-24 bg-gradient-to-br from-indigo-500 to-purple-500 text-white">
+    <h1 class="text-4xl md:text-5xl font-bold mb-4">Reconciliation Done Right.</h1>
+    <p class="mb-8 max-w-2xl mx-auto text-lg">Automate your Alle and Aspire reward tracking — and reclaim lost revenue.</p>
+    <div class="space-x-4">
+      <a href="https://app.medspasyncpro.com/demo" class="inline-block bg-white text-indigo-600 font-semibold px-6 py-3 rounded-2xl shadow">Try the Demo</a>
+      <button id="openModal" class="inline-block bg-indigo-600 text-white font-semibold px-6 py-3 rounded-2xl shadow">Request a Demo Call</button>
+    </div>
+  </section>
 
-    <section class="features" id="features">
-        <div class="feature">
-            <h3>⚡ Instant Matching</h3>
-            <p>Upload your POS, Alle, and Aspire files. We match and flag discrepancies in seconds — not hours.</p>
-        </div>
-        <div class="feature">
-            <h3>📊 ROI Calculator</h3>
-            <p>Estimate your savings instantly and show your team the real business impact.</p>
-        </div>
-        <div class="feature">
-            <h3>🔐 HIPAA-Compliant</h3>
-            <p>We follow industry best practices for data security, encryption, and compliance.</p>
-        </div>
-    </section>
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 py-20" id="features">
+    <h2 class="text-3xl font-bold text-center mb-12">Features</h2>
+    <div class="grid gap-8 md:grid-cols-3">
+      <div class="p-6 rounded-2xl shadow bg-white dark:bg-slate-800">
+        <div class="text-4xl mb-4">🧠</div>
+        <h3 class="text-xl font-semibold mb-2">AI-Matched Redemptions</h3>
+        <p>Automatically match Alle and Aspire transactions with lightning-fast precision.</p>
+      </div>
+      <div class="p-6 rounded-2xl shadow bg-white dark:bg-slate-800">
+        <div class="text-4xl mb-4">🧾</div>
+        <h3 class="text-xl font-semibold mb-2">Real-Time PDF Reports</h3>
+        <p>Generate polished reconciliation reports instantly — ready for auditors.</p>
+      </div>
+      <div class="p-6 rounded-2xl shadow bg-white dark:bg-slate-800">
+        <div class="text-4xl mb-4">📊</div>
+        <h3 class="text-xl font-semibold mb-2">Dashboard Analytics</h3>
+        <p>Track savings and reconciliation trends with intuitive visual dashboards.</p>
+      </div>
+    </div>
+  </section>
 
-    <footer class="footer">
-        &copy; 2025 MedSpaSync Pro • Built by MythosMediaCo
-    </footer>
+  <footer class="bg-slate-100 dark:bg-slate-800 py-6 text-center text-sm">
+    <p>&copy; 2025 MedSpaSync Pro • <a class="underline" href="/privacy/">Privacy</a> • <a class="underline" href="/terms/">Terms</a></p>
+  </footer>
 
-    <section id="roi" style="padding: 4rem 2rem; background: #f9f9fc;">
-        <h2 style="text-align:center; font-size:2rem; margin-bottom:2rem;">📈 ROI Calculator</h2>
-        <div style="max-width:600px; margin:0 auto;">
-            <label>Monthly Transactions: <input id="transactions" type="number" value="500" style="width:100%;padding:10px;margin-bottom:10px;"></label>
-            <label>Hours Spent Manually: <input id="hours" type="number" value="12" style="width:100%;padding:10px;margin-bottom:10px;"></label>
-            <label>Hourly Rate ($): <input id="rate" type="number" value="30" style="width:100%;padding:10px;margin-bottom:10px;"></label>
-            <label>Missed Discrepancies (%): <input id="missed" type="number" value="15" style="width:100%;padding:10px;margin-bottom:10px;"></label>
-            <div style="margin-top:1rem;">
-                <strong>Estimated Monthly ROI:</strong>
-                <p id="roiResult" style="font-size:1.5rem; color:#667eea;">$0</p>
-            </div>
-        </div>
-    </section>
+  <div id="leadModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur flex items-center justify-center">
+    <div class="bg-white dark:bg-slate-800 rounded-2xl p-8 w-11/12 max-w-lg relative">
+      <button id="closeModal" class="absolute top-2 right-2 text-xl">✖</button>
+      <h2 class="text-2xl font-bold mb-4">Request a Demo Call</h2>
+      <form id="leadForm" class="space-y-4">
+        <input type="text" name="name" placeholder="Name" class="w-full p-3 rounded border border-slate-300 dark:border-slate-700 bg-transparent" required />
+        <input type="email" name="email" placeholder="Email" class="w-full p-3 rounded border border-slate-300 dark:border-slate-700 bg-transparent" required />
+        <input type="text" name="business" placeholder="Business Name" class="w-full p-3 rounded border border-slate-300 dark:border-slate-700 bg-transparent" />
+        <textarea name="message" placeholder="Message" class="w-full p-3 rounded border border-slate-300 dark:border-slate-700 bg-transparent"></textarea>
+        <button type="submit" class="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-2xl w-full">Submit</button>
+      </form>
+      <p id="formSuccess" class="mt-4 hidden text-green-600">Thank you! We'll be in touch.</p>
+    </div>
+  </div>
 
-    <script>
-        function calculateROI() {
-            const tx = parseInt(document.getElementById('transactions').value) || 0;
-            const hrs = parseFloat(document.getElementById('hours').value) || 0;
-            const rate = parseFloat(document.getElementById('rate').value) || 0;
-            const missed = parseFloat(document.getElementById('missed').value) || 0;
+  <script>
+    const toggle = document.getElementById('themeToggle');
+    toggle.addEventListener('click', () => {
+      const html = document.documentElement;
+      if (html.classList.contains('dark')) {
+        html.classList.remove('dark');
+        localStorage.theme = 'light';
+      } else {
+        html.classList.add('dark');
+        localStorage.theme = 'dark';
+      }
+    });
 
-            const timeSavings = hrs * 0.96 * rate;
-            const missedTx = tx * (missed / 100);
-            const revenueRecovered = missedTx * 33;
+    const modal = document.getElementById('leadModal');
+    document.getElementById('openModal').addEventListener('click', () => modal.classList.remove('hidden'));
+    document.getElementById('closeModal').addEventListener('click', () => modal.classList.add('hidden'));
 
-            const roi = Math.round(timeSavings + revenueRecovered);
-            document.getElementById('roiResult').textContent = '$' + roi.toLocaleString();
-        }
-
-        ['transactions', 'hours', 'rate', 'missed'].forEach(id => {
-            document.getElementById(id).addEventListener('input', calculateROI);
+    document.getElementById('leadForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const data = Object.fromEntries(new FormData(form));
+      try {
+        const res = await fetch('https://app.medspasyncpro.com/api/leads', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
         });
-
-        calculateROI();
-    </script>
+        if (res.ok) {
+          form.classList.add('hidden');
+          document.getElementById('formSuccess').classList.remove('hidden');
+        } else {
+          alert('There was an error submitting the form.');
+        }
+      } catch {
+        alert('There was an error submitting the form.');
+      }
+    });
+  </script>
 </body>
 </html>
-
