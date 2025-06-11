@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Modal from '../components/Ui/Modal.jsx'; // Explicit .jsx extension
 import { useForm } from '../hooks/useForm.js'; // Explicit .js extension
 import { validationSchemas } from '../utils/validation.js'; // Explicit .js extension
 import { useAuth } from '../services/AuthContext.jsx'; // Explicit .js extension
@@ -9,8 +8,6 @@ import LoadingScreen from '../components/Common/LoadingScreen.jsx';
 const RegisterPage = React.memo(() => {
     const navigate = useNavigate();
     const { register: registerUser, error: authError, clearError, isAuthenticated, isLoading } = useAuth();
-    const [showModal, setShowModal] = useState(false); // For custom modal visibility
-    const [modalConfig, setModalConfig] = useState({}); // For custom modal content
 
     const {
         values,
@@ -290,8 +287,6 @@ const RegisterPage = React.memo(() => {
                     </div>
                 </div>
             </div>
-            {/* Modal component for pop-ups */}
-            <Modal isOpen={showModal} {...modalConfig} />
         </div>
     );
 });

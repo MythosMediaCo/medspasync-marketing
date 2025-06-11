@@ -3,19 +3,17 @@ import React, { useState, useMemo, useCallback } from 'react';
 import TopNav from '../components/TopNav.jsx';
 import { useAuth } from '../services/AuthContext.jsx';
 import { Plus, Search, Users } from 'lucide-react'; // Removed unused icons (Phone, Mail, Calendar, MoreVertical, Edit, Trash2)
-import { 
-  useClients, 
-  useCreateClient, 
-  useUpdateClient, 
-  useDeleteClient,
-  useUpdateClientStatus // Assuming this is needed for status updates
+import {
+  useClients,
+  useCreateClient,
+  useUpdateClient,
+  useDeleteClient
 } from '../hooks/useClients.js'; // Explicit .js extension
 // ClientCard, ClientFormModal, DeleteConfirmModal are now imported from their own files
 import ClientCard from '../components/ClientCard.jsx';
 import ClientFormModal from '../components/ClientFormModal.jsx';
 import DeleteConfirmModal from '../components/DeleteConfirmModal.jsx';
 import LoadingCard from '../components/Common/LoadingScreen.jsx'; // Explicit .jsx extension
-import { format } from 'date-fns'; // For date formatting
 import toast from 'react-hot-toast'; // For toast messages
 import { useDebounce } from '../hooks/useDebounce.js'; // Use the useDebounce hook
 

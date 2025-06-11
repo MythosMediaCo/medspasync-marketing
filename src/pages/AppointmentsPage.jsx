@@ -3,7 +3,7 @@
 // Enhanced Appointments Management - Fixed Version
 // ========================================
 
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo } from 'react';
 import TopNav from '../components/TopNav.jsx';
 import { useAuth } from '../services/AuthContext.jsx';
 import { Calendar, Plus, Search, Users, Phone, Mail, Clock, User, DollarSign, MoreVertical } from 'lucide-react';
@@ -333,7 +333,7 @@ const AppointmentFormModal = React.memo(({ appointment, isOpen, onClose, onSubmi
 // Main Appointments Page
 const AppointmentsPage = React.memo(() => {
   const [statusFilter, setStatusFilter] = useState('all');
-  const { firstName, practiceName } = useAuth();
+  const { practiceName } = useAuth();
   const [dateFilter, setDateFilter] = useState('all');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
