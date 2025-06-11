@@ -257,3 +257,4 @@ For questions or issues:
 ## 📄 License
 
 MIT License - see LICENSE file for details
+[![Production - MedSpaSync Pro](https://img.shields.io/badge/Live%20App-Online-blue?style=flat-square&logo=vercel)](https://mythosmedia.github.io/medspasync-frontend/)
