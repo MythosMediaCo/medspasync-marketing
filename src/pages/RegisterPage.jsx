@@ -1,14 +1,14 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../components/Ui/Modal.jsx'; // Explicit .jsx extension
 import { useForm } from '../hooks/useForm.js'; // Explicit .js extension
 import { validationSchemas } from '../utils/validation.js'; // Explicit .js extension
 import { useAuth } from '../services/AuthContext.jsx'; // Explicit .js extension
+import LoadingScreen from '../components/Common/LoadingScreen.jsx';
 
 const RegisterPage = React.memo(() => {
     const navigate = useNavigate();
-    const { register, error: authError, clearError } = useAuth();
-    const [success, setSuccess] = useState(false);
+    const { register: registerUser, error: authError, clearError, isAuthenticated, isLoading } = useAuth();
     const [showModal, setShowModal] = useState(false); // For custom modal visibility
     const [modalConfig, setModalConfig] = useState({}); // For custom modal content
 
@@ -35,49 +35,26 @@ const RegisterPage = React.memo(() => {
         clearError();
     }, [clearError, reset]);
 
+    useEffect(() => {
+        if (!isLoading && isAuthenticated) {
+            navigate('/dashboard', { replace: true });
+        }
+    }, [isAuthenticated, isLoading, navigate]);
+
     // Handle form submission using useForm's handleSubmit
     const onSubmit = useCallback(async (formData) => {
         try {
-            const result = await register(formData); // Call the register function from AuthContext
-            if (result.success) {
-                setSuccess(true); // Set success state for the registration confirmation page
-            } else {
-                // If register function doesn't throw, but returns success: false, handle here.
-                // AuthContext's register function should throw errors, so this path is less likely
-                // unless backend returns a non-error success:false.
+            const success = await registerUser(formData);
+            if (success) {
+                navigate('/dashboard');
             }
         } catch (err) {
-            // Errors are handled and toasted by AuthContext. We just ensure submission state is reset.
+            // Errors are handled by AuthContext
         }
-    }, [register]);
+    }, [registerUser, navigate]);
 
-    // Conditional rendering for successful registration
-    if (success) {
-        return (
-            <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-white to-purple-100 flex items-center justify-center px-4">
-                <div className="max-w-md w-full text-center">
-                    <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
-                        <div className="mx-auto w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6">
-                            <span className="text-3xl" role="img" aria-label="Success Checkmark">✅</span>
-                        </div>
-                        <h1 className="text-2xl font-bold text-gray-900 mb-3">
-                            Welcome to MedSpaSync Pro!
-                        </h1>
-                        <p className="text-gray-600 mb-6 leading-relaxed">
-                            Your account has been created successfully. You can now sign in and start managing your medical spa.
-                        </p>
-                        <div className="space-y-3">
-                            <button
-                                onClick={() => navigate('/login')}
-                                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg"
-                            >
-                                Continue to Sign In
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
+    if (isLoading) {
+        return <LoadingScreen message="Loading user session..." />;
     }
 
     // Default rendering for the registration form

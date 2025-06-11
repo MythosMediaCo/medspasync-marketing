@@ -8,6 +8,7 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => storageService.getUserData());
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const initialize = useCallback(async () => {
     const token = storageService.getAuthToken();
@@ -31,12 +32,30 @@ export const AuthProvider = ({ children }) => {
   }, [initialize]);
 
   const login = async (credentials) => {
+    setError(null);
     try {
       const res = await authService.login(credentials);
       setUser(res.user);
       toast.success('Login successful');
       return true;
     } catch (err) {
+      setError(err.message);
+      toast.error(err.message);
+      return false;
+    }
+  };
+
+  const register = async (data) => {
+    setError(null);
+    try {
+      const res = await authService.register(data);
+      if (res.user) {
+        setUser(res.user);
+      }
+      toast.success('Registration successful');
+      return true;
+    } catch (err) {
+      setError(err.message);
       toast.error(err.message);
       return false;
     }
@@ -47,6 +66,8 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     toast.success('Logged out');
   };
+
+  const clearError = () => setError(null);
 
   const refreshToken = async () => {
     try {
@@ -64,8 +85,11 @@ export const AuthProvider = ({ children }) => {
         user,
         isLoading,
         login,
+        register,
         logout,
+        clearError,
         refreshToken,
+        error,
         isAuthenticated: !!user,
         role: user?.role,
         practiceId: user?.practiceId,

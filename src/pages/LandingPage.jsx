@@ -1,22 +1,8 @@
-import React, { useCallback, useEffect, useState, useContext } from 'react';
-import { AuthContext } from '../services/AuthContext.jsx';
-
-const decodeJWT = (token) => {
-  try {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split('')
-        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-        .join('')
-    );
-    return JSON.parse(jsonPayload);
-  } catch (error) {
-    console.warn('JWT decode failed:', error);
-    return null;
-  }
-};
+import React, { useCallback, useEffect, useState } from 'react';
+import { useAuth } from '../services/AuthContext.jsx';
+import storageService from '../services/storageService.js';
+import { decodeJWT } from '../utils/jwt.js';
+import LoadingScreen from '../components/Common/LoadingScreen.jsx';
 
 const LandingPage = React.memo(() => {
   const handleGetStarted = useCallback(() => {
@@ -27,23 +13,17 @@ const LandingPage = React.memo(() => {
     window.location.href = '/login';
   }, []);
 
-  const { user: contextUser } = useContext(AuthContext);
   const [darkMode, setDarkMode] = useState(false);
   const [userName, setUserName] = useState('');
   const version = import.meta.env.VITE_APP_VERSION || '1.0.0';
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      const decoded = decodeJWT(token);
-      const exp = decoded?.exp;
-      const now = Date.now() / 1000;
+  const { user: contextUser, isAuthenticated, isLoading } = useAuth();
 
-      if (exp && exp > now) {
-        window.location.href = '/dashboard';
-      }
+  useEffect(() => {
+    if (!isLoading && isAuthenticated) {
+      window.location.href = '/dashboard';
     }
-  }, []);
+  }, [isAuthenticated, isLoading]);
 
   useEffect(() => {
     const storedMode = localStorage.getItem('darkMode');
@@ -62,19 +42,28 @@ const LandingPage = React.memo(() => {
   }, [darkMode]);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    if (contextUser?.name) {
+      setUserName(contextUser.name);
+      return;
+    }
+
+    const token = storageService.getAuthToken();
     try {
       if (token) {
         const decoded = decodeJWT(token);
-        setUserName(decoded?.name || decoded?.username || '');
-      } else if (contextUser?.name) {
-        setUserName(contextUser.name);
+        if (decoded && decoded.exp * 1000 > Date.now()) {
+          setUserName(decoded.name || decoded.username || '');
+        }
       }
     } catch (error) {
       console.warn('Token decode failed:', error);
       setUserName('');
     }
   }, [contextUser]);
+
+  if (isLoading) {
+    return <LoadingScreen message="Loading user session..." />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-slate-50 to-gray-100 text-gray-800 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 dark:text-gray-100 transition-colors duration-300">
