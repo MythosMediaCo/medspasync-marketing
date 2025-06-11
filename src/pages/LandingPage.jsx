@@ -14,7 +14,11 @@ const LandingPage = React.memo(() => {
     window.location.href = '/login';
   }, []);
 
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    const stored = localStorage.getItem('darkMode');
+    if (stored) return stored === 'true';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
   const [userName, setUserName] = useState('');
   const version = import.meta.env.VITE_APP_VERSION || '1.0.0';
 
@@ -26,10 +30,6 @@ const LandingPage = React.memo(() => {
     }
   }, [isAuthenticated, isLoading]);
 
-  useEffect(() => {
-    const storedMode = localStorage.getItem('darkMode');
-    if (storedMode === 'true') setDarkMode(true);
-  }, []);
 
   useEffect(() => {
     const root = document.documentElement;
