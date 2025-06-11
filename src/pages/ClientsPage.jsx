@@ -1,5 +1,7 @@
 // src/pages/ClientsPage.jsx
 import React, { useState, useMemo, useCallback } from 'react';
+import TopNav from '../components/TopNav.jsx';
+import { useAuth } from '../services/AuthContext.jsx';
 import { Plus, Search, Users } from 'lucide-react'; // Removed unused icons (Phone, Mail, Calendar, MoreVertical, Edit, Trash2)
 import { 
   useClients, 
@@ -20,6 +22,7 @@ import { useDebounce } from '../hooks/useDebounce.js'; // Use the useDebounce ho
 // Main Clients Page Component
 const ClientsPage = React.memo(() => {
   const [searchQuery, setSearchQuery] = useState('');
+  const { firstName } = useAuth();
   const [statusFilter, setStatusFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(12); // Clients per page
@@ -137,11 +140,14 @@ const ClientsPage = React.memo(() => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30 p-6">
+      <TopNav />
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Client Management</h1>
+            <h1 className="text-3xl font-bold text-gray-900">
+              {firstName ? `${firstName}'s Clients` : 'Client Management'}
+            </h1>
             <p className="text-gray-600 mt-1">Manage your spa's client relationships</p>
           </div>
           <button 

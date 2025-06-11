@@ -1,66 +1,54 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../services/AuthContext.jsx';
-import storageService from '../services/storageService.js';
-import { decodeJWT } from '../utils/jwt.js';
 import LoadingScreen from '../components/Common/LoadingScreen.jsx';
 import UptimeStatusBadge from '../components/Common/UptimeStatusBadge.jsx';
+import TopNav from '../components/TopNav.jsx';
 
 const LandingPage = React.memo(() => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const handleGetStarted = useCallback(() => {
-    window.location.href = '/register';
-  }, []);
+    navigate('/register');
+  }, [navigate]);
 
   const handleSignIn = useCallback(() => {
-    window.location.href = '/login';
-  }, []);
+    navigate('/login');
+  }, [navigate]);
 
-  const [darkMode, setDarkMode] = useState(() => {
-    const stored = localStorage.getItem('darkMode');
-    if (stored) return stored === 'true';
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
-  });
-  const [userName, setUserName] = useState('');
   const version = import.meta.env.VITE_APP_VERSION || '1.0.0';
 
-  const { user: contextUser, isAuthenticated, isLoading } = useAuth();
+  const { firstName, isAuthenticated, isLoading, role } = useAuth();
 
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
-      window.location.href = '/dashboard';
-    }
-  }, [isAuthenticated, isLoading]);
-
-
-  useEffect(() => {
-    const root = document.documentElement;
-    if (darkMode) {
-      root.classList.add('dark');
-      localStorage.setItem('darkMode', 'true');
-    } else {
-      root.classList.remove('dark');
-      localStorage.setItem('darkMode', 'false');
-    }
-  }, [darkMode]);
-
-  useEffect(() => {
-    if (contextUser?.name) {
-      setUserName(contextUser.name);
-      return;
-    }
-
-    const token = storageService.getAuthToken();
-    try {
-      if (token) {
-        const decoded = decodeJWT(token);
-        if (decoded && decoded.exp * 1000 > Date.now()) {
-          setUserName(decoded.name || decoded.username || '');
-        }
+      const from = location.state?.from;
+      if (from) {
+        navigate(from, { replace: true });
+        return;
       }
-    } catch (error) {
-      console.warn('Token decode failed:', error);
-      setUserName('');
+
+      const cookie = document.cookie
+        .split(';')
+        .map(c => c.trim())
+        .find(c => c.startsWith('lastVisitedPage='));
+      const lastVisited = cookie ? decodeURIComponent(cookie.split('=')[1]) : null;
+      if (lastVisited) {
+        navigate(lastVisited, { replace: true });
+        return;
+      }
+
+      if (role) {
+        navigate('/dashboard', { replace: true });
+      } else {
+        navigate('/dashboard', { replace: true });
+      }
     }
-  }, [contextUser]);
+  }, [isAuthenticated, isLoading, location, navigate, role]);
+
+
+
 
   if (isLoading) {
     return <LoadingScreen message="Loading user session..." />;
@@ -68,42 +56,7 @@ const LandingPage = React.memo(() => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-slate-50 to-gray-100 text-gray-800 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 dark:text-gray-100 transition-colors duration-300">
-      <header className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <div
-            className="flex items-center cursor-pointer"
-            onClick={() => (window.location.href = '/')}
-          >
-            <div className="h-9 w-9 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center shadow">
-              <span className="text-white font-bold text-md">M</span>
-            </div>
-            <span className="ml-3 text-lg font-semibold tracking-tight">
-              MedSpaSync Pro
-            </span>
-          </div>
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={() => setDarkMode(!darkMode)}
-              className="text-sm px-3 py-1 border rounded-lg border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-              aria-label={`Switch to ${darkMode ? 'light' : 'dark'} mode`}
-            >
-              {darkMode ? '☀️ Light' : '🌙 Dark'}
-            </button>
-            <button
-              onClick={handleSignIn}
-              className="text-gray-700 dark:text-gray-200 hover:text-indigo-600 transition font-medium"
-            >
-              Sign In
-            </button>
-            <button
-              onClick={handleGetStarted}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg shadow transition"
-            >
-              Get Started
-            </button>
-          </div>
-        </div>
-      </header>
+      <TopNav />
 
       <main className="flex items-center justify-center min-h-[calc(100vh-4rem)] px-6">
         <div className="max-w-md w-full text-center">
@@ -112,10 +65,10 @@ const LandingPage = React.memo(() => {
               <span className="text-white font-bold text-2xl">M</span>
             </div>
             <h1 className="text-2xl font-bold mb-2">
-              {userName ? `Welcome back, ${userName}` : 'Welcome to MedSpaSync Pro'}
+              {firstName ? `Welcome back, ${firstName}` : 'Welcome to MedSpaSync Pro'}
             </h1>
             <p className="text-gray-600 dark:text-gray-300">
-              {userName
+              {firstName
                 ? 'Ready to reconcile your latest data?'
                 : 'Streamlined, accurate, and effortless reconciliation.'}
             </p>
