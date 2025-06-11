@@ -24,10 +24,7 @@ export default defineConfig({
     process.env.ANALYZE && visualizer({ open: true, gzipSize: true })
   ].filter(Boolean),
   build: {
-    sourcemap: true,
-    terserOptions: {
-      compress: { drop_console: true, drop_debugger: true }
-    }
+    sourcemap: true
   },
   define: {
     'process.env.NODE_ENV': JSON.stringify('production')
