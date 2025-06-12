@@ -16,9 +16,6 @@ function stripUseClient() {
   };
 }
 
-const basePath = process.env.VITE_BASE_PATH ||
-  (process.env.NODE_ENV === 'production' ? '/medspasync-frontend/' : '/');
-
 export default defineConfig({
   plugins: [react(), stripUseClient(), visualizer()],
   build: {
@@ -28,5 +25,5 @@ export default defineConfig({
   define: {
     'process.env': process.env
   },
-  base: basePath,
+  base: '/', // ✅ Required for Netlify
 });
