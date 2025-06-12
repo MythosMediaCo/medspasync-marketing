@@ -1,5 +1,5 @@
 // src/pages/Dashboard.jsx
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Calendar, Users, DollarSign, BarChart3, TrendingUp, Clock, Star, Plus } from 'lucide-react';
 import { useClients } from '../hooks/useClients.js';
 import { useAppointmentsByDateRange } from '../hooks/useAppointments.js';
@@ -12,6 +12,7 @@ import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from 'date-f
 import { formatCurrency } from '../utils/formatting.js';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header.jsx';
+import WelcomeOnboardingModal from '../components/WelcomeOnboardingModal.jsx';
 
 // Metric Card Component
 function MetricCard(props) {
@@ -170,6 +171,20 @@ const TopClients = ({ clients, isLoading }) => {
 const Dashboard = () => {
   const { firstName } = useAuth();
   const [dateRange, setDateRange] = useState('week');
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('medspasync_onboarding'));
+      if (!saved || !saved.dismissed) {
+        setShowOnboarding(true);
+      }
+    } catch {
+      setShowOnboarding(true);
+    }
+  }, []);
+
+  const handleOnboardingClose = () => setShowOnboarding(false);
   
   // Calculate date ranges
   const today = new Date();
@@ -230,6 +245,10 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30">
       <Header />
+      <WelcomeOnboardingModal
+        isOpen={showOnboarding}
+        onClose={handleOnboardingClose}
+      />
       <div className="max-w-7xl mx-auto p-6">
         {/* Header */}
         <div className="mb-8">

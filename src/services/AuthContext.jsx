@@ -125,6 +125,16 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const refreshUser = async () => {
+    try {
+      const res = await authService.getProfile();
+      setUser(res.user);
+      storageService.updateLastActivity();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   // Track user activity and session validity
   useEffect(() => {
     const activityEvents = ['mousemove', 'mousedown', 'keydown', 'touchstart'];
@@ -171,6 +181,7 @@ export const AuthProvider = ({ children }) => {
         logout,
         clearError,
         refreshToken,
+        refreshUser,
         error,
         isAuthenticated: !!user,
         role: user?.role,
