@@ -249,10 +249,10 @@ npm run build
 ## 📞 Support
 
 For questions or issues:
-1. Check the documentation
+1. [Check the documentation](/docs)
 2. Search existing issues
 3. Create a new issue with details
-4. Contact support team
+4. [Contact support team](/support)
 
 ## 📄 License
 
