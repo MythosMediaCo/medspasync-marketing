@@ -1,153 +1,83 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MedSpaSync Pro</title>
-  <meta name="description" content="Rewards reconciliation built by medspa veterans.">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
-  <link rel="stylesheet" href="/assets/style.css">
-</head>
-<body class="font-inter bg-white text-slate-900">
-  <header class="sticky top-0 bg-white/80 backdrop-blur z-20">
-    <nav class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center text-sm font-medium">
-      <a href="#" class="text-2xl font-bold text-indigo-600">MedSpaSync Pro</a>
-      <div class="space-x-6">
-        <a href="#features" class="hover:text-indigo-500">Features</a>
-        <a href="#pricing" class="hover:text-indigo-500">Pricing</a>
-        <a href="mailto:support@medspasyncpro.com" class="hover:text-indigo-500">Support</a>
-        <a href="https://medspasync-landing.netlify.app" class="ml-4 inline-block bg-indigo-600 text-white px-4 py-2 rounded-full shadow hover:bg-indigo-500">Try Demo</a>
-      </div>
-    </nav>
-  </header>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedSpaSync Pro | Automated Rewards Reconciliation for Medical Spas</title>
+  <meta name="description" content="Automate Alle, Aspire, and POS reconciliation with 96% time reduction and 90% match accuracy. Built by a 10-year medspa veteran." />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/logo192.png" />
+  <meta name="theme-color" content="#ffffff" />
 
-  <main>
-    <section class="min-h-screen flex flex-col justify-center items-center text-center bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-white p-8">
-      <h1 class="text-5xl md:text-6xl font-extrabold mb-4">Reconciliation Done Right</h1>
-      <p class="max-w-xl mx-auto mb-8">Automate your Alle and Aspire reward tracking without the guesswork.</p>
-      <a href="https://medspasync-landing.netlify.app" class="bg-white text-indigo-600 font-semibold px-8 py-4 rounded-full shadow hover:bg-slate-100">Try the Demo</a>
-    </section>
+  <!-- Open Graph -->
+  <meta property="og:title" content="MedSpaSync Pro" />
+  <meta property="og:description" content="The first platform to automate Alle, Aspire, and POS reconciliation for medical spas." />
+  <meta property="og:image" content="https://medspasyncpro.com/og-cover.png" />
+  <meta property="og:url" content="https://medspasyncpro.com" />
+  <meta property="og:type" content="website" />
 
-    <section id="features" class="max-w-7xl mx-auto px-4 sm:px-6 py-20">
-      <h2 class="text-3xl font-bold text-center mb-12">Features</h2>
-      <div class="grid gap-8 md:grid-cols-3">
-        <div class="p-6 rounded-2xl shadow bg-white">
-          <svg class="w-8 h-8 mb-4 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2"></path>
-            <circle cx="12" cy="12" r="10"></circle>
-          </svg>
-          <h3 class="text-xl font-semibold mb-2">AI-Matched Redemptions</h3>
-          <p class="text-sm">Matches transactions automatically to reduce manual errors.</p>
-        </div>
-        <div class="p-6 rounded-2xl shadow bg-white">
-          <svg class="w-8 h-8 mb-4 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M7 8h10M7 12h10m-9 4h9"></path>
-            <rect width="20" height="14" x="2" y="5" rx="2" ry="2"></rect>
-          </svg>
-          <h3 class="text-xl font-semibold mb-2">Instant PDF Reports</h3>
-          <p class="text-sm">Export polished reports ready for auditors.</p>
-        </div>
-        <div class="p-6 rounded-2xl shadow bg-white">
-          <svg class="w-8 h-8 mb-4 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M11 11V3h2v8h5l-6 6-6-6h5z"></path>
-          </svg>
-          <h3 class="text-xl font-semibold mb-2">Insightful Analytics</h3>
-          <p class="text-sm">Track savings over time with clear dashboards.</p>
-        </div>
-      </div>
-    </section>
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="MedSpaSync Pro" />
+  <meta name="twitter:description" content="Built by medical spa pros to eliminate reconciliation headaches. Try the live demo." />
+  <meta name="twitter:image" content="https://medspasyncpro.com/twitter-card.png" />
 
-    <section id="roi" class="max-w-3xl mx-auto px-4 sm:px-6 py-20 text-center bg-gradient-to-b from-slate-50 to-white">
-      <h2 class="text-3xl font-bold mb-8">ROI Calculator</h2>
-      <div class="grid gap-6 md:grid-cols-3 text-left">
-        <div>
-          <label for="hours" class="block font-semibold mb-2">Estimated hours saved per month</label>
-          <input id="hours" type="number" min="0" step="0.1" class="w-full p-3 rounded border border-slate-300 bg-transparent">
-        </div>
-        <div>
-          <label for="wage" class="block font-semibold mb-2">Average staff hourly wage</label>
-          <input id="wage" type="number" min="0" step="0.01" class="w-full p-3 rounded border border-slate-300 bg-transparent">
-        </div>
-        <div class="flex flex-col justify-center items-center">
-          <p class="font-semibold">Estimated monthly savings</p>
-          <p id="roiResult" class="text-3xl font-bold mt-2">$0.00</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="pricing" class="max-w-7xl mx-auto px-4 sm:px-6 py-20">
-      <h2 class="text-3xl font-bold text-center mb-12">Pricing</h2>
-      <div class="grid gap-8 md:grid-cols-2">
-        <div class="p-8 rounded-2xl shadow bg-white text-center">
-          <h3 class="text-2xl font-semibold mb-4">Core Reconciliation</h3>
-          <p class="text-4xl font-bold mb-4">$299</p>
-          <ul class="space-y-2 mb-6 text-left max-w-sm mx-auto text-sm">
-            <li>✔️ AI-Matched Redemptions</li>
-            <li>✔️ Real-Time PDF Reports</li>
-            <li>✔️ Dashboard Analytics</li>
-          </ul>
-          <p class="text-sm mb-6">Billed monthly. Cancel anytime.</p>
-        </div>
-        <div class="p-8 rounded-2xl shadow bg-white text-center relative">
-          <span class="absolute top-2 right-2 bg-indigo-600 text-white text-xs px-2 py-1 rounded">Coming Soon</span>
-          <h3 class="text-2xl font-semibold mb-4">Professional Suite</h3>
-          <p class="text-4xl font-bold mb-4">$499</p>
-          <ul class="space-y-2 mb-6 text-left max-w-sm mx-auto text-sm">
-            <li>✔️ Everything in Core</li>
-            <li>✔️ Drag-and-Drop Uploads</li>
-            <li>✔️ HIPAA-Conscious Design</li>
-          </ul>
-          <p class="text-sm mb-6">Billed monthly. Cancel anytime.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="max-w-3xl mx-auto px-4 sm:px-6 py-20 text-center">
-      <h2 class="text-3xl font-bold mb-4">From the Founder</h2>
-      <p class="italic mb-4">"After a decade running a medspa, I built MedSpaSync Pro to take the headache out of reward reconciliation."</p>
-      <p class="font-semibold">— Jamie Lee, Founder</p>
-    </section>
-
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 py-20" id="trust">
-      <h2 class="text-3xl font-bold text-center mb-12">Trusted Infrastructure</h2>
-      <div class="grid gap-8 md:grid-cols-3 text-center">
-        <div class="p-6 rounded-2xl shadow bg-white">
-          <div class="text-4xl mb-2">⏱️</div>
-          <h3 class="text-xl font-semibold mb-2">99.9% Uptime</h3>
-          <p class="text-sm">Reliable service keeps your data available when you need it.</p>
-        </div>
-        <div class="p-6 rounded-2xl shadow bg-white">
-          <div class="text-4xl mb-2">🔒</div>
-          <h3 class="text-xl font-semibold mb-2">Privacy First</h3>
-          <p class="text-sm">Designed with HIPAA-conscious practices and encrypted backups.</p>
-        </div>
-        <div class="p-6 rounded-2xl shadow bg-white">
-          <div class="text-4xl mb-2">⚡</div>
-          <h3 class="text-xl font-semibold mb-2">Fast Support</h3>
-          <p class="text-sm">Reach us anytime at <a href="mailto:support@medspasyncpro.com" class="underline">support@medspasyncpro.com</a>.</p>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="bg-slate-100 py-6 text-center text-sm">
-    <p>&copy; 2025 MedSpaSync Pro • <a class="underline" href="/privacy/">Privacy</a> • <a class="underline" href="/terms/">Terms</a></p>
-  </footer>
-
-  <script>
-    const hoursInput = document.getElementById('hours');
-    const wageInput = document.getElementById('wage');
-    const roiResult = document.getElementById('roiResult');
-
-    function updateROI() {
-      const hours = parseFloat(hoursInput.value) || 0;
-      const wage = parseFloat(wageInput.value) || 0;
-      const savings = hours * wage;
-      roiResult.textContent = '$' + savings.toFixed(2);
-    }
-
-    hoursInput.addEventListener('input', updateROI);
-    wageInput.addEventListener('input', updateROI);
+  <!-- JSON-LD FAQ Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "We're a small practice. Is this overkill for us?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No — even single-location spas waste hours on reconciliation. The ROI often kicks in faster for smaller teams."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Will this work with our POS system?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "If your POS can export CSV files, MedSpaSync Pro can reconcile them. Most major systems are supported."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How secure is our data?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We follow HIPAA-conscious design, encrypt uploads, and delete files after processing. No email required for demo."
+        }
+      }
+    ]
+  }
   </script>
+
+  <!-- Tailwind (via CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Sitemap + Robots.txt -->
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
+  <meta name="robots" content="index, follow" />
+</head>
+
+<body class="bg-white text-gray-900 antialiased">
+  <div id="root"></div>
+  <div id="modal-root"></div>
+
+  <!-- noscript fallback for analytics -->
+  <noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXX"
+            height="0" width="0" style="display:none;visibility:hidden"></iframe>
+  </noscript>
+
+  <!-- Your React app entry -->
+  <script type="module" src="/src/main.jsx"></script>
 </body>
 </html>
