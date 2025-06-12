@@ -246,6 +246,12 @@ npm run build
 # Upload dist folder to Netlify
 ```
 
+### Deploy to GitHub Pages
+```bash
+npm run build
+npm run deploy
+```
+
 ## 📞 Support
 
 For questions or issues:
