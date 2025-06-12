@@ -1,8 +1,14 @@
 import React from "react";
+import { Helmet } from 'react-helmet-async';
 
 export default function SupportPage() {
   return (
-    <section className="pt-24 pb-20 gradient-bg">
+    <>
+      <Helmet>
+        <title>Support | MedSpaSync Pro</title>
+        <meta name="description" content="Get help from our medical spa experts." />
+      </Helmet>
+      <section className="pt-24 pb-20 gradient-bg">
       <div className="max-w-4xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
           <h1 className="text-4xl lg:text-5xl font-bold mb-6">Support</h1>
@@ -68,5 +74,6 @@ export default function SupportPage() {
         </div>
       </div>
     </section>
+    </>
   );
 }

@@ -11,7 +11,9 @@ import AboutPage from './pages/AboutPage';
 import SupportPage from './pages/SupportPage';
 import ContactPage from './pages/ContactPage';
 import ScrollToTop from './components/ScrollToTop';
-import Toast from './components/Toast';
+
+import TermsPage from './pages/TermsPage';
+import PrivacyPage from './pages/PrivacyPage';
 
 function App() {
   return (
@@ -28,10 +30,11 @@ function App() {
               <Route path="/about" element={<AboutPage />} />
               <Route path="/support" element={<SupportPage />} />
               <Route path="/contact" element={<ContactPage />} />
+              <Route path="/privacy" element={<PrivacyPage />} />
+              <Route path="/terms" element={<TermsPage />} />
             </Routes>
           </main>
           <Footer />
-          <Toast />
         </div>
       </Router>
     </HelmetProvider>

@@ -1,9 +1,36 @@
 // src/pages/ContactPage.jsx
-import React from "react";
+import React, { useState } from "react";
+import { Helmet } from 'react-helmet-async';
+import { submitForm } from "../utils/formSubmit";
+import Toast from "../components/Toast";
 
 export default function ContactPage() {
+  const [formData, setFormData] = useState({ name: '', email: '', business: '', message: '' });
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { success, error } = await submitForm(formData);
+    if (success) {
+      setToast({ show: true, message: 'Message sent!', type: 'success' });
+      setFormData({ name: '', email: '', business: '', message: '' });
+    } else {
+      setToast({ show: true, message: error || 'Submission failed', type: 'error' });
+    }
+  };
+
   return (
-    <section className="pt-24 pb-20 gradient-bg">
+    <>
+      <Helmet>
+        <title>Contact | MedSpaSync Pro</title>
+        <meta name="description" content="Contact the MedSpaSync Pro team." />
+      </Helmet>
+      <Toast message={toast.message} type={toast.type} show={toast.show} onClose={() => setToast({ ...toast, show: false })} />
+      <section className="pt-24 pb-20 gradient-bg">
       <div className="max-w-4xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
           <h1 className="text-4xl lg:text-5xl font-bold mb-6">Contact Us</h1>
@@ -71,7 +98,7 @@ export default function ContactPage() {
 
           <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
             <h3 className="text-xl font-semibold mb-6">Send us a message</h3>
-            <form id="contact-form" className="space-y-6">
+            <form id="contact-form" className="space-y-6" onSubmit={handleSubmit}>
               <div>
                 <label htmlFor="name" className="block text-sm font-medium mb-2">
                   Name *
@@ -81,6 +108,8 @@ export default function ContactPage() {
                   id="name"
                   name="name"
                   required
+                  value={formData.name}
+                  onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700"
                 />
               </div>
@@ -94,6 +123,8 @@ export default function ContactPage() {
                   id="email"
                   name="email"
                   required
+                  value={formData.email}
+                  onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700"
                 />
               </div>
@@ -106,6 +137,8 @@ export default function ContactPage() {
                   type="text"
                   id="business"
                   name="business"
+                  value={formData.business}
+                  onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700"
                 />
               </div>
@@ -119,6 +152,8 @@ export default function ContactPage() {
                   name="message"
                   rows="4"
                   required
+                  value={formData.message}
+                  onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700"
                 />
               </div>
@@ -134,5 +169,6 @@ export default function ContactPage() {
         </div>
       </div>
     </section>
+    </>
   );
 }
