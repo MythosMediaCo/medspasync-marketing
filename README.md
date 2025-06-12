@@ -252,6 +252,12 @@ npm run build
 npm run deploy
 ```
 
+### Troubleshooting 404 Errors
+If you serve `index.html` from the repository root, the browser will try to load
+`/src/main.jsx` and return a 404. Always run `npm run build` and deploy the
+generated `dist/` directory instead. The files in `dist/` have the correct asset
+paths for production environments.
+
 ## 📞 Support
 
 For questions or issues:
