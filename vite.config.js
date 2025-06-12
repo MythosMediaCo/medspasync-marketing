@@ -25,5 +25,5 @@ export default defineConfig({
   define: {
     'process.env': process.env
   },
-  base: '/', // 👈 This is the fix
+  base: './', // ✅ FIXED: ensures relative paths work in Netlify
 });
