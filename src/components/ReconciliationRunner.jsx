@@ -5,6 +5,9 @@ import toast from 'react-hot-toast';
 import api from '../services/api.js';
 import { useAuth } from '../services/AuthContext.jsx';
 import { canExport } from '../utils/access.js';
+import { useLocalStorage } from '../hooks/useLocalStorage.js';
+import { callAIFlagging } from '../services/ai.js';
+import MatchTable from './MatchTable.jsx';
 
 function ReconciliationRunner() {
   const { subscriptionTier } = useAuth();
@@ -13,6 +16,7 @@ function ReconciliationRunner() {
   const [file3, setFile3] = useState(null);
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [aiEnabled, setAiEnabled] = useLocalStorage('aiFlagging', false);
 
   const handleUpload = async () => {
     if (!file1 || !file2 || !file3) {
@@ -28,7 +32,12 @@ function ReconciliationRunner() {
     setLoading(true);
     try {
       const res = await api.post('/reconciliation/run', formData);
-      setResults(res.data);
+      let data = res.data;
+      if (aiEnabled && Array.isArray(data?.matches)) {
+        const flagged = await callAIFlagging(data.matches);
+        data = { ...data, matches: flagged };
+      }
+      setResults(data);
       toast.success('Reconciliation complete');
     } catch (err) {
       toast.error('Error running reconciliation');
@@ -60,6 +69,15 @@ function ReconciliationRunner() {
         <input type="file" onChange={e => setFile1(e.target.files[0])} />
         <input type="file" onChange={e => setFile2(e.target.files[0])} />
         <input type="file" onChange={e => setFile3(e.target.files[0])} />
+        <label className="inline-flex items-center space-x-2">
+          <input
+            type="checkbox"
+            className="h-4 w-4 text-blue-600"
+            checked={aiEnabled}
+            onChange={() => setAiEnabled(!aiEnabled)}
+          />
+          <span>AI-Powered Flagging</span>
+        </label>
 
         <button
           className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
@@ -70,9 +88,12 @@ function ReconciliationRunner() {
         </button>
 
         {results && (
-          <div className="mt-6 p-4 bg-white rounded shadow">
-            <h2 className="text-xl font-semibold mb-2">Summary</h2>
+          <div className="mt-6 p-4 bg-white rounded shadow space-y-4">
+            <h2 className="text-xl font-semibold">Summary</h2>
             <pre className="text-sm overflow-auto whitespace-pre-wrap">{JSON.stringify(results.summary, null, 2)}</pre>
+            {Array.isArray(results.matches) && results.matches.length > 0 && (
+              <MatchTable data={results.matches} />
+            )}
             <button
               className="mt-4 bg-green-600 text-white px-4 py-2 rounded disabled:opacity-50"
               onClick={handleExportPDF}
