@@ -1,22 +1,40 @@
-import React from 'react';
-import { Routes } from 'react-router-dom';
-import routes from './routes';
+// File: src/App.jsx
+
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import Toast from './components/Toast';
+import Home from './pages/Home';
+import FeaturesPage from './pages/FeaturesPage';
+import PricingPage from './pages/PricingPage';
+import AboutPage from './pages/AboutPage';
+import SupportPage from './pages/SupportPage';
+import ContactPage from './pages/ContactPage';
 import ScrollToTop from './components/ScrollToTop';
+import Toast from './components/Toast';
 
 function App() {
   return (
-    <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-      <Header />
-      <ScrollToTop />
-      <main className="flex-1">
-        <Routes>{routes}</Routes>
-      </main>
-      <Footer />
-      <Toast />
-    </div>
+    <HelmetProvider>
+      <Router>
+        <ScrollToTop />
+        <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+          <Header />
+          <main className="flex-grow">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/features" element={<FeaturesPage />} />
+              <Route path="/pricing" element={<PricingPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/support" element={<SupportPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+            </Routes>
+          </main>
+          <Footer />
+          <Toast />
+        </div>
+      </Router>
+    </HelmetProvider>
   );
 }
 

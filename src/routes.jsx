@@ -1,17 +1,18 @@
-import React from 'react';
-import { Route } from 'react-router-dom';
-import Home from './pages/Home';
-import FeaturesPage from './pages/FeaturesPage';
-import PricingPage from './pages/PricingPage';
-import AboutPage from './pages/AboutPage';
-import SupportPage from './pages/SupportPage';
-import ContactPage from './pages/ContactPage';
+// /workspaces/medspasync-marketing/src/routes.jsx
+import Hero from './components/Hero.jsx';
+import Features from './components/Features.jsx';
+import Pricing from './components/Pricing.jsx';
+import About from './components/About.jsx';
+import Support from './components/Support.jsx';
+import Contact from './components/Contact.jsx';
 
-export default [
-  <Route key="home" path="/" element={<Home />} />,
-  <Route key="features" path="/features" element={<FeaturesPage />} />,
-  <Route key="pricing" path="/pricing" element={<PricingPage />} />,
-  <Route key="about" path="/about" element={<AboutPage />} />,
-  <Route key="support" path="/support" element={<SupportPage />} />,
-  <Route key="contact" path="/contact" element={<ContactPage />} />,
+export const routes = [
+  { path: '/', name: 'Home', component: <Hero /> },
+  { path: '/features', name: 'Features', component: <Features /> },
+  { path: '/pricing', name: 'Pricing', component: <Pricing /> },
+  { path: '/about', name: 'About', component: <About /> },
+  { path: '/support', name: 'Support', component: <Support /> },
+  { path: '/contact', name: 'Contact', component: <Contact /> },
 ];
+import { lazy } from 'react';
+// export const lazyRoutes; // Uncomment and initialize if needed, or remove if not used
