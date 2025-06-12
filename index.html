@@ -45,6 +45,7 @@
     </div>
   </section>
 
+
   <section class="max-w-7xl mx-auto px-4 sm:px-6 py-20" id="features">
     <h2 class="text-3xl font-bold text-center mb-12">Features</h2>
     <div class="grid gap-8 md:grid-cols-3">
@@ -62,6 +63,24 @@
         <div class="text-4xl mb-4">📊</div>
         <h3 class="text-xl font-semibold mb-2">Dashboard Analytics</h3>
         <p>Track savings and reconciliation trends with intuitive visual dashboards.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="roi" class="max-w-3xl mx-auto px-4 sm:px-6 py-20 text-center">
+    <h2 class="text-3xl font-bold mb-8">ROI Calculator</h2>
+    <div class="grid gap-6 md:grid-cols-3 text-left">
+      <div>
+        <label for="hours" class="block font-semibold mb-2">Estimated hours saved per month</label>
+        <input id="hours" type="number" min="0" step="0.1" class="w-full p-3 rounded border border-slate-300 dark:border-slate-700 bg-transparent" />
+      </div>
+      <div>
+        <label for="wage" class="block font-semibold mb-2">Average staff hourly wage</label>
+        <input id="wage" type="number" min="0" step="0.01" class="w-full p-3 rounded border border-slate-300 dark:border-slate-700 bg-transparent" />
+      </div>
+      <div class="flex flex-col justify-center items-center">
+        <p class="font-semibold">Estimated monthly savings</p>
+        <p id="roiResult" class="text-3xl font-bold mt-2">$0.00</p>
       </div>
     </div>
   </section>
@@ -122,6 +141,20 @@
         alert('There was an error submitting the form.');
       }
     });
+
+    const hoursInput = document.getElementById('hours');
+    const wageInput = document.getElementById('wage');
+    const roiResult = document.getElementById('roiResult');
+
+    function updateROI() {
+      const hours = parseFloat(hoursInput.value) || 0;
+      const wage = parseFloat(wageInput.value) || 0;
+      const savings = hours * wage;
+      roiResult.textContent = '$' + savings.toFixed(2);
+    }
+
+    hoursInput.addEventListener('input', updateROI);
+    wageInput.addEventListener('input', updateROI);
   </script>
 </body>
 </html>
