@@ -1,9 +1,9 @@
 /* /workspaces/medspasync-marketing/src/index.css */
 
-/* Tailwind base + components + utilities (if using PostCSS setup) */
-/* @tailwind base;
+/* Tailwind base + components + utilities */
+@tailwind base;
 @tailwind components;
-@tailwind utilities; */
+@tailwind utilities;
 
 /* Custom Fonts */
 body {
@@ -118,9 +118,6 @@ html.dark input, html.dark textarea {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-/* @tailwind base; */
-/* @tailwind components; */
-/* @tailwind utilities; */
 
 /* Base Layer Customization */
 @layer base {
