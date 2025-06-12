@@ -26,5 +26,5 @@ export default defineConfig({
   define: {
     'process.env': process.env
   },
-  base: '/'
+  base: '/medspasync-frontend/'
 });
