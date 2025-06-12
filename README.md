@@ -245,6 +245,10 @@ vercel --prod
 npm run build
 # Upload dist folder to Netlify
 ```
+The repository includes a `netlify.toml` with the correct build command and a
+catch-all redirect for single page routing. Keep the generated `dist/` folder
+and the root `404.html` when deploying so deep links resolve correctly on
+Netlify or any other static host.
 
 ### Deploy to GitHub Pages
 Set `VITE_BASE_PATH=/medspasync-frontend/` before building:
