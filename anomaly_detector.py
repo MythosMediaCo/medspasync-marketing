@@ -34,7 +34,7 @@ def flag_anomalies(records: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         return []
 
     # Extract dates first to compute relative days
-    parsed_dates = [_parse_date(r.get("date")) for r in records]
+    parsed_dates = [_parse_date(r.get("date")) for r in records] # type: ignore
     valid_dates = [d for d in parsed_dates if d is not None]
     min_date = min(valid_dates) if valid_dates else None
 
