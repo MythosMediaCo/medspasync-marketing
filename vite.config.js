@@ -16,6 +16,11 @@ function stripUseClient() {
   };
 }
 
+<<<<<<< HEAD
+=======
+const basePath = process.env.VITE_BASE_PATH || '/';
+
+>>>>>>> 72b472d0989c5f2c4ca08e39e5672dee2191303c
 export default defineConfig({
   plugins: [react(), stripUseClient(), visualizer()],
   build: {

@@ -93,7 +93,6 @@ const ClientsPage = React.memo(() => {
 
   const handleViewClient = useCallback((client) => {
     // Implement client detail view (e.g., open a modal, navigate to /clients/:id)
-    console.log('Viewing client:', client);
     toast.info(`View Client: ${client.firstName} ${client.lastName}`);
   }, []);
 
