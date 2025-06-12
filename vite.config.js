@@ -1,4 +1,3 @@
-// vite.config.js
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { visualizer } from 'rollup-plugin-visualizer';
@@ -26,5 +25,5 @@ export default defineConfig({
   define: {
     'process.env': process.env
   },
-  base: process.env.NODE_ENV === 'production' ? '/medspasync-frontend/' : '/'
+  base: process.env.NODE_ENV === 'production' ? '/medspasync-frontend/' : '/',
 });
