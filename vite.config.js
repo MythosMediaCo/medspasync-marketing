@@ -16,18 +16,14 @@ function stripUseClient() {
   };
 }
 
-const basePath =
-  process.env.VITE_BASE_PATH ||
-  (process.env.NODE_ENV === 'production' ? '/medspasync-frontend/' : '/');
-
 export default defineConfig({
   plugins: [react(), stripUseClient(), visualizer()],
   build: {
     sourcemap: true,
-    minify: 'terser',
+    minify: 'terser'
   },
   define: {
-    'process.env': process.env,
+    'process.env': process.env
   },
-  base: basePath,
+  base: '/', // 👈 This is the fix
 });
