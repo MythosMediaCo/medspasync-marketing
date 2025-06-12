@@ -13,6 +13,10 @@
   <meta name="twitter:description" content="Automate your Alle and Aspire reward tracking and reclaim lost revenue." />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" />
   <link rel="stylesheet" href="/assets/style.css" />
+  <style>
+    .reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease-out,transform .6s ease-out}
+    .reveal.visible{opacity:1;transform:none}
+  </style>
   <script>
     if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       document.documentElement.classList.add('dark');
@@ -22,52 +26,93 @@
   </script>
 </head>
 <body class="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-inter">
-  <header class="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur border-b border-slate-200 dark:border-slate-700">
+  <header class="fixed top-0 left-0 right-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur shadow">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
-      <a href="/" class="text-2xl font-bold text-indigo-500">MedSpaSync Pro</a>
-      <nav class="space-x-6 text-sm font-medium">
+      <a href="/" class="text-2xl font-bold text-indigo-600">MedSpaSync Pro</a>
+      <nav class="space-x-6 text-sm font-medium flex items-center">
         <a href="/features/" class="hover:text-indigo-500">Features</a>
         <a href="/pricing/" class="hover:text-indigo-500">Pricing</a>
         <a href="/about/" class="hover:text-indigo-500">About</a>
         <a href="/support/" class="hover:text-indigo-500">Support</a>
         <a href="/contact/" class="hover:text-indigo-500">Contact</a>
+        <a href="/demo/" class="ml-4 inline-block bg-indigo-600 text-white font-semibold px-4 py-2 rounded-full shadow animate-pulse hover:animate-none hover:bg-indigo-500 transition">Try Demo</a>
         <button id="themeToggle" class="ml-4 p-2 rounded-full border border-slate-300 dark:border-slate-600" aria-label="Toggle dark mode">🌓</button>
       </nav>
     </div>
   </header>
 
-  <section class="text-center py-24 bg-gradient-to-br from-indigo-500 to-purple-500 text-white">
-    <h1 class="text-4xl md:text-5xl font-bold mb-4">Reconciliation Done Right.</h1>
-    <p class="mb-8 max-w-2xl mx-auto text-lg">Automate your Alle and Aspire reward tracking — and reclaim lost revenue.</p>
-    <div class="space-x-4">
-      <a href="https://app.medspasyncpro.com/demo" class="inline-block bg-white text-indigo-600 font-semibold px-6 py-3 rounded-2xl shadow">Try the Demo</a>
-      <button id="openModal" class="inline-block bg-indigo-600 text-white font-semibold px-6 py-3 rounded-2xl shadow">Request a Demo Call</button>
+  <section class="relative flex items-center justify-center text-center min-h-screen pt-32 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-white">
+    <div class="space-y-6">
+      <h1 class="text-5xl md:text-6xl font-extrabold">Reconciliation Done Right.</h1>
+      <p class="max-w-2xl mx-auto text-lg">Automate your Alle and Aspire reward tracking and reclaim lost revenue.</p>
+      <div class="space-x-4">
+        <a href="/demo/" class="inline-block bg-white text-indigo-600 font-semibold px-8 py-4 rounded-full shadow-lg animate-pulse hover:animate-none hover:bg-slate-100 transition">Try the Demo</a>
+        <button id="openModal" class="inline-block bg-indigo-600 text-white font-semibold px-8 py-4 rounded-full shadow-lg hover:bg-indigo-500 transition">Request a Demo Call</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-20 bg-gradient-to-b from-white via-slate-50 to-white dark:from-slate-800 dark:via-slate-800 dark:to-slate-800">
+    <div class="max-w-3xl mx-auto text-center space-y-6 reveal">
+      <svg class="w-12 h-12 mx-auto text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+      </svg>
+      <p class="text-xl italic font-semibold">"MedSpaSync Pro has transformed how we manage rewards reconciliation. We save hours each week."</p>
+      <p class="font-medium">— Dr. Ava Simmons, Revive Med Spa</p>
     </div>
   </section>
 
 
   <section class="max-w-7xl mx-auto px-4 sm:px-6 py-20" id="features">
-    <h2 class="text-3xl font-bold text-center mb-12">Features</h2>
-    <div class="grid gap-8 md:grid-cols-3">
-      <div class="p-6 rounded-2xl shadow bg-white dark:bg-slate-800">
-        <div class="text-4xl mb-4">🧠</div>
+    <h2 class="text-3xl font-bold text-center mb-12 reveal">Features</h2>
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+      <div class="p-6 rounded-2xl shadow bg-white dark:bg-slate-800 reveal">
+        <svg class="w-8 h-8 mb-4 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2"></path>
+          <circle cx="12" cy="12" r="10"></circle>
+        </svg>
         <h3 class="text-xl font-semibold mb-2">AI-Matched Redemptions</h3>
-        <p>Automatically match Alle and Aspire transactions with lightning-fast precision.</p>
+        <ul class="list-disc pl-5 text-sm space-y-1">
+          <li>Matches transactions automatically</li>
+          <li>Reduces manual errors</li>
+        </ul>
       </div>
-      <div class="p-6 rounded-2xl shadow bg-white dark:bg-slate-800">
-        <div class="text-4xl mb-4">🧾</div>
-        <h3 class="text-xl font-semibold mb-2">Real-Time PDF Reports</h3>
-        <p>Generate polished reconciliation reports instantly — ready for auditors.</p>
+      <div class="p-6 rounded-2xl shadow bg-white dark:bg-slate-800 reveal">
+        <svg class="w-8 h-8 mb-4 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M7 8h10M7 12h10m-9 4h9"></path>
+          <rect width="20" height="14" x="2" y="5" rx="2" ry="2"></rect>
+        </svg>
+        <h3 class="text-xl font-semibold mb-2">Instant PDF Reports</h3>
+        <ul class="list-disc pl-5 text-sm space-y-1">
+          <li>Polished exports ready for auditors</li>
+          <li>One-click sharing</li>
+        </ul>
       </div>
-      <div class="p-6 rounded-2xl shadow bg-white dark:bg-slate-800">
-        <div class="text-4xl mb-4">📊</div>
-        <h3 class="text-xl font-semibold mb-2">Dashboard Analytics</h3>
-        <p>Track savings and reconciliation trends with intuitive visual dashboards.</p>
+      <div class="p-6 rounded-2xl shadow bg-white dark:bg-slate-800 reveal">
+        <svg class="w-8 h-8 mb-4 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M11 11V3h2v8h5l-6 6-6-6h5z"></path>
+        </svg>
+        <h3 class="text-xl font-semibold mb-2">Insightful Analytics</h3>
+        <ul class="list-disc pl-5 text-sm space-y-1">
+          <li>Track savings over time</li>
+          <li>Visual dashboards</li>
+        </ul>
+      </div>
+      <div class="p-6 rounded-2xl shadow bg-white dark:bg-slate-800 reveal">
+        <svg class="w-8 h-8 mb-4 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 11c1.657 0 3-1.567 3-3.5S13.657 4 12 4s-3 1.567-3 3.5S10.343 11 12 11z"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 20h14v-2a7 7 0 00-14 0v2z"></path>
+        </svg>
+        <h3 class="text-xl font-semibold mb-2">Secure Cloud Sync</h3>
+        <ul class="list-disc pl-5 text-sm space-y-1">
+          <li>HIPAA-compliant storage</li>
+          <li>Daily encrypted backups</li>
+        </ul>
       </div>
     </div>
   </section>
 
-  <section id="roi" class="max-w-3xl mx-auto px-4 sm:px-6 py-20 text-center">
+  <section id="roi" class="max-w-3xl mx-auto px-4 sm:px-6 py-20 text-center reveal bg-gradient-to-b from-slate-50 to-white dark:from-slate-800 dark:to-slate-900">
     <h2 class="text-3xl font-bold mb-8">ROI Calculator</h2>
     <div class="grid gap-6 md:grid-cols-3 text-left">
       <div>
@@ -96,8 +141,6 @@
       <form id="leadForm" class="space-y-4">
         <input type="text" name="name" placeholder="Name" class="w-full p-3 rounded border border-slate-300 dark:border-slate-700 bg-transparent" required />
         <input type="email" name="email" placeholder="Email" class="w-full p-3 rounded border border-slate-300 dark:border-slate-700 bg-transparent" required />
-        <input type="text" name="business" placeholder="Business Name" class="w-full p-3 rounded border border-slate-300 dark:border-slate-700 bg-transparent" />
-        <textarea name="message" placeholder="Message" class="w-full p-3 rounded border border-slate-300 dark:border-slate-700 bg-transparent"></textarea>
         <button type="submit" class="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-2xl w-full">Submit</button>
       </form>
       <p id="formSuccess" class="mt-4 hidden text-green-600">Thank you! We'll be in touch.</p>
@@ -142,19 +185,28 @@
       }
     });
 
-    const hoursInput = document.getElementById('hours');
-    const wageInput = document.getElementById('wage');
-    const roiResult = document.getElementById('roiResult');
+      const hoursInput = document.getElementById('hours');
+      const wageInput = document.getElementById('wage');
+      const roiResult = document.getElementById('roiResult');
 
-    function updateROI() {
-      const hours = parseFloat(hoursInput.value) || 0;
-      const wage = parseFloat(wageInput.value) || 0;
-      const savings = hours * wage;
-      roiResult.textContent = '$' + savings.toFixed(2);
-    }
+  function updateROI() {
+    const hours = parseFloat(hoursInput.value) || 0;
+    const wage = parseFloat(wageInput.value) || 0;
+    const savings = hours * wage;
+    roiResult.textContent = '$' + savings.toFixed(2);
+  }
 
-    hoursInput.addEventListener('input', updateROI);
-    wageInput.addEventListener('input', updateROI);
-  </script>
+  hoursInput.addEventListener('input', updateROI);
+  wageInput.addEventListener('input', updateROI);
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
 </body>
 </html>
