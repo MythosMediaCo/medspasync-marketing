@@ -1,10 +1,13 @@
 // components/ReconciliationRunner.jsx
 import React, { useState } from 'react';
-import axios from 'axios';
 import { saveAs } from 'file-saver';
 import toast from 'react-hot-toast';
+import api from '../services/api.js';
+import { useAuth } from '../services/AuthContext.jsx';
+import { canExport } from '../utils/access.js';
 
 function ReconciliationRunner() {
+  const { subscriptionTier } = useAuth();
   const [file1, setFile1] = useState(null);
   const [file2, setFile2] = useState(null);
   const [file3, setFile3] = useState(null);
@@ -24,7 +27,7 @@ function ReconciliationRunner() {
 
     setLoading(true);
     try {
-      const res = await axios.post('/api/reconciliation/run', formData);
+      const res = await api.post('/reconciliation/run', formData);
       setResults(res.data);
       toast.success('Reconciliation complete');
     } catch (err) {
@@ -37,7 +40,7 @@ function ReconciliationRunner() {
 
   const handleExportPDF = async () => {
     try {
-      const res = await axios.get('/api/reconciliation/export-latest', {
+      const res = await api.get('/analytics/pdf', {
         responseType: 'blob',
       });
       const blob = new Blob([res.data], { type: 'application/pdf' });
@@ -71,11 +74,17 @@ function ReconciliationRunner() {
             <h2 className="text-xl font-semibold mb-2">Summary</h2>
             <pre className="text-sm overflow-auto whitespace-pre-wrap">{JSON.stringify(results.summary, null, 2)}</pre>
             <button
-              className="mt-4 bg-green-600 text-white px-4 py-2 rounded"
+              className="mt-4 bg-green-600 text-white px-4 py-2 rounded disabled:opacity-50"
               onClick={handleExportPDF}
+              disabled={!canExport(subscriptionTier)}
             >
               Export PDF
             </button>
+            {!canExport(subscriptionTier) && (
+              <p className="text-xs text-gray-500 mt-2">
+                Upgrade to Professional to export reports.
+              </p>
+            )}
           </div>
         )}
       </div>

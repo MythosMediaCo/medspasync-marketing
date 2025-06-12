@@ -144,7 +144,6 @@ export const isValidEmail = (email) => {
  * @returns {boolean} True if valid phone format
  */
 export const isValidPhone = (phone) => {
-  const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
   const cleaned = phone.replace(/\D/g, '');
   return cleaned.length >= 10 && cleaned.length <= 15;
 };

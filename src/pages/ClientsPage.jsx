@@ -1,25 +1,26 @@
 // src/pages/ClientsPage.jsx
 import React, { useState, useMemo, useCallback } from 'react';
+import Header from '../components/Header.jsx';
+import { useAuth } from '../services/AuthContext.jsx';
 import { Plus, Search, Users } from 'lucide-react'; // Removed unused icons (Phone, Mail, Calendar, MoreVertical, Edit, Trash2)
-import { 
-  useClients, 
-  useCreateClient, 
-  useUpdateClient, 
-  useDeleteClient,
-  useUpdateClientStatus // Assuming this is needed for status updates
+import {
+  useClients,
+  useCreateClient,
+  useUpdateClient,
+  useDeleteClient
 } from '../hooks/useClients.js'; // Explicit .js extension
 // ClientCard, ClientFormModal, DeleteConfirmModal are now imported from their own files
 import ClientCard from '../components/ClientCard.jsx';
 import ClientFormModal from '../components/ClientFormModal.jsx';
 import DeleteConfirmModal from '../components/DeleteConfirmModal.jsx';
-import { LoadingCard } from '../components/Common/LoadingScreen.jsx'; // Explicit .jsx extension
-import { format } from 'date-fns'; // For date formatting
+import LoadingCard from '../components/Common/LoadingScreen.jsx'; // Explicit .jsx extension
 import toast from 'react-hot-toast'; // For toast messages
 import { useDebounce } from '../hooks/useDebounce.js'; // Use the useDebounce hook
 
 // Main Clients Page Component
 const ClientsPage = React.memo(() => {
   const [searchQuery, setSearchQuery] = useState('');
+  const { firstName } = useAuth();
   const [statusFilter, setStatusFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(12); // Clients per page
@@ -106,6 +107,12 @@ const ClientsPage = React.memo(() => {
     setShowDeleteModal(true);
   }, []);
 
+  // Fixed: Added missing handleSearchChange function
+  const handleSearchChange = useCallback((value) => {
+    setSearchQuery(value);
+    setCurrentPage(1); // Reset to first page when search changes
+  }, []);
+
   // Extract clients and pagination data from API response
   const clients = clientsData?.data?.clients || [];
   const pagination = clientsData?.data?.pagination || {};
@@ -131,11 +138,14 @@ const ClientsPage = React.memo(() => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30 p-6">
+      <Header />
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Client Management</h1>
+            <h1 className="text-3xl font-bold text-gray-900">
+              {firstName ? `${firstName}'s Clients` : 'Client Management'}
+            </h1>
             <p className="text-gray-600 mt-1">Manage your spa's client relationships</p>
           </div>
           <button 
@@ -268,7 +278,6 @@ const ClientsPage = React.memo(() => {
         />
 
         <DeleteConfirmModal
-          client={selectedClient} // Client to delete
           isOpen={showDeleteModal}
           onClose={() => {
             setShowDeleteModal(false);
@@ -276,10 +285,16 @@ const ClientsPage = React.memo(() => {
           }}
           onConfirm={handleDeleteClient}
           isLoading={deleteClientMutation.isLoading}
+          title="Delete Client"
+          message={selectedClient ? (
+            <>Are you sure you want to delete <strong>{selectedClient.firstName} {selectedClient.lastName}</strong>? This action cannot be undone and will remove all associated appointment history.</>
+          ) : (
+            'Are you sure you want to delete this client? This action cannot be undone and will remove all associated appointment history.'
+          )}
         />
       </div>
     </div>
   );
-};
+});
 
 export default ClientsPage;

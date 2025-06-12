@@ -2,7 +2,7 @@
 import React, { useState, useMemo } from 'react';
 import { Calendar, Users, DollarSign, BarChart3, TrendingUp, Clock, Star, Plus } from 'lucide-react';
 import { useClients } from '../hooks/useClients.js';
-import { useAppointments, useAppointmentsByDateRange } from '../hooks/useAppointments.js';
+import { useAppointmentsByDateRange } from '../hooks/useAppointments.js';
 import { useServices } from '../hooks/useServices.js';
 import { useAuth } from '../services/AuthContext.jsx';
 import StatusBadge from '../components/Ui/StatusBadge.jsx';
@@ -11,21 +11,24 @@ import ClientCard from '../components/ClientCard.jsx';
 import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from 'date-fns';
 import { formatCurrency } from '../utils/formatting.js';
 import { Link } from 'react-router-dom';
+import Header from '../components/Header.jsx';
 
 // Metric Card Component
-const MetricCard = ({ title, value, change, trend, icon: Icon, gradient, isLoading, onClick }) => (
-  <div 
-    className={`bg-white rounded-2xl shadow-lg border border-gray-100 p-6 relative overflow-hidden transition-all duration-300 hover:shadow-xl ${onClick ? 'cursor-pointer hover:-translate-y-1' : ''}`}
-    onClick={onClick}
-  >
-    <div className="absolute top-0 right-0 w-32 h-32 -mr-16 -mt-16 opacity-10">
-      <div className={`w-full h-full rounded-full bg-gradient-to-r ${gradient}`}></div>
-    </div>
+function MetricCard(props) {
+  const { title, value, change, trend, icon: IconComponent, gradient, isLoading, onClick } = props;
+  return (
+    <div
+      className={`bg-white rounded-2xl shadow-lg border border-gray-100 p-6 relative overflow-hidden transition-all duration-300 hover:shadow-xl ${onClick ? 'cursor-pointer hover:-translate-y-1' : ''}`}
+      onClick={onClick}
+    >
+      <div className="absolute top-0 right-0 w-32 h-32 -mr-16 -mt-16 opacity-10">
+        <div className={`w-full h-full rounded-full bg-gradient-to-r ${gradient}`}></div>
+      </div>
     
     <div className="relative">
       <div className="flex items-center justify-between mb-4">
         <div className={`p-3 rounded-xl bg-gradient-to-r ${gradient}`}>
-          <Icon className="w-6 h-6 text-white" />
+          <IconComponent className="w-6 h-6 text-white" />
         </div>
         {change && (
           <span className={`text-sm font-medium flex items-center ${
@@ -51,8 +54,9 @@ const MetricCard = ({ title, value, change, trend, icon: Icon, gradient, isLoadi
         )}
       </div>
     </div>
-  </div>
-);
+    </div>
+  );
+}
 
 // Recent Activity Component
 const RecentActivity = ({ appointments, clients, isLoading }) => {
@@ -164,7 +168,7 @@ const TopClients = ({ clients, isLoading }) => {
 
 // Main Dashboard Component
 const Dashboard = () => {
-  const { user } = useAuth();
+  const { firstName } = useAuth();
   const [dateRange, setDateRange] = useState('week');
   
   // Calculate date ranges
@@ -225,13 +229,14 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30">
+      <Header />
       <div className="max-w-7xl mx-auto p-6">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
-                Welcome back, {user?.firstName}! 👋
+                {firstName ? `Welcome back, ${firstName}! 👋` : 'Welcome back!'}
               </h1>
               <p className="text-gray-600 mt-1">Here's what's happening at your spa today.</p>
             </div>

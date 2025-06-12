@@ -4,7 +4,8 @@
 // ========================================
 
 import axios from 'axios';
-import { storageService } from './storage.js'; // Named import for storageService
+// Use the correct path to the storage service utilities
+import storageService from './storageService.js';
 import toast from 'react-hot-toast'; // For displaying notifications
 
 // Auto-detect backend URL based on environment
@@ -79,25 +80,41 @@ api.interceptors.response.use(
       try {
         const refreshToken = storageService.getRefreshToken();
         if (refreshToken) {
-          // Attempt to refresh the token using a direct axios call (bypassing this interceptor)
-          const refreshResponse = await axios.post(`${API_BASE_URL}/api/auth/refresh`, {
-            refreshToken
-          });
-
-          const { token } = refreshResponse.data;
-          storageService.setAuthToken(token); // Store the new access token
-
-          // Retry the original failed request with the new token
+          const refreshResponse = await axios.post(`${API_BASE_URL}/api/auth/refresh`, { refreshToken });
+          const { token, refreshToken: newRefresh } = refreshResponse.data;
+          storageService.setAuthToken(token);
+          if (newRefresh) {
+            storageService.setRefreshToken(newRefresh);
+          }
           originalRequest.headers.Authorization = `Bearer ${token}`;
-          return api(originalRequest); // Use the 'api' instance to retry
+          return api(originalRequest);
         }
       } catch (refreshError) {
         console.error('Token refresh failed:', refreshError);
-        // If refresh fails, clear all authentication data and redirect to login
-        storageService.clearAll();
-        toast.error('Your session has expired. Please log in again.');
-        window.location.href = '/login'; // Force full reload
-        return Promise.reject(refreshError);
+
+        if (refreshError.response?.status === 401) {
+          storageService.clearAll();
+          toast.error('Your session has expired. Please log in again.');
+          window.location.href = '/login';
+          return Promise.reject(refreshError);
+        }
+
+        try {
+          await new Promise((res) => setTimeout(res, 3000));
+          const rt = storageService.getRefreshToken();
+          if (!rt) throw refreshError;
+          const retryResp = await axios.post(`${API_BASE_URL}/api/auth/refresh`, { refreshToken: rt });
+          const { token: retryToken, refreshToken: retryRefresh } = retryResp.data;
+          storageService.setAuthToken(retryToken);
+          if (retryRefresh) {
+            storageService.setRefreshToken(retryRefresh);
+          }
+          originalRequest.headers.Authorization = `Bearer ${retryToken}`;
+          return api(originalRequest);
+        } catch (retryError) {
+          toast.error('Unable to refresh session. Please try again.');
+          return Promise.reject(retryError);
+        }
       }
     }
 
@@ -189,5 +206,6 @@ export const analyticsAPI = {
 // Export the Axios instance itself as a default export if needed for specific use cases (e.g., direct download)
 // If you explicitly need the raw axios instance, you might use `export default api;`
 // However, it's generally cleaner to use the named API objects (clientsAPI, authAPI, etc.).
-// For now, we'll keep it as a named export for consistency with the rest of the file.
-// export default api; // Removed default export to prevent conflicts. Use named exports.
+// For now, we'll export the axios instance as the default for hooks like useAPI
+// that expect a default export.
+export default api;

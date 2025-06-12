@@ -14,7 +14,7 @@ A comprehensive spa management system built with React, featuring client managem
 1. **Clone and install dependencies**
    ```bash
    git clone <repository-url>
-   cd medspa-management-app
+   cd medspasync-frontend
    npm install
    ```
 
@@ -257,3 +257,4 @@ For questions or issues:
 ## 📄 License
 
 MIT License - see LICENSE file for details
+[![Production - MedSpaSync Pro](https://img.shields.io/badge/Live%20App-Online-blue?style=flat-square&logo=vercel)](https://mythosmedia.github.io/medspasync-frontend/)

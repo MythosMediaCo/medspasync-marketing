@@ -59,7 +59,7 @@ export const useCreateClient = () => {
 
   return useMutation({
     mutationFn: clientsAPI.create, // Use the create function from clientsAPI
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries(clientKeys.lists()); // Invalidate all client lists
       toast.success('Client created successfully');
     },

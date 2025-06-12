@@ -3,7 +3,9 @@
 // Enhanced Appointments Management - Fixed Version
 // ========================================
 
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo } from 'react';
+import Header from '../components/Header.jsx';
+import { useAuth } from '../services/AuthContext.jsx';
 import { Calendar, Plus, Search, Users, Phone, Mail, Clock, User, DollarSign, MoreVertical } from 'lucide-react';
 import { 
   useAppointments, 
@@ -331,6 +333,7 @@ const AppointmentFormModal = React.memo(({ appointment, isOpen, onClose, onSubmi
 // Main Appointments Page
 const AppointmentsPage = React.memo(() => {
   const [statusFilter, setStatusFilter] = useState('all');
+  const { practiceName } = useAuth();
   const [dateFilter, setDateFilter] = useState('all');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -443,11 +446,14 @@ const AppointmentsPage = React.memo(() => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30 p-6">
+      <Header />
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Appointments</h1>
+            <h1 className="text-3xl font-bold text-gray-900">
+              {practiceName ? `Appointments for ${practiceName}` : 'Appointments'}
+            </h1>
             <p className="text-gray-600 mt-1">Manage your appointment schedule</p>
           </div>
           <button 
@@ -592,7 +598,6 @@ const AppointmentsPage = React.memo(() => {
         />
 
         <DeleteConfirmModal
-          item={selectedAppointment}
           isOpen={showDeleteModal}
           onClose={() => {
             setShowDeleteModal(false);
@@ -601,7 +606,7 @@ const AppointmentsPage = React.memo(() => {
           onConfirm={handleDeleteAppointment}
           isLoading={deleteAppointmentMutation.isLoading}
           title="Delete Appointment"
-          message={selectedAppointment ? 
+          message={selectedAppointment ?
             `Are you sure you want to delete this appointment for ${selectedAppointment.client?.firstName} ${selectedAppointment.client?.lastName} on ${format(parseISO(selectedAppointment.dateTime), 'MMM d, h:mm a')}? This action cannot be undone.` :
             'Are you sure you want to delete this appointment?'
           }

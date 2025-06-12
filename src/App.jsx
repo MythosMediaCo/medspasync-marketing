@@ -1,27 +1,24 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import ErrorBoundary from './components/Common/ErrorBoundary.jsx';
-import LoadingScreen from './components/Common/LoadingScreen.jsx';
-
-// Auth Components & Context
-import { AuthProvider, useAuth } from './services/AuthContext.jsx';
-import ProtectedRoute from './components/auth/ProtectedRoute.jsx';
+import { lazy, Suspense } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import { useAuth } from './services/AuthContext.jsx';
 import PublicRoute from './components/auth/PublicRoute.jsx';
-
-// UI Components
+import ProtectedRoute from './components/auth/ProtectedRoute.jsx';
+import LoadingScreen from './components/Common/LoadingScreen.jsx';
 import Toast from './components/Ui/Toast.jsx';
 
-// Page Components
 import LandingPage from './pages/LandingPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
-import DashboardPage from './pages/Dashboard.jsx';
-import ClientsPage from './pages/ClientsPage.jsx';
-import AppointmentsPage from './pages/AppointmentsPage.jsx';
-import ServicesPage from './pages/ServicesPage.jsx';
+import SupportPage from './pages/SupportPage.jsx';
+import DocsPage from './pages/DocsPage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
-import DemoReconciliation from './pages/DemoReconciliation.jsx';
-import ReconciliationRunner from './components/ReconciliationRunner';
+
+const DashboardPage = lazy(() => import('./pages/Dashboard.jsx'));
+const ClientsPage = lazy(() => import('./pages/ClientsPage.jsx'));
+const AppointmentsPage = lazy(() => import('./pages/AppointmentsPage.jsx'));
+const ServicesPage = lazy(() => import('./pages/ServicesPage.jsx'));
+const DemoReconciliation = lazy(() => import('./pages/DemoReconciliation.jsx'));
+const ReconciliationRunner = lazy(() => import('./components/ReconciliationRunner.jsx'));
 
 function AppContent() {
   const { isLoading } = useAuth();
@@ -38,32 +35,63 @@ function AppContent() {
         <Route path="/" element={<PublicRoute><LandingPage /></PublicRoute>} />
         <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
         <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
-        <Route path="/demo" element={<PublicRoute><DemoReconciliation /></PublicRoute>} />
-
-        {/* Protected Routes */}
-        <Route path="/dashboard" element={<ProtectedRoute requiredRoles={['admin', 'manager', 'staff', 'receptionist']}><DashboardPage /></ProtectedRoute>} />
-        <Route path="/clients" element={<ProtectedRoute requiredRoles={['admin', 'manager', 'receptionist']}><ClientsPage /></ProtectedRoute>} />
-        <Route path="/appointments" element={<ProtectedRoute requiredRoles={['admin', 'manager', 'staff', 'receptionist']}><AppointmentsPage /></ProtectedRoute>} />
-        <Route path="/services" element={<ProtectedRoute requiredRoles={['admin', 'manager']}><ServicesPage /></ProtectedRoute>} />
-        <Route path="/reconciliation" element={<ProtectedRoute requiredRoles={['admin', 'manager']}><ReconciliationRunner /></ProtectedRoute>} />
-
-        {/* 404 Fallback */}
+        <Route path="/support" element={<PublicRoute><SupportPage /></PublicRoute>} />
+        <Route path="/docs" element={<PublicRoute><DocsPage /></PublicRoute>} />
+        <Route
+          path="/demo"
+          element={
+            <PublicRoute>
+              <Suspense fallback={<LoadingScreen />}>
+                <DemoReconciliation />
+              </Suspense>
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Suspense fallback={<LoadingScreen />}>
+                <DashboardPage />
+              </Suspense>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/clients"
+          element={
+            <ProtectedRoute>
+              <Suspense fallback={<LoadingScreen />}>
+                <ClientsPage />
+              </Suspense>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/appointments"
+          element={
+            <ProtectedRoute>
+              <Suspense fallback={<LoadingScreen />}>
+                <AppointmentsPage />
+              </Suspense>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/services"
+          element={
+            <ProtectedRoute>
+              <Suspense fallback={<LoadingScreen />}>
+                <ServicesPage />
+              </Suspense>
+            </ProtectedRoute>
+          }
+        />
         <Route path="*" element={<NotFoundPage />} />
+        {/* Additional authenticated/private routes can be added below */}
       </Routes>
     </div>
   );
 }
 
-function App() {
-  return (
-    <ErrorBoundary>
-      <Router>
-        <AuthProvider>
-          <AppContent />
-        </AuthProvider>
-      </Router>
-    </ErrorBoundary>
-  );
-}
-
-export default App;
+export default AppContent;
