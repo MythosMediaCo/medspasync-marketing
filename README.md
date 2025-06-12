@@ -247,6 +247,8 @@ npm run build
 ```
 
 ### Deploy to GitHub Pages
+Set `VITE_BASE_PATH=/medspasync-frontend/` before building:
+
 ```bash
 npm run build
 npm run deploy
