@@ -1,0 +1,7 @@
+### 🧠 Codex-Safe Diff
+Assets added (not included):
+- favicon.ico
+- apple-touch-icon.png
+- assets/og-image.png
+
+HTML/CSS/JS diff:
