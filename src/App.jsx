@@ -1,24 +1,8 @@
-import { lazy, Suspense } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React from 'react';
 import { useAuth } from './services/AuthContext.jsx';
-import PublicRoute from './components/auth/PublicRoute.jsx';
-import ProtectedRoute from './components/auth/ProtectedRoute.jsx';
 import LoadingScreen from './components/Common/LoadingScreen.jsx';
 import Toast from './components/Ui/Toast.jsx';
-
-import LandingPage from './pages/LandingPage.jsx';
-import LoginPage from './pages/LoginPage.jsx';
-import RegisterPage from './pages/RegisterPage.jsx';
-import SupportPage from './pages/SupportPage.jsx';
-import DocsPage from './pages/DocsPage.jsx';
-import NotFoundPage from './pages/NotFoundPage.jsx';
-
-const DashboardPage = lazy(() => import('./pages/Dashboard.jsx'));
-const ClientsPage = lazy(() => import('./pages/ClientsPage.jsx'));
-const AppointmentsPage = lazy(() => import('./pages/AppointmentsPage.jsx'));
-const ServicesPage = lazy(() => import('./pages/ServicesPage.jsx'));
-const DemoReconciliation = lazy(() => import('./pages/DemoReconciliation.jsx'));
-const ReconciliationRunner = lazy(() => import('./components/ReconciliationRunner.jsx'));
+import AppRoutes from './routes.jsx';
 
 function AppContent() {
   const { isLoading } = useAuth();
@@ -30,66 +14,7 @@ function AppContent() {
   return (
     <div className="App min-h-screen bg-gray-50">
       <Toast />
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<PublicRoute><LandingPage /></PublicRoute>} />
-        <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
-        <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
-        <Route path="/support" element={<PublicRoute><SupportPage /></PublicRoute>} />
-        <Route path="/docs" element={<PublicRoute><DocsPage /></PublicRoute>} />
-        <Route
-          path="/demo"
-          element={
-            <PublicRoute>
-              <Suspense fallback={<LoadingScreen />}>
-                <DemoReconciliation />
-              </Suspense>
-            </PublicRoute>
-          }
-        />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Suspense fallback={<LoadingScreen />}>
-                <DashboardPage />
-              </Suspense>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/clients"
-          element={
-            <ProtectedRoute>
-              <Suspense fallback={<LoadingScreen />}>
-                <ClientsPage />
-              </Suspense>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/appointments"
-          element={
-            <ProtectedRoute>
-              <Suspense fallback={<LoadingScreen />}>
-                <AppointmentsPage />
-              </Suspense>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/services"
-          element={
-            <ProtectedRoute>
-              <Suspense fallback={<LoadingScreen />}>
-                <ServicesPage />
-              </Suspense>
-            </ProtectedRoute>
-          }
-        />
-        <Route path="*" element={<NotFoundPage />} />
-        {/* Additional authenticated/private routes can be added below */}
-      </Routes>
+      <AppRoutes />
     </div>
   );
 }
