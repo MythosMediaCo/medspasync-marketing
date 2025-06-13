@@ -1,5 +1,5 @@
 import React from 'react';
-import ConfidenceScore from './ConfidenceScore.jsx';
+import ConfidenceIndicator from '../reconciliation/ConfidenceIndicator.jsx';
 
 const MatchCard = ({ match, onClick }) => (
   <div
@@ -12,7 +12,10 @@ const MatchCard = ({ match, onClick }) => (
         <p className="text-sm text-gray-500">Alle: {match.alle}</p>
         <p className="text-sm text-gray-500">Aspire: {match.aspire}</p>
       </div>
-      <ConfidenceScore score={match.confidence} />
+      <ConfidenceIndicator
+        confidence={match.confidence}
+        recommendation={match.recommendation}
+      />
     </div>
   </div>
 );
