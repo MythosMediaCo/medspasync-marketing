@@ -7,8 +7,9 @@ const CorrectionForm = ({ matchId }) => {
 
   const handleSubmit = async (text) => {
     setOpen(false);
-    await fetch('/api/ai/train', { method: 'POST', body: JSON.stringify({ id: matchId, feedback: text }) });
+    const req = fetch('/api/ai/train', { method: 'POST', body: JSON.stringify({ id: matchId, feedback: text }) });
     toast.success('Feedback submitted');
+    await req;
   };
 
   return (

@@ -20,6 +20,7 @@ const AppointmentsPage = lazy(() => import('./pages/AppointmentsPage.jsx'));
 const ServicesPage = lazy(() => import('./pages/ServicesPage.jsx'));
 const DemoReconciliation = lazy(() => import('./pages/DemoReconciliation.jsx'));
 const ReconciliationDashboardPage = lazy(() => import('./pages/ReconciliationDashboard.jsx'));
+const ReconciliationWorkflowPage = lazy(() => import('./pages/reconciliation/index.jsx'));
 
 export default function AppRoutes() {
   return (
@@ -76,6 +77,16 @@ export default function AppRoutes() {
           <ProtectedRoute>
             <Suspense fallback={<LoadingScreen />}>
               <ServicesPage />
+            </Suspense>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/reconciliation"
+        element={
+          <ProtectedRoute>
+            <Suspense fallback={<LoadingScreen />}>
+              <ReconciliationWorkflowPage />
             </Suspense>
           </ProtectedRoute>
         }

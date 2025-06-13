@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { screen } from '@testing-library/react';
-import { renderWithProviders } from '../test/utils.js';
+import { renderWithProviders } from '../test/utils.jsx';
 import { AIProvider, useAI } from '../src/services/AIContext.jsx';
 
 const TestComponent = () => {
