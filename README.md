@@ -263,6 +263,9 @@ If you serve `index.html` from the repository root, the browser will try to load
 `/src/main.jsx` and return a 404. Always run `npm run build` and deploy the
 generated `dist/` directory instead. The files in `dist/` have the correct asset
 paths for production environments.
+### Python AI Service
+A minimal FastAPI service is included in `python-ai/`. Start it with `uvicorn api_server:app` for local AI reconciliation tests.
+
 
 ## 📞 Support
 
