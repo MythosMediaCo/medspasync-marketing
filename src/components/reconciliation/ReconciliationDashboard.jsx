@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import useReconciliation from '../../hooks/useReconciliation.js';
 import { useWebSocket } from '../../hooks/useWebSocket.js';
+import MatchingProgress from './MatchingProgress.jsx';
 
 const ReconciliationDashboard = () => {
   const [dateRange, setDateRange] = useState({
@@ -8,12 +9,31 @@ const ReconciliationDashboard = () => {
     end: new Date()
   });
   const { startReconciliation, getResults, loading, error } = useReconciliation();
-  const { connectionStatus } = useWebSocket('/ws');
   const [job, setJob] = useState(null);
+
+  const handleWsMessage = useCallback(
+    (msg) => {
+      if (!job) return;
+      if (msg.type === 'reconciliation:progress' && msg.jobId === job.jobId) {
+        setJob((prev) => ({ ...prev, progress: msg.progress, message: msg.message }));
+      }
+      if (msg.type === 'reconciliation:complete' && msg.jobId === job.jobId) {
+        getResults(msg.jobId).then((res) => {
+          setJob((prev) => ({ ...prev, status: 'completed', progress: 100, results: res }));
+        });
+      }
+      if (msg.type === 'reconciliation:error' && msg.jobId === job.jobId) {
+        setJob((prev) => ({ ...prev, status: 'failed', message: msg.error }));
+      }
+    },
+    [job, getResults]
+  );
+
+  const { connectionStatus } = useWebSocket('/ws', { onMessage: handleWsMessage });
 
   const handleStart = async () => {
     const jobInfo = await startReconciliation({ dateRange });
-    setJob(jobInfo);
+    setJob({ ...jobInfo, progress: 0, status: 'processing' });
   };
 
   return (
@@ -37,9 +57,12 @@ const ReconciliationDashboard = () => {
       </div>
       {error && <p className="text-red-600 text-sm">{error}</p>}
       {job && (
-        <div className="text-sm text-gray-700">
-          Job ID: {job.jobId} Status: {job.status}
-        </div>
+        <MatchingProgress job={job} onCancel={() => setJob(null)} />
+      )}
+      {job?.results && (
+        <pre className="whitespace-pre-wrap bg-gray-50 p-2 rounded text-xs overflow-x-auto">
+          {JSON.stringify(job.results, null, 2)}
+        </pre>
       )}
     </div>
   );
