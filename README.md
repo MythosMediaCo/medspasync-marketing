@@ -5,34 +5,24 @@ A comprehensive spa management system built with React, featuring client managem
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 16+ 
-- npm or yarn
+- Node.js 16+
+- Yarn (npm works too)
 - Backend API server running
 
 ### Installation
 
-1. **Clone and install dependencies**
-   ```bash
-   git clone <repository-url>
-   cd medspasync-frontend
-   npm install
-   ```
+```bash
+git clone <repository-url>
+cd medspasync-frontend
+yarn
+cp .env.example .env  # update API URL
+yarn dev
+```
 
-2. **Environment setup**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your API URL
-   ```
-
-3. **Start development server**
-   ```bash
-   npm run dev
-   ```
-
-4. **Build for production**
-   ```bash
-   npm run build
-   ```
+**Build for production**
+```bash
+yarn build
+```
 
 ## 📁 Project Structure
 
@@ -231,18 +221,18 @@ The app automatically detects the backend URL:
 
 ### Build for Production
 ```bash
-npm run build
+yarn build
 ```
 
 ### Deploy to Vercel
 ```bash
-npm install -g vercel
+yarn global add vercel
 vercel --prod
 ```
 
 ### Deploy to Netlify
 ```bash
-npm run build
+yarn build
 # Upload dist folder to Netlify
 ```
 The repository includes a `netlify.toml` with the correct build command and a
@@ -254,13 +244,13 @@ Netlify or any other static host.
 Set `VITE_BASE_PATH=/medspasync-frontend/` before building:
 
 ```bash
-npm run build
-npm run deploy
+yarn build
+yarn deploy
 ```
 
 ### Troubleshooting 404 Errors
 If you serve `index.html` from the repository root, the browser will try to load
-`/src/main.jsx` and return a 404. Always run `npm run build` and deploy the
+`/src/main.jsx` and return a 404. Always run `yarn build` and deploy the
 generated `dist/` directory instead. The files in `dist/` have the correct asset
 paths for production environments.
 ### Python AI Service
