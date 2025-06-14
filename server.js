@@ -7,7 +7,6 @@ console.log('🚀 Starting MedSpaSync Pro Frontend...');
 console.log(`📍 Port: ${port}`);
 console.log(`🔗 VITE_API_URL: ${process.env.VITE_API_URL || 'not set'}`);
 console.log(`🔗 REACT_APP_API_BASE: ${process.env.REACT_APP_API_BASE || 'not set'}`);
-console.log(`🌍 NODE_ENV: ${process.env.NODE_ENV || 'development'}`);
 
 // Serve static files from dist directory
 app.use(express.static(path.join(__dirname, 'dist')));
@@ -24,9 +23,20 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Handle client-side routing
+// Catch-all handler: send back React app (MUST be last)
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  try {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  } catch (error) {
+    console.error('Error serving index.html:', error);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Server error:', err);
+  res.status(500).send('Something broke!');
 });
 
 app.listen(port, '0.0.0.0', () => {
