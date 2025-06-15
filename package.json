@@ -2,7 +2,7 @@
   "name": "medspa-management-app",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://MythosMedia.github.io/medspasync-frontend",
+
   "dependencies": {
     "@tanstack/react-query": "^5.80.6",
     "axios": "^1.3.0",
