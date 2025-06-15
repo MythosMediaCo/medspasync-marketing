@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react({ fastRefresh: false })],
   test: {
-    environment: 'jsdom'
+    environment: 'jsdom',
+    setupFiles: './vitest.setup.js'
   }
 });
