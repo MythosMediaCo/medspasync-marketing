@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from 'react';
 import { authService } from './auth.js';
 import storageService from './storageService.js';
 import toast from 'react-hot-toast';
@@ -21,17 +27,8 @@ export const AuthProvider = ({ children }) => {
 
     const decoded = decodeJWT(token);
     const now = Date.now() / 1000;
-    if (decoded?.exp && decoded.exp - now < 120) {
-      try {
-        const newToken = await authService.refreshToken();
-        storageService.setAuthToken(newToken.token || newToken);
-      } catch {
-        storageService.clearAll();
-        setUser(null);
-        setIsLoading(false);
-        return;
-      }
-    } else if (decoded?.exp && decoded.exp <= now) {
+
+    if (decoded?.exp && (decoded.exp <= now || decoded.exp - now < 120)) {
       try {
         const newToken = await authService.refreshToken();
         storageService.setAuthToken(newToken.token || newToken);
@@ -59,7 +56,6 @@ export const AuthProvider = ({ children }) => {
     initialize();
   }, [initialize]);
 
-  // Derive first name from user data or token
   useEffect(() => {
     let name = '';
     if (user?.firstName) {
@@ -93,9 +89,7 @@ export const AuthProvider = ({ children }) => {
     setError(null);
     try {
       const res = await authService.register(data);
-      if (res.user) {
-        setUser(res.user);
-      }
+      if (res.user) setUser(res.user);
       storageService.updateLastActivity();
       toast.success('Registration successful');
       return true;
@@ -135,12 +129,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Track user activity and session validity
   useEffect(() => {
     const activityEvents = ['mousemove', 'mousedown', 'keydown', 'touchstart'];
     const updateActivity = () => storageService.updateLastActivity();
 
-    activityEvents.forEach((evt) => window.addEventListener(evt, updateActivity));
+    activityEvents.forEach((evt) =>
+      window.addEventListener(evt, updateActivity)
+    );
 
     const checkIdleAndToken = async () => {
       const last = parseInt(storageService.getLastActivity(), 10);
@@ -155,7 +150,7 @@ export const AuthProvider = ({ children }) => {
       if (decoded?.exp && decoded.exp * 1000 - Date.now() < 2 * 60 * 1000) {
         try {
           await refreshToken();
-        } catch (err) {
+        } catch {
           await logout();
           toast.error('Session expired. Please log in again.');
         }
@@ -188,7 +183,7 @@ export const AuthProvider = ({ children }) => {
         practiceId: user?.practiceId,
         subscriptionTier: user?.subscriptionTier || 'starter',
         firstName,
-        practiceName: user?.practiceName || user?.practice?.name
+        practiceName: user?.practiceName || user?.practice?.name,
       }}
     >
       {children}
@@ -196,5 +191,30 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+// ✅ Safe Hook with Fallback
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    console.warn('useAuth() called outside of <AuthProvider>. Returning fallback.');
+    return {
+      user: null,
+      isLoading: false,
+      login: () => Promise.resolve(false),
+      register: () => Promise.resolve(false),
+      logout: () => {},
+      refreshToken: () => Promise.resolve(null),
+      refreshUser: () => {},
+      clearError: () => {},
+      error: null,
+      isAuthenticated: false,
+      role: null,
+      practiceId: null,
+      subscriptionTier: 'starter',
+      firstName: '',
+      practiceName: '',
+    };
+  }
+  return context;
+};
+
 export { AuthContext };
