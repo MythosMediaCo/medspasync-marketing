@@ -5,7 +5,7 @@ import React, {
   useState,
   useCallback,
 } from 'react';
-import { authService } from './auth.js';
+import { authService } from '../services/auth.js';
 import storageService from '../services/storageService.js';
 import toast from 'react-hot-toast';
 import { decodeJWT } from '../utils/jwt.js';
