@@ -35,6 +35,9 @@ const WelcomeOnboardingModal = ({ isOpen, onClose }) => {
 
   const toggle = (key) => update(key, !state[key]);
   const allDone = state.uploadReport && state.viewHistory && state.exportPDF;
+  const progress =
+    (['uploadReport', 'viewHistory', 'exportPDF'].filter((k) => state[k]).length /
+      3) * 100;
 
   useEffect(() => {
     if (allDone) {
@@ -80,12 +83,20 @@ const WelcomeOnboardingModal = ({ isOpen, onClose }) => {
           </label>
         </li>
       </ul>
-      {allDone && (
-        <div className="mt-4 flex items-center text-green-600">
-          <CheckCircle className="w-5 h-5 mr-1" />
-          <span>All steps completed!</span>
+      <div className="mt-6">
+        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-indigo-600 transition-all"
+            style={{ width: `${progress}%` }}
+          />
         </div>
-      )}
+        {allDone && (
+          <div className="mt-2 flex items-center text-green-600">
+            <CheckCircle className="w-5 h-5 mr-1" />
+            <span>All steps completed!</span>
+          </div>
+        )}
+      </div>
     </Modal>
   );
 };
