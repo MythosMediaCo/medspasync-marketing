@@ -1,12 +1,16 @@
-// /workspaces/medspasync-marketing/src/utils/meta.js
-
+// Default metadata for all pages
 export const defaultMeta = {
-  title: 'MedSpaSync Pro | Reconciliation Done Right',
-  description: 'Automate your Alle and Aspire reward tracking and reclaim lost revenue. Built by medical spa professionals.',
+  title: 'MedSpaSync Pro | AI Reconciliation for Medical Spas',
+  description:
+    'Save 8+ hours weekly and prevent $2,500+ in missed revenue with 95%+ match accuracy. Built by a 10-year medical spa veteran.',
   image: 'https://medspasyncpro.com/og-image.jpg',
   url: 'https://medspasyncpro.com',
 };
 
+/**
+ * Dynamically inject meta tags into the page head
+ * @param {Object} meta - Overrides for default meta
+ */
 export function injectMeta(meta = {}) {
   const fullMeta = { ...defaultMeta, ...meta };
 
@@ -26,13 +30,16 @@ export function injectMeta(meta = {}) {
   ];
 
   tags.forEach(({ name, property, content }) => {
-    const tag = document.querySelector(
-      `meta[${name ? 'name' : 'property'}="${name || property}"]`
-    ) || document.createElement('meta');
+    const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;
+    let tag = document.head.querySelector(selector);
 
-    if (name) tag.setAttribute('name', name);
-    if (property) tag.setAttribute('property', property);
+    if (!tag) {
+      tag = document.createElement('meta');
+      if (name) tag.setAttribute('name', name);
+      if (property) tag.setAttribute('property', property);
+      document.head.appendChild(tag);
+    }
+
     tag.setAttribute('content', content);
-    document.head.appendChild(tag);
   });
 }

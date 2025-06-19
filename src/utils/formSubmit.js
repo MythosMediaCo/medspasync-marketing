@@ -1,30 +1,41 @@
-// /workspaces/medspasync-marketing/src/utils/formSubmit.js
+/**
+ * Generic form submission helper.
+ * @param {Object} options
+ * @param {string} options.endpoint - The API endpoint to POST to.
+ * @param {Object} options.data - Payload to send.
+ * @returns {Promise<Object>} - Parsed JSON response.
+ */
+export async function submitForm({ endpoint, data }) {
+  if (!endpoint || typeof endpoint !== 'string') {
+    throw new Error('Missing or invalid endpoint.');
+  }
 
-export async function submitForm({ name, email, business, message, type = 'contact', source = 'marketing_site' }) {
   try {
-    const response = await fetch('https://app.medspasyncpro.com/api/leads', {
+    const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        name,
-        email,
-        business,
-        message,
-        type,
-        source
-      })
+      body: JSON.stringify(data || {}),
     });
 
+    const isJson = response.headers
+      .get('content-type')
+      ?.includes('application/json');
+
+    const responseBody = isJson ? await response.json() : await response.text();
+
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Server responded with an error.');
+      const errorMessage =
+        typeof responseBody === 'string'
+          ? responseBody
+          : responseBody?.message || 'Form submission failed.';
+      throw new Error(errorMessage);
     }
 
-    return { success: true };
+    return responseBody;
   } catch (err) {
-    console.error('Form submission failed:', err);
-    return { success: false, error: err.message };
+    console.error('[submitForm] Error:', err);
+    throw err;
   }
 }

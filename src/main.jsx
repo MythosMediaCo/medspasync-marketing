@@ -1,10 +1,10 @@
-// /workspaces/medspasync-marketing/src/main.jsx
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App.jsx';
 import { initializeTheme } from './theme.js';
 
+// Initialize color mode or local theme preference
 initializeTheme();
 
 ReactDOM.createRoot(document.getElementById('root')).render(

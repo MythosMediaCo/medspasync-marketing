@@ -21,7 +21,7 @@ export const Header = () => (
           <a href="/contact" className="nav-link">Contact</a>
         </nav>
         <div className="flex items-center space-x-4">
-          <a href="https://app.medspasyncpro.com/demo" target="_blank" rel="noopener noreferrer" className="px-6 py-2.5 rounded-lg text-sm font-medium text-white bg-gradient-to-br from-indigo-500 to-purple-600">
+          <a href="https://demo.medspasyncpro.com" target="_blank" rel="noopener noreferrer" className="px-6 py-2.5 rounded-lg text-sm font-medium text-white bg-gradient-to-br from-indigo-500 to-purple-600">
             Try Demo
           </a>
         </div>

@@ -1,20 +1,14 @@
-<<<<<<< HEAD
-/* Tailwind Directives */
-=======
-/* /workspaces/medspasync-marketing/src/index.css */
-
-/* Tailwind base + components + utilities */
->>>>>>> 95d1a57cc0c1b7c6670e326a2a17f106f104aa2d
+/* Tailwind base layers */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Custom Fonts */
+/* Custom Font */
 body {
   font-family: 'Inter', sans-serif;
 }
 
-/* Reusable Classes */
+/* === Reusable Buttons === */
 .button-primary {
   background-image: linear-gradient(to bottom right, #4f46e5, #8b5cf6);
   color: #fff;
@@ -40,11 +34,9 @@ body {
   background-color: #f9fafb;
 }
 
+/* === Layout & Containers === */
 .section {
-  padding-top: 4rem;
-  padding-bottom: 4rem;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  padding: 4rem 1.5rem;
 }
 @media (min-width: 1024px) {
   .section {
@@ -52,8 +44,18 @@ body {
     padding-right: 2rem;
   }
 }
+.container-center {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+@media (min-width: 1024px) {
+  .container-center {
+    padding: 0 2rem;
+  }
+}
 
-/* Animations */
+/* === Animation === */
 .fade-in {
   opacity: 0;
   transform: translateY(20px);
@@ -69,190 +71,114 @@ body {
 .stagger-2 { animation-delay: 0.2s; }
 .stagger-3 { animation-delay: 0.3s; }
 
-/* Dark Mode Support */
+/* === Dark Mode === */
 html.dark body {
   background-color: #0f172a;
   color: #f1f5f9;
 }
 
-/* Forms */
-input, textarea {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
-  background-color: #fff;
-  transition: box-shadow 0.2s, border-color 0.2s;
-  outline: none;
-}
-input:focus, textarea:focus {
-  border-color: #6366f1;
-  box-shadow: 0 0 0 2px #6366f1;
-}
-html.dark input, html.dark textarea {
-  border-color: #475569;
-  background-color: #1e293b;
-  color: #f1f5f9;
-}
-
-/* Container Helpers */
-.container-center {
-  max-width: 80rem;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-}
-@media (min-width: 1024px) {
-  .container-center {
-    padding: 0 2rem;
-  }
-}
-
-.text-gradient {
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Base Layer Customization */
+/* === Typography & Links === */
 @layer base {
   html {
     scroll-behavior: smooth;
   }
+
   body {
     color: #1a202c;
     background-color: #fff;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
   @media (prefers-color-scheme: dark) {
     body {
       color: #f3f4f6;
       background-color: #111827;
-      font-family: 'Inter', system-ui, sans-serif;
     }
   }
+
   h1, h2, h3, h4, h5, h6 {
     font-weight: 600;
     color: #1a202c;
   }
+
   @media (prefers-color-scheme: dark) {
     h1, h2, h3, h4, h5, h6 {
       color: #fff;
     }
   }
+
   p {
     line-height: 1.625;
     color: #374151;
   }
+
   @media (prefers-color-scheme: dark) {
     p {
       color: #d1d5db;
     }
   }
+
   a {
-    transition: color 0.2s, background-color 0.2s, border-color 0.2s, text-decoration-color 0.2s;
+    transition: all 0.2s ease;
     text-decoration: none;
   }
+
   a:hover {
     text-decoration: underline;
   }
 }
 
-/* Component Layer */
+/* === Component Layer === */
 @layer components {
-  .button-primary {
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    font-weight: 600;
-    color: #fff;
-    background-image: linear-gradient(to bottom right, #6366f1, #8b5cf6);
-    box-shadow: 0 10px 15px -3px rgba(99,102,241,0.1), 0 4px 6px -4px rgba(139,92,246,0.1);
-    transition: all 0.2s;
-  }
-  .button-primary:hover {
-    background-image: linear-gradient(to bottom right, #4f46e5, #7c3aed);
-  }
-  .button-secondary {
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    font-weight: 600;
-    border: 1px solid #d1d5db;
-    color: #374151;
-    background-color: #fff;
-    transition: background-color 0.2s;
-  }
-  @media (prefers-color-scheme: dark) {
-    .button-secondary {
-      border: 1px solid #4b5563;
-      color: #e5e7eb;
-      background-color: #1f2937;
-    }
-    .button-secondary:hover {
-      background-color: #374151;
-    }
-  }
-  .button-secondary:hover {
-    background-color: #f3f4f6;
-  }
   .card-hover {
     transition: transform 0.3s;
-    transform: translateZ(0);
   }
   .card-hover:hover {
     transform: translateY(-0.25rem);
     box-shadow: 0 20px 25px -5px rgba(31, 41, 55, 0.1), 0 8px 10px -6px rgba(31, 41, 55, 0.1);
   }
+
   .input-field {
     width: 100%;
     padding: 0.75rem 1rem;
     border-radius: 0.5rem;
     border: 1px solid #d1d5db;
     background-color: #fff;
-    outline: none;
     transition: box-shadow 0.2s;
   }
+
+  .input-field:focus {
+    box-shadow: 0 0 0 2px #6366f1;
+    outline: none;
+  }
+
   @media (prefers-color-scheme: dark) {
     .input-field {
       border: 1px solid #4b5563;
       background-color: #1f2937;
+      color: #f1f5f9;
     }
   }
-  .input-field:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px #6366f1;
-  }
+
   .section-heading {
     font-size: 1.875rem;
-    line-height: 2.25rem;
     font-weight: 700;
     text-align: center;
     margin-bottom: 1rem;
   }
+
   @media (min-width: 1024px) {
     .section-heading {
       font-size: 2.25rem;
-      line-height: 2.5rem;
     }
   }
 }
 
-/* Utility Layer */
-@layer utilities {
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  .animate-fadeInUp {
-    animation: fadeInUp 0.6s ease forwards;
-  }
-  .stagger-1 { animation-delay: 0.1s; }
-  .stagger-2 { animation-delay: 0.2s; }
-  .stagger-3 { animation-delay: 0.3s; }
+/* === Gradient Text === */
+.text-gradient {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }

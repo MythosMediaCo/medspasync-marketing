@@ -1,36 +1,35 @@
-# MedSpaSync Marketing Site
+# MedSpaSync Pro – Marketing Site
 
-This repository contains the marketing website for **MedSpaSync Pro**, built with [React](https://reactjs.org/) and [Vite](https://vitejs.dev/). Tailwind CSS is used for styling.
+This repository contains the official **marketing website** for [MedSpaSync Pro](https://medspasyncpro.com), the first AI-powered reconciliation platform for medical spas. Built using **React**, **Tailwind CSS**, and **Vite**.
 
-## Development
+---
 
-1. Install Node dependencies:
-   ```bash
-   npm install
-   ```
-2. Run a development server with hot reloading:
-   ```bash
-   npm run dev
-   ```
+## 🧠 What is MedSpaSync Pro?
 
-## Production Build
+> **"Reconciliation Done Right."**
 
-Generate optimized static files in the `dist` folder:
+MedSpaSync Pro eliminates the 8+ hours weekly spa teams waste manually matching Alle, Aspire, and POS records — replacing spreadsheets with AI-driven accuracy and professional PDF reports.
+
+- 💸 **$2,500+ Monthly** in missed revenue recovered  
+- ⚙️ **95%+ Matching Accuracy** with machine learning  
+- ⏱️ **6 Hours → 15 Minutes** reconciliation time  
+- 🚀 **24-Hour Implementation** — no sales call required
+
+---
+
+## ⚙️ Tech Stack
+
+- **Frontend**: React + React Router  
+- **Styling**: Tailwind CSS  
+- **Build Tool**: Vite  
+- **SEO**: React Helmet Async + Open Graph + FAQ Structured Data  
+- **Hosting**: Netlify
+
+---
+
+## 🔧 Getting Started
+
+### 1. Install Dependencies
 
 ```bash
-npm run build
-```
-
-The site can then be served from the `dist` directory or deployed to a static hosting service such as Netlify.
-
-## Project Structure
-
-- `src/` – React components, pages and styles
-- `index.html` – entry HTML file
-- `tailwind.config.js` – Tailwind configuration
-- `vite.config.js` – build configuration
-
-## Assets
-
-Provide your own `favicon.ico` and `logo192.png` in the project root for PWA and browser icons. These files are not included in the repository.
-
+npm install
