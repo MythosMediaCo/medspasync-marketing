@@ -25,12 +25,12 @@ const Modal = ({
 
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'hidden';
+      document.body.classList.add('no-scroll');
     }
 
     return () => {
       document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'unset';
+      document.body.classList.remove('no-scroll');
     };
   }, [isOpen, onClose]);
 
