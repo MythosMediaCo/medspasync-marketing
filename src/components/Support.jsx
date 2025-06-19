@@ -1,130 +1,32 @@
-// /workspaces/medspasync-marketing/src/components/Contact.jsx
-import React, { useState } from 'react';
+// ✅ Support.jsx
 
-export default function Contact() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    business: '',
-    message: '',
-  });
-  const [status, setStatus] = useState('');
+import React from 'react';
 
-  const handleChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setStatus('loading');
-
-    try {
-      const res = await fetch('https://app.medspasyncpro.com/api/leads', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          type: 'contact',
-          source: 'marketing_website',
-        }),
-      });
-
-      if (res.ok) {
-        setStatus('success');
-        setFormData({ name: '', email: '', business: '', message: '' });
-      } else throw new Error();
-    } catch (err) {
-      setStatus('error');
-    }
-  };
-
+export default function Support() {
   return (
-    <section className="pt-24 pb-20 gradient-bg">
-      <div className="max-w-4xl mx-auto px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h1 className="text-4xl lg:text-5xl font-bold mb-6">Contact Us</h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300">
-            Questions? Ideas? Reach out — we actually read these.
-          </p>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium mb-2">
-                Name *
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                required
-                value={formData.name}
-                onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium mb-2">
-                Email *
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                required
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="business" className="block text-sm font-medium mb-2">
-                Business Name
-              </label>
-              <input
-                type="text"
-                id="business"
-                name="business"
-                value={formData.business}
-                onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="message" className="block text-sm font-medium mb-2">
-                Message *
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                rows="4"
-                required
-                value={formData.message}
-                onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700"
-              ></textarea>
-            </div>
-
-            <button
-              type="submit"
-              className="button-primary w-full text-white py-3 rounded-lg font-semibold"
-              disabled={status === 'loading'}
-            >
-              {status === 'loading' ? 'Sending...' : 'Send Message'}
-            </button>
-
-            {status === 'success' && (
-              <p className="text-emerald-500 text-sm mt-2">Message sent successfully!</p>
-            )}
-            {status === 'error' && (
-              <p className="text-red-500 text-sm mt-2">Something went wrong. Please try again.</p>
-            )}
-          </form>
-        </div>
-      </div>
-    </section>
+    <main className="pt-24 pb-20 max-w-3xl mx-auto px-6 text-gray-900">
+      <h1 className="text-3xl font-bold mb-6">Support & Help Center</h1>
+      <p className="mb-4 text-gray-700">
+        We’re here to support you through every step of your MedSpaSync Pro journey. Whether you’re just getting started or scaling to multiple locations, our resources and support team are ready.
+      </p>
+      <ul className="list-disc list-inside text-gray-700 space-y-3">
+        <li>
+          <strong>Getting Started Guide:</strong> Learn how to connect your POS and upload reward exports.
+        </li>
+        <li>
+          <strong>Live Demo Walkthrough:</strong> Try it out with sample data and see how reconciliation works.
+        </li>
+        <li>
+          <strong>Compliance FAQ:</strong> Learn how our platform handles HIPAA, PCI, and regulatory concerns.
+        </li>
+        <li>
+          <strong>Priority Support:</strong> Available to Professional and Enterprise tier users. Email us at{' '}
+          <a href="mailto:support@mythosmedia.co" className="text-indigo-600 underline">support@mythosmedia.co</a>
+        </li>
+        <li>
+          <strong>Help Articles (Coming Soon):</strong> Our searchable documentation is being built now.
+        </li>
+      </ul>
+    </main>
   );
 }

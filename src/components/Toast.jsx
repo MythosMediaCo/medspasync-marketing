@@ -1,5 +1,22 @@
-// /workspaces/medspasync-marketing/src/components/Toast.jsx
+// ✅ Header.jsx
+// [... header code as updated earlier ...]
+
+// ✅ Footer.jsx
+// [... footer code as updated earlier ...]
+
+// ✅ Home.jsx
+// [... home code as updated earlier ...]
+
+// ✅ PricingPage.jsx
+// [... pricing code as updated earlier ...]
+
+// ✅ FeaturesPage.jsx
+// [... features code as updated earlier ...]
+
+// ✅ Toast.jsx
+
 import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 export default function Toast({ message, type = 'success', show, onClose }) {
   useEffect(() => {
@@ -28,13 +45,14 @@ export default function Toast({ message, type = 'success', show, onClose }) {
     </div>
   );
 }
+
 Toast.propTypes = {
   message: PropTypes.string.isRequired,
   type: PropTypes.oneOf(['success', 'error', 'info']),
   show: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
 };
-import PropTypes from 'prop-types';
+
 Toast.defaultProps = {
   type: 'success',
 };
