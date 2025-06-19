@@ -33,7 +33,7 @@ export const LoadingCard = () => (
 export const LoadingTable = ({ rows = 5, cols = 4 }) => (
   <div className="animate-pulse">
     <div className="bg-gray-100 rounded-t-lg p-4">
-      <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
+      <div className={`grid gap-4 grid-cols-${cols}`}>
         {Array.from({ length: cols }).map((_, i) => (
           <div key={i} className="h-4 bg-gray-200 rounded"></div>
         ))}
@@ -42,7 +42,7 @@ export const LoadingTable = ({ rows = 5, cols = 4 }) => (
     <div className="divide-y divide-gray-200">
       {Array.from({ length: rows }).map((_, rowIndex) => (
         <div key={rowIndex} className="p-4">
-          <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
+          <div className={`grid gap-4 grid-cols-${cols}`}>
             {Array.from({ length: cols }).map((_, colIndex) => (
               <div key={colIndex} className="h-4 bg-gray-200 rounded"></div>
             ))}
