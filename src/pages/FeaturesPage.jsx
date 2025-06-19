@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 
 const features = [
   {
@@ -41,7 +42,15 @@ const features = [
 
 export default function FeaturesPage() {
   return (
-    <section className="pt-24 pb-20 gradient-bg">
+    <>
+      <Helmet>
+        <title>Features | MedSpaSync Pro</title>
+        <meta
+          name="description"
+          content="Explore key features that eliminate manual reconciliation."
+        />
+      </Helmet>
+      <section className="pt-24 pb-20 gradient-bg">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h1 className="text-4xl lg:text-5xl font-bold mb-6">Powerful Features</h1>
@@ -63,5 +72,6 @@ export default function FeaturesPage() {
         </div>
       </div>
     </section>
+    </>
   );
 }

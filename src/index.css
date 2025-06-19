@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 /* Tailwind Directives */
+=======
+/* /workspaces/medspasync-marketing/src/index.css */
+
+/* Tailwind base + components + utilities */
+>>>>>>> 95d1a57cc0c1b7c6670e326a2a17f106f104aa2d
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

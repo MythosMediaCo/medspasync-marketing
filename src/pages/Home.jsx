@@ -1,9 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 
 const HomePage = () => {
   return (
-    <main className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <>
+      <Helmet>
+        <title>MedSpaSync Pro | Automated Rewards Reconciliation</title>
+        <meta
+          name="description"
+          content="Automate your Alle and Aspire reward tracking and reclaim lost revenue."
+        />
+      </Helmet>
+      <main className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       {/* Hero Section */}
       <section className="gradient-bg pt-24 pb-20 lg:pt-32 lg:pb-28">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
@@ -87,6 +96,7 @@ const HomePage = () => {
         </div>
       </section>
     </main>
+    </>
   );
 };
 
