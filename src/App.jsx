@@ -14,6 +14,7 @@ import SupportPage from './pages/SupportPage';
 import ContactPage from './pages/ContactPage';
 import PrivacyPage from './pages/PrivacyPage';
 import TermsPage from './pages/TermsPage';
+import InsightsPage from './pages/InsightsPage'; // ✅ Correct placement
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/privacy" element={<PrivacyPage />} />
               <Route path="/terms" element={<TermsPage />} />
+              <Route path="/insights" element={<InsightsPage />} /> {/* ✅ Now correctly added */}
             </Routes>
           </main>
           <Footer />
