@@ -1,48 +1,60 @@
-import React from 'react';
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy | MedSpaSync Pro</title>
+  <meta name="description" content="Your privacy is protected at every step. Learn how MedSpaSync Pro securely handles your data, honors HIPAA, and avoids storing unnecessary information." />
+  <link rel="stylesheet" href="/src/index.css" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans">
 
-export default function PricingPage() {
-  return (
-    <main className="pt-24 pb-20 max-w-5xl mx-auto px-6 text-gray-900">
-      <h1 className="text-4xl font-bold text-center mb-10">Honest Pricing. Built for Operators.</h1>
+  <main class="max-w-3xl mx-auto py-16 px-6">
+    <h1 class="text-4xl font-bold mb-6">Privacy Policy</h1>
 
-      <div className="grid md:grid-cols-2 gap-8">
-        {/* Core Tier */}
-        <div className="border border-gray-300 rounded-lg p-6 shadow">
-          <h2 className="text-2xl font-semibold mb-2">Core</h2>
-          <p className="text-xl font-bold mb-4">$299/month</p>
-          <ul className="list-disc list-inside text-gray-700 space-y-2">
-            <li>Save 8+ hours weekly on reconciliation</li>
-            <li>Prevent $2,500+ in monthly missed revenue</li>
-            <li>95%+ AI matching accuracy</li>
-            <li>HIPAA-conscious security</li>
-            <li>Email support</li>
-            <li>24-hour implementation</li>
-          </ul>
-        </div>
+    <p class="mb-6 text-gray-700 dark:text-gray-300">
+      MedSpaSync Pro was built by industry insiders who understand how important patient and practice data security is. We believe in clear policies, secure processing, and minimal data storage.
+    </p>
 
-        {/* Professional Tier */}
-        <div className="border border-indigo-500 rounded-lg p-6 shadow-lg bg-indigo-50">
-          <h2 className="text-2xl font-semibold text-indigo-700 mb-2">Professional</h2>
-          <p className="text-xl font-bold mb-4">$499/month</p>
-          <ul className="list-disc list-inside text-gray-700 space-y-2">
-            <li>Everything in Core</li>
-            <li>Automated compliance tracking</li>
-            <li>Advanced inventory forecasting</li>
-            <li>Multi-location dashboard</li>
-            <li>Priority onboarding + phone support</li>
-            <li>Auto-flagged discrepancies</li>
-          </ul>
-        </div>
-      </div>
+    <h2 class="text-2xl font-semibold mt-10 mb-4">1. What We Collect</h2>
+    <p class="mb-4 text-gray-700 dark:text-gray-300">
+      We collect only the information necessary to deliver reconciliation services:
+    </p>
+    <ul class="list-disc ml-6 text-gray-600 dark:text-gray-300 mb-6">
+      <li>Email address (optional for demo, required for subscription)</li>
+      <li>Name (optional)</li>
+      <li>CSV file contents — temporarily processed and not stored long-term</li>
+    </ul>
 
-      <div className="mt-10 text-center max-w-2xl mx-auto text-gray-700">
-        <p className="mb-4">
-          Pricing is based on real-world operational data. We built this platform from 10 years inside medical spas — not from spreadsheets in a boardroom.
-        </p>
-        <p className="text-sm text-gray-500">
-          No inflated claims. No forced demos. Just clear ROI and a money-back guarantee if we don't save you time.
-        </p>
-      </div>
-    </main>
-  );
-}
+    <h2 class="text-2xl font-semibold mt-10 mb-4">2. File Privacy</h2>
+    <p class="mb-6 text-gray-700 dark:text-gray-300">
+      Uploaded CSV files are encrypted during transit and processing. Files are auto-deleted shortly after processing completes. We never store customer records or transactions unless explicitly authorized.
+    </p>
+
+    <h2 class="text-2xl font-semibold mt-10 mb-4">3. HIPAA-Conscious Design</h2>
+    <p class="mb-6 text-gray-700 dark:text-gray-300">
+      While MedSpaSync Pro is not a covered entity under HIPAA, we design and operate the platform with HIPAA-conscious safeguards: encrypted file handling, user-level access controls, and audit-ready logs.
+    </p>
+
+    <h2 class="text-2xl font-semibold mt-10 mb-4">4. Analytics and Tracking</h2>
+    <p class="mb-6 text-gray-700 dark:text-gray-300">
+      We do not use invasive tracking. No cookies, no heatmaps, no pixel profiling. Analytics is limited to anonymous usage patterns (e.g. demo count, file types) to improve functionality.
+    </p>
+
+    <h2 class="text-2xl font-semibold mt-10 mb-4">5. Data Deletion</h2>
+    <p class="mb-6 text-gray-700 dark:text-gray-300">
+      You may request deletion of all personal data at any time by emailing <a href="mailto:support@mythosmedia.co" class="text-indigo-600 underline">support@mythosmedia.co</a>. We respond to all requests within 3 business days.
+    </p>
+
+    <h2 class="text-2xl font-semibold mt-10 mb-4">6. Policy Changes</h2>
+    <p class="mb-6 text-gray-700 dark:text-gray-300">
+      We update this page as needed. Significant changes will be announced via our platform and email where applicable.
+    </p>
+
+    <p class="mt-10 text-sm text-gray-500 dark:text-gray-400">
+      Last updated: June 2025 • MedSpaSync Pro is a MythosMediaCo product
+    </p>
+  </main>
+</body>
+</html>
