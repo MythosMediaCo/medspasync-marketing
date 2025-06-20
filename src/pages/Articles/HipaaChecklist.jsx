@@ -6,90 +6,54 @@ export default function HipaaChecklist() {
     <>
       <Helmet>
         <title>HIPAA Compliance Checklist for Medical Spa Automation</title>
-        <meta
-          name="description"
-          content="Protect your medspa from violations with this HIPAA automation compliance checklist: MFA, encryption, backups, audit logs, and more."
-        />
+        <meta name="description" content="Ensure your med spa software meets HIPAA standards. Use this detailed checklist to protect patient data, avoid penalties, and build trust." />
       </Helmet>
-
-      <section className="max-w-3xl mx-auto py-16 px-6">
-        <h1 className="text-4xl font-bold mb-6">
-          HIPAA Compliance Checklist for Medical Spa Automation
-        </h1>
-
-        <p className="text-lg text-gray-700 mb-6">
-          Medical spas handle protected health information (PHI) — from intake forms and treatment notes to photos and payment details — which means they fall under HIPAA regulations. Non-compliance isn’t just a legal issue; it erodes patient trust and can lead to hefty penalties. Civil fines start at <strong>$127 per violation</strong> and can reach <strong>$1.9 million</strong> for serious offenses.
+      <section className="pt-24 pb-20 px-6 max-w-5xl mx-auto">
+        <h1 className="text-4xl font-bold mb-6">HIPAA Compliance Checklist for Medical Spa Automation</h1>
+        <p className="text-lg text-gray-700 dark:text-gray-300 mb-8">
+          Medical spas handle protected health information (PHI) daily. From intake forms and treatment notes to photos and billing data, every digital touchpoint must comply with HIPAA. Here’s what your software should offer:
         </p>
 
-        <h2 className="text-2xl font-semibold mt-10 mb-4">HIPAA Compliance Features Checklist</h2>
-        <ul className="space-y-6 text-gray-700">
+        <ul className="space-y-6">
           <li>
-            <strong>🔒 Data Encryption (At Rest and In Transit):</strong><br />
-            Ensure all PHI is encrypted using industry standards like AES-256 for stored data and TLS for data in transit.
+            <h3 className="text-xl font-semibold text-indigo-700">🔒 Data Encryption</h3>
+            <p>All PHI must be encrypted both at rest (e.g., in databases or backups) and in transit (e.g., emails or cloud sync). Industry-standard: AES-256 and TLS 1.2+.</p>
           </li>
-
           <li>
-            <strong>👥 Access Controls and Role-Based Permissions:</strong><br />
-            Every staff member should have a unique login with access limited to only the information necessary for their role.
+            <h3 className="text-xl font-semibold text-indigo-700">🧑‍💼 Role-Based Access Controls</h3>
+            <p>Limit access by staff role. Front desk vs. providers vs. admin should have different data visibility. This reduces internal snooping and meets HIPAA’s “minimum necessary” rule.</p>
           </li>
-
           <li>
-            <strong>🧾 Audit Trails:</strong><br />
-            Your software must log who accessed or edited PHI and when. These logs are critical for accountability and breach investigations.
+            <h3 className="text-xl font-semibold text-indigo-700">📝 Audit Trails</h3>
+            <p>Your software should log every access, view, and edit of PHI. This log must be exportable and show who accessed what, when, and from where.</p>
           </li>
-
           <li>
-            <strong>🔐 Secure User Authentication (MFA):</strong><br />
-            Require multi-factor authentication for software access to prevent breaches from stolen or weak passwords.
+            <h3 className="text-xl font-semibold text-indigo-700">🔐 Multi-Factor Authentication (MFA)</h3>
+            <p>MFA protects against weak/stolen passwords. Systems should require a second verification step (e.g., text code, biometric scan).</p>
           </li>
-
           <li>
-            <strong>⏲️ Automatic Logoff:</strong><br />
-            Automatically log users out after inactivity. This prevents unauthorized access from unattended devices.
+            <h3 className="text-xl font-semibold text-indigo-700">⏳ Auto Logoff</h3>
+            <p>Inactivity should trigger automatic logout to prevent unauthorized access from unattended devices, especially shared tablets or front desk stations.</p>
           </li>
-
           <li>
-            <strong>💾 Data Backup & Disaster Recovery:</strong><br />
-            Regular encrypted backups are required. Confirm your vendor has a disaster recovery plan and fast recovery SLA.
+            <h3 className="text-xl font-semibold text-indigo-700">💾 Backup & Disaster Recovery</h3>
+            <p>Your platform should run encrypted backups and offer a disaster recovery plan. Ask how fast they can restore data after an outage or ransomware attack.</p>
           </li>
-
           <li>
-            <strong>📄 Business Associate Agreements (BAAs):</strong><br />
-            Any vendor handling PHI must sign a BAA. Avoid platforms that won’t provide this — it's a red flag.
+            <h3 className="text-xl font-semibold text-indigo-700">📄 Business Associate Agreement (BAA)</h3>
+            <p>All vendors handling PHI must sign a BAA. No BAA? They’re not HIPAA compliant. This includes cloud storage, CRM tools, and text/email vendors.</p>
           </li>
-
           <li>
-            <strong>🎓 Employee Training & Support:</strong><br />
-            Your software should support team training — through tooltips, modes, or vendor documentation — and provide responsive compliance support.
+            <h3 className="text-xl font-semibold text-indigo-700">👩‍🏫 Staff Training & Admin Support</h3>
+            <p>Choose software that supports HIPAA training (tooltips, help docs, admin controls). Document team training and regularly update protocols.</p>
           </li>
         </ul>
 
-        <h2 className="text-2xl font-semibold mt-12 mb-4">⚠️ Common Compliance Gaps in Spa Software</h2>
-        <ul className="space-y-5 text-gray-700">
-          <li>
-            <strong>🚫 Using generic POS platforms:</strong> These often lack encryption, RBAC, and audit logs.
-          </li>
-          <li>
-            <strong>🚫 Shared logins:</strong> Violates HIPAA’s unique user ID requirement and kills traceability.
-          </li>
-          <li>
-            <strong>🚫 Insecure communications:</strong> Texting or emailing PHI without a secure platform risks data exposure.
-          </li>
-          <li>
-            <strong>🚫 No regular risk assessments:</strong> HIPAA requires periodic review of your software for vulnerabilities.
-          </li>
-          <li>
-            <strong>🚫 Missing documentation:</strong> Privacy and incident response policies must exist and match what your software supports.
-          </li>
-        </ul>
-
-        <p className="mt-8 text-gray-600">
-          HIPAA compliance isn’t a one-time box to check. It's a continuous process of monitoring, documentation, training, and technology updates. Choose software with compliance built-in so you can scale confidently — without compromising patient trust.
+        <p className="mt-10 text-gray-700 dark:text-gray-300">
+          ⚠️ Common gaps: generic spa software, shared logins, unencrypted messaging, and lack of documented policies.
+          <br />
+          ✅ Use this checklist to vet your tools and stay compliant—because HIPAA isn’t optional.
         </p>
-
-        <div className="mt-10 border-l-4 border-indigo-500 pl-4 text-sm text-gray-500">
-          <strong>Sources:</strong> Pabau (2025), Zenoti (2024), Boulevard (2023), HIPAA Journal, HHS, Compliancy Group
-        </div>
       </section>
     </>
   );
