@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
@@ -7,6 +8,7 @@ import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
 
 import Home from './pages/Home';
+import InsightsPage from './pages/InsightsPage';
 import FeaturesPage from './pages/FeaturesPage';
 import PricingPage from './pages/PricingPage';
 import AboutPage from './pages/AboutPage';
@@ -14,7 +16,8 @@ import SupportPage from './pages/SupportPage';
 import ContactPage from './pages/ContactPage';
 import PrivacyPage from './pages/PrivacyPage';
 import TermsPage from './pages/TermsPage';
-import InsightsPage from './pages/InsightsPage'; // ✅ Correct placement
+import HipaaChecklist from './pages/HipaaChecklist';
+import SoftwareFailures from './pages/SoftwareFailures';
 
 function App() {
   return (
@@ -33,7 +36,9 @@ function App() {
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/privacy" element={<PrivacyPage />} />
               <Route path="/terms" element={<TermsPage />} />
-              <Route path="/insights" element={<InsightsPage />} /> {/* ✅ Now correctly added */}
+              <Route path="/insights" element={<InsightsPage />} />
+              <Route path="/insights/hipaa-compliance" element={<HipaaChecklist />} />
+              <Route path="/insights/software-integration-failures" element={<SoftwareFailures />} />
             </Routes>
           </main>
           <Footer />

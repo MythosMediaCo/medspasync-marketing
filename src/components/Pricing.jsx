@@ -1,44 +1,54 @@
-export const PricingPage = () => (
-  <main className="pt-24 pb-20 bg-white text-gray-900">
-    <section className="text-center mb-16">
-      <h1 className="text-4xl font-bold mb-4">Simple, Transparent Pricing</h1>
-      <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-        Start with Core. Scale with Professional. Add Intelligence when you're ready. No hidden fees. No contracts.
-      </p>
-    </section>
+// src/components/PricingSection.jsx
+import React from 'react';
 
-    <section className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto px-6">
-      {/* Core Tier */}
-      <div className="border border-gray-200 rounded-lg p-6 shadow-sm">
-        <h2 className="text-2xl font-semibold mb-2">Core Reconciliation</h2>
-        <p className="text-gray-600 mb-4">Perfect for single-location medspas automating Alle + Aspire workflows.</p>
-        <p className="text-3xl font-bold mb-6">$299<span className="text-base font-normal">/month</span></p>
-        <ul className="space-y-2 text-sm text-gray-700 mb-6">
-          <li>✓ AI-powered Alle & Aspire matching</li>
-          <li>✓ Clean CSV exports</li>
-          <li>✓ Discrepancy highlighting</li>
-          <li>✓ Email support</li>
-          <li>✓ HIPAA-ready audit trail</li>
-        </ul>
-        <a href="https://app.medspasyncpro.com/demo" className="block w-full text-center bg-indigo-600 text-white py-2 rounded-md font-medium mb-2">Start Free Demo</a>
-        <a href="/insights/hidden-costs-of-integration" className="text-indigo-600 text-sm underline hover:text-indigo-800">See the hidden cost of manual workflows →</a>
+const PricingSection = () => {
+  return (
+    <section id="pricingSection" className="mb-16">
+      <div className="text-center mb-12">
+        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+          Honest Pricing, Tangible ROI
+        </h2>
+        <p className="text-xl text-gray-600">
+          At just $299/month, MedSpaSync Pro delivers savings in labor costs that far exceed the platform's investment.
+        </p>
       </div>
 
-      {/* Professional Tier */}
-      <div className="border border-indigo-500 rounded-lg p-6 shadow-md bg-indigo-50">
-        <h2 className="text-2xl font-semibold mb-2">Professional Suite</h2>
-        <p className="text-gray-700 mb-4">For growing medspas that need compliance automation, analytics, and multi-location tools.</p>
-        <p className="text-3xl font-bold text-indigo-600 mb-6">$499<span className="text-base font-normal">/month</span></p>
-        <ul className="space-y-2 text-sm text-gray-800 mb-6">
-          <li>✓ Everything in Core</li>
-          <li>✓ Compliance automation tools</li>
-          <li>✓ Inventory forecasting</li>
-          <li>✓ Multi-location dashboard</li>
-          <li>✓ Priority support</li>
-        </ul>
-        <a href="https://app.medspasyncpro.com/demo" className="block w-full text-center bg-indigo-600 text-white py-2 rounded-md font-medium mb-2">Join Waitlist</a>
-        <a href="/insights/hipaa-checklist-automation" className="text-indigo-700 text-sm underline hover:text-indigo-900">See how we automate HIPAA compliance →</a>
+      <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div id="corePlan" className="pricing-card">
+          <h3 className="text-2xl font-semibold mb-2">Core Reconciliation</h3>
+          <p className="text-gray-600 mb-4">$299/month</p>
+          <ul className="text-gray-700 list-disc list-inside">
+            <li>Alle + Aspire + POS Reconciliation</li>
+            <li>90% Automated Matching Accuracy</li>
+            <li>Professional PDF Reports</li>
+            <li>Email Support from Industry Expert</li>
+            <li>30-Day Money-Back Guarantee</li>
+          </ul>
+        </div>
+
+        <div id="proPlan" className="pricing-card opacity-75">
+          <h3 className="text-2xl font-semibold mb-2">Professional Suite</h3>
+          <p className="text-gray-600 mb-4">$499/month (Coming Q4)</p>
+          <ul className="text-gray-700 list-disc list-inside">
+            <li>Everything in Core</li>
+            <li>Multi-Location Support</li>
+            <li>Automated Email Reports</li>
+            <li>Priority Support</li>
+            <li>Advanced Analytics Dashboard</li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="text-center mt-12">
+        <div className="inline-flex items-center bg-emerald-100 text-emerald-800 px-6 py-3 rounded-full">
+          <svg className="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
+          </svg>
+          <span className="font-semibold">30-day money-back guarantee</span>
+        </div>
       </div>
     </section>
-  </main>
-);
+  );
+};
+
+export default PricingSection;
