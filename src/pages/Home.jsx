@@ -14,7 +14,6 @@ const HomePage = () => {
       </Helmet>
 
       <main className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-
         {/* Hero */}
         <section className="gradient-bg pt-24 pb-20 lg:pt-32 lg:pb-28">
           <div className="max-w-7xl mx-auto px-6 text-center">
@@ -29,14 +28,16 @@ const HomePage = () => {
             </h1>
 
             <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
-              MedSpaSync Pro automates Alle and Aspire reconciliation with <strong>95%+ match rate accuracy</strong>, 
+              MedSpaSync Pro automates Alle and Aspire reconciliation with <strong>95%+ match rate accuracy</strong>,
               eliminating spreadsheet chaos and helping spas recover <strong>$2,500+ monthly</strong> in missed revenue.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-10">
               <a
                 href="https://app.medspasyncpro.com/demo"
-                className="button-primary text-white px-8 py-4 rounded-xl text-lg font-semibold"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-xl text-lg font-semibold shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-900"
               >
                 Try the Demo
               </a>

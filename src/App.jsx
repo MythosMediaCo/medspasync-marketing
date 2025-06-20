@@ -16,8 +16,8 @@ import SupportPage from './pages/SupportPage';
 import ContactPage from './pages/ContactPage';
 import PrivacyPage from './pages/PrivacyPage';
 import TermsPage from './pages/TermsPage';
-import HipaaChecklist from './pages/HipaaChecklist';
-import SoftwareFailures from './pages/SoftwareFailures';
+import SoftwareFailures from './pages/Articles/SoftwareFailures';
+import HIPAACompliance from './pages/Articles/HIPPACompliance'
 
 function App() {
   return (
@@ -37,7 +37,7 @@ function App() {
               <Route path="/privacy" element={<PrivacyPage />} />
               <Route path="/terms" element={<TermsPage />} />
               <Route path="/insights" element={<InsightsPage />} />
-              <Route path="/insights/hipaa-compliance" element={<HipaaChecklist />} />
+              <Route path="/insights/hipaa-compliance" element={<HIPAACompliance />} />
               <Route path="/insights/software-integration-failures" element={<SoftwareFailures />} />
             </Routes>
           </main>
