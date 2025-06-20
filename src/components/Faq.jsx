@@ -1,4 +1,4 @@
-// src/components/FaqSection.jsx
+// src/components/Faq.jsx
 import React, { useState } from 'react';
 
 const FaqItem = ({ question, answer, id }) => {
@@ -30,7 +30,7 @@ const FaqItem = ({ question, answer, id }) => {
   );
 };
 
-const FaqSection = () => {
+const Faq = () => {
   const faqs = [
     { id: 'faq1', question: 'How accurate is the AI matching?', answer: 'MedSpaSync Pro achieves 95%+ matching accuracy using fuzzy logic and real medspa data.' },
     { id: 'faq2', question: 'How long does setup take?', answer: 'Most medical spas can be reconciling within 24 hours of signup with no technical setup.' },
@@ -49,4 +49,4 @@ const FaqSection = () => {
   );
 };
 
-export default FaqSection;
+export default Faq;

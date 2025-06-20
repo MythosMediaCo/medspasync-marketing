@@ -1,7 +1,4 @@
-// src/components/PricingSection.jsx
-import React from 'react';
-
-const PricingSection = () => {
+const Pricing = () => {
   return (
     <section id="pricingSection" className="mb-16">
       <div className="text-center mb-12">
@@ -14,7 +11,7 @@ const PricingSection = () => {
       </div>
 
       <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-        <div id="corePlan" className="pricing-card">
+        <div id="corePlan" className="bg-white border border-gray-200 p-6 rounded-lg shadow-md text-left text-gray-800 text-base hover:shadow-lg transition-transform transform hover:-translate-y-1">
           <h3 className="text-2xl font-semibold mb-2">Core Reconciliation</h3>
           <p className="text-gray-600 mb-4">$299/month</p>
           <ul className="text-gray-700 list-disc list-inside">
@@ -26,7 +23,7 @@ const PricingSection = () => {
           </ul>
         </div>
 
-        <div id="proPlan" className="pricing-card opacity-75">
+        <div id="proPlan" className="bg-white border border-gray-200 p-6 rounded-lg shadow-md text-left text-gray-800 text-base hover:shadow-lg transition-transform transform hover:-translate-y-1 opacity-75">
           <h3 className="text-2xl font-semibold mb-2">Professional Suite</h3>
           <p className="text-gray-600 mb-4">$499/month (Coming Q4)</p>
           <ul className="text-gray-700 list-disc list-inside">
@@ -51,4 +48,4 @@ const PricingSection = () => {
   );
 };
 
-export default PricingSection;
+export default Pricing;

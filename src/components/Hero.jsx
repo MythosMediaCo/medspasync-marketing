@@ -1,30 +1,20 @@
-// ✅ Hero.jsx
-
+// src/components/Hero.jsx
 import React from 'react';
 
-export default function Hero() {
+const Hero = () => {
   return (
-    <section className="text-center max-w-4xl mx-auto px-6 pt-24 pb-16">
-      <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-6">
-        Finally — AI-Powered Reconciliation <span className="text-indigo-600">for Medical Spas</span>
+    <section className="bg-emerald-50 py-20 text-center px-6">
+      <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+        MedSpa Reconciliation. Automated.
       </h1>
-      <p className="text-lg text-gray-600 mb-8">
-        MedSpaSync Pro automates your rewards and POS reconciliation with 90%+ accuracy, built-in HIPAA compliance, and no sales calls required.
+      <p className="text-xl text-gray-700 mb-8">
+        Stop wasting hours fixing Alle and Aspire mismatches. MedSpaSync Pro reconciles everything in minutes.
       </p>
-      <div className="flex justify-center gap-4">
-        <a
-          href="https://app.medspasyncpro.com/demo"
-          className="px-6 py-3 rounded-lg bg-indigo-600 text-white font-medium shadow hover:bg-indigo-700 transition"
-        >
-          Try the Live Demo
-        </a>
-        <a
-          href="/insights/hidden-costs-of-integration"
-          className="px-6 py-3 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
-        >
-          Read the Research
-        </a>
-      </div>
+      <a href="#pricingSection" className="bg-emerald-600 text-white px-6 py-3 rounded-lg text-lg font-medium hover:bg-emerald-700 transition">
+        See Pricing
+      </a>
     </section>
   );
-}
+};
+
+export default Hero;

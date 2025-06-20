@@ -1,18 +1,32 @@
+// src/pages/AboutPage.jsx
 import React from 'react';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
-export default function AboutPage() {
+const AboutPage = () => {
   return (
-    <main className="pt-24 pb-20 max-w-3xl mx-auto px-6 text-gray-900">
-      <h1 className="text-3xl font-bold mb-6">Built by Operators. Backed by Ethics.</h1>
-      <p className="mb-6 text-gray-700">
-        MedSpaSync Pro was created by <strong>Jacob Hagood</strong>, a 10-year medical spa veteran who lived through the nightmare of manual reconciliation — spreadsheets, double-entry errors, and $2,500+ vanishing from the books every month.
-      </p>
-      <p className="mb-6 text-gray-700">
-        Our platform automates reconciliation with 95%+ accuracy, reduces 8+ hours of staff time weekly, and helps you recover missed revenue in days. But more importantly — we believe in <strong>integrity-first AI</strong>. Privacy-conscious. Human-centric. Audit-ready.
-      </p>
-      <p className="text-gray-600 italic">
-        This isn’t Silicon Valley’s idea of healthcare software. It’s yours.
-      </p>
-    </main>
+    <>
+      <Header />
+      <main className="bg-white text-gray-800 px-6 py-20">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-4xl font-bold mb-6">About MedSpaSync Pro</h1>
+          <p className="text-lg mb-4">
+            MedSpaSync Pro was created by medspa professionals who were tired of wasting hours reconciling Alle and Aspire manually. We built the tool we wished existed — one that automates reward tracking, reduces errors, and actually saves you time.
+          </p>
+          <p className="text-lg mb-4">
+            Our founder has over 10 years of real medspa operations experience. Every feature is based on real workflow pain — not investor pitch decks. We’re not a generic SaaS app trying to pivot into healthcare. We’re built for you.
+          </p>
+          <p className="text-lg mb-4">
+            Whether you manage a single-location spa or multiple practices, MedSpaSync Pro helps you take back control of your reconciliation process and frees your team to focus on clients — not data entry.
+          </p>
+          <p className="text-lg font-medium mt-8">
+            Have questions or want to partner with us? Reach out at <a href="mailto:support@mythosmedia.co" className="text-emerald-600 underline">support@mythosmedia.co</a>.
+          </p>
+        </div>
+      </main>
+      <Footer />
+    </>
   );
-}
+};
+
+export default AboutPage;
