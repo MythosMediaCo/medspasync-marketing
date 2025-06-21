@@ -243,7 +243,7 @@ const Pricing = () => {
               onClick={() => showToast('Connecting to our operations experts...', 'contact')}
               className="px-8 py-3 bg-white text-gray-900 font-semibold rounded-lg hover:bg-gray-100 transition-colors"
             >
-              Talk to Operations Expert
+              Talk to the Team
             </button>
           </div>
         </div>

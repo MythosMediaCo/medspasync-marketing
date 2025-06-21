@@ -1,6 +1,6 @@
 // src/components/CallToAction.jsx
 import React from 'react';
-import { useToast } from '../context/ToastContext';
+import { useToast } from '../ToastContext'; // Fixed import path
 
 const CallToAction = () => {
   const { showToast } = useToast();
