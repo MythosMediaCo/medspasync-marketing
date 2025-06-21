@@ -1,91 +1,15 @@
-// src/pages/FeaturesPage.jsx
+// src/components/Features.jsx  
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import { getCoreFeatures, getProfessionalFeatures } from '../data/features';
 
 export const FeaturesPage = () => {
-  const coreFeatures = [
-    {
-      icon: '🧠',
-      title: 'Advanced AI Matching',
-      description: 'Machine learning algorithms achieve 95%+ accuracy by automatically pairing rewards, redemptions, and invoices across Alle, Aspire, and POS systems.',
-      metrics: '95%+ accuracy, 8+ hours saved weekly',
-      highlights: ['Fuzzy matching handles name variations', 'Exact matching for financial precision', 'Edge case detection and resolution']
-    },
-    {
-      icon: '📊',
-      title: 'Professional Reports',
-      description: 'Generate bookkeeper-ready PDF reports with complete audit trails. All matched transactions and flagged discrepancies documented.',
-      metrics: 'Export ready in < 15 seconds',
-      highlights: ['One-click PDF exports', 'Email directly to accountant', 'Complete transaction audit trail']
-    },
-    {
-      icon: '🔐',
-      title: 'HIPAA-Conscious Design',
-      description: 'Zero permanent storage architecture with encrypted processing and automatic file deletion. Built with medical spa compliance in mind.',
-      metrics: '100% secure processing',
-      highlights: ['Files deleted after processing', '256-bit encryption standard', 'No email required for demo']
-    },
-    {
-      icon: '📁',
-      title: 'Universal CSV Support',
-      description: 'Upload your CSVs from any POS system that exports data. No API dependencies or complex integrations required.',
-      metrics: '24-hour implementation',
-      highlights: ['Works with any CSV-exporting POS', 'Drag-and-drop file uploads', 'No technical requirements']
-    }
-  ];
+  const coreFeatures = getCoreFeatures();
 
-  const professionalFeatures = [
-    {
-      icon: '🏢',
-      title: 'Multi-Location Dashboard',
-      badge: 'Coming Soon',
-      description: 'Centralized reconciliation across multiple spa locations with consolidated reporting and analytics.',
-      timeline: 'Q4 2025'
-    },
-    {
-      icon: '📋',
-      title: 'Automated Compliance Tracking',
-      badge: 'Coming Soon', 
-      description: 'Automated audit trail generation and compliance documentation for medical spa regulatory requirements.',
-      timeline: 'Q4 2025'
-    },
-    {
-      icon: '📈',
-      title: 'Advanced Analytics',
-      badge: 'Coming Soon',
-      description: 'Deep insights into reconciliation patterns, revenue trends, and operational efficiency metrics.',
-      timeline: 'Q4 2025'
-    },
-    {
-      icon: '📞',
-      title: 'Priority Support',
-      badge: 'Coming Soon',
-      description: '4-hour response time with direct phone access to operations experts who understand spa workflows.',
-      timeline: 'Q4 2025'
-    }
-  ];
+  const professionalFeatures = getProfessionalFeatures();
 
-  const futureTech = [
-    {
-      icon: '🤖',
-      title: 'Predictive Analytics',
-      description: 'AI-powered forecasting for inventory management and revenue optimization',
-      timeline: 'Q4 2025'
-    },
-    {
-      icon: '⚡',
-      title: 'Real-Time Processing', 
-      description: 'Live reconciliation as transactions occur across all connected systems',
-      timeline: 'Q1 2026'
-    },
-    {
-      icon: '🔌',
-      title: 'API Marketplace',
-      description: 'Custom integrations and third-party applications for specialized workflows',
-      timeline: 'Q2 2026'
-    }
-  ];
+  // Future tech features are included in professionalFeatures data
 
   return (
     <>

@@ -1,9 +1,11 @@
-import { useState } from 'react';
+// React automatically imported in JSX
 import { useToast } from '../context/ToastContext';
+import Navigation from '../components/Navigation';
+import Button from '../components/Button';
+import { pricingPlans, pricingFeatures, businessMetrics, formatPrice } from '../data/pricing';
 
 const HomePage = () => {
   const { showToast } = useToast();
-  const [selectedPlan, setSelectedPlan] = useState(null);
 
   const handleDemoClick = () => {
     showToast('Launching demo in new tab...', 'info');
@@ -11,7 +13,6 @@ const HomePage = () => {
   };
 
   const handleSubscribeClick = (plan) => {
-    setSelectedPlan(plan);
     showToast(`Starting ${plan} subscription...`, 'success');
     // In production, redirect to Stripe checkout
     // window.location.href = '/api/checkout/create-session';
@@ -22,46 +23,8 @@ const HomePage = () => {
       {/* Skip Link for Accessibility */}
       <a href="#main" className="skip-link">Skip to main content</a>
       
-      {/* Demo-Inspired Navigation */}
-      <nav className="demo-nav">
-        <div className="demo-container">
-          <div className="flex justify-between items-center py-4">
-            <div className="logo">
-              <div className="logo-icon">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
-              <span className="text-xl font-bold text-gray-900">MedSpaSync Pro</span>
-            </div>
-
-            <div className="hidden md:flex items-center space-x-8">
-              <a href="#features" className="text-gray-600 hover:text-emerald-600 transition-colors font-medium">
-                Features
-              </a>
-              <a href="#pricing" className="text-gray-600 hover:text-emerald-600 transition-colors font-medium">
-                Pricing
-              </a>
-              <a href="#insights" className="text-gray-600 hover:text-emerald-600 transition-colors font-medium">
-                Insights
-              </a>
-              <a href="#about" className="text-gray-600 hover:text-emerald-600 transition-colors font-medium">
-                About
-              </a>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600 hidden sm:block">Ready to save hours?</span>
-              <button
-                onClick={() => handleSubscribeClick('Core')}
-                className="btn-primary focus:ring-emerald"
-              >
-                Subscribe Now
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      {/* Unified Navigation */}
+      <Navigation variant="demo" />
 
       <main id="main" className="demo-container">
         {/* Hero Section */}
@@ -81,18 +44,22 @@ const HomePage = () => {
           </div>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center mb-8">
-            <button
+            <Button
+              variant="primary"
+              size="xl"
               onClick={handleDemoClick}
-              className="btn-primary text-xl px-12 py-4"
+              className="px-12 py-4"
             >
               🚀 Try Live Demo (No Email Required)
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="secondary"
+              size="xl"
               onClick={() => handleSubscribeClick('Core')}
-              className="btn-secondary text-xl px-12 py-4"
+              className="px-12 py-4"
             >
               Start Subscription
-            </button>
+            </Button>
           </div>
 
           <div className="alert-info">
@@ -168,93 +135,51 @@ const HomePage = () => {
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-12">
-            <div className="pricing-card featured">
-              <div className="status-badge success absolute -top-3 left-1/2 transform -translate-x-1/2">
-                ✅ Available Now
-              </div>
-              <div className="text-center mb-8">
-                <h3 className="text-3xl font-bold text-gray-900 mb-4">Core Reconciliation</h3>
-                <div className="metric-display">
-                  <div className="metric-number">$299</div>
-                  <div className="metric-label">per month</div>
+            {Object.values(pricingPlans).map((plan) => (
+              <div key={plan.id} className={`pricing-card ${plan.featured ? 'featured' : ''} ${plan.status === 'coming_soon' ? 'coming-soon' : ''}`}>
+                <div className={`status-badge ${plan.badge.type} absolute -top-3 left-1/2 transform -translate-x-1/2`}>
+                  {plan.badge.text}
                 </div>
-              </div>
-
-              <ul className="space-y-4 mb-10 text-left">
-                <li className="flex items-center text-lg">
-                  <svg className="h-6 w-6 text-emerald-600 mr-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                  </svg>
-                  Save 8+ hours weekly on reconciliation
-                </li>
-                <li className="flex items-center text-lg">
-                  <svg className="h-6 w-6 text-emerald-600 mr-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                  </svg>
-                  Prevent $2,500+ monthly revenue loss
-                </li>
-                <li className="flex items-center text-lg">
-                  <svg className="h-6 w-6 text-emerald-600 mr-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                  </svg>
-                  95%+ AI matching accuracy
-                </li>
-                <li className="flex items-center text-lg">
-                  <svg className="h-6 w-6 text-emerald-600 mr-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                  </svg>
-                  24-hour implementation
-                </li>
-              </ul>
-
-              <button 
-                onClick={() => handleSubscribeClick('Core')}
-                className="btn-primary w-full text-xl py-4"
-              >
-                Start Core Plan
-              </button>
-            </div>
-
-            <div className="pricing-card coming-soon">
-              <div className="status-badge info absolute -top-3 left-1/2 transform -translate-x-1/2">
-                🚧 Q3 2025
-              </div>
-              <div className="text-center mb-8">
-                <h3 className="text-3xl font-bold text-gray-900 mb-4">Professional Suite</h3>
-                <div className="metric-display">
-                  <div className="metric-number text-purple-600">$499</div>
-                  <div className="metric-label">per month</div>
+                <div className="text-center mb-8">
+                  <h3 className="text-3xl font-bold text-gray-900 mb-4">{plan.name}</h3>
+                  <div className="metric-display">
+                    <div className={`metric-number ${plan.id === 'professional' ? 'text-purple-600' : ''}`}>
+                      {formatPrice(plan)}
+                    </div>
+                    <div className="metric-label">per {plan.period}</div>
+                  </div>
                 </div>
+
+                <ul className={`space-y-4 mb-10 text-left ${plan.status === 'coming_soon' ? 'text-gray-500' : ''}`}>
+                  {plan.features.map((feature, index) => (
+                    <li key={index} className="flex items-center text-lg">
+                      <svg className={`h-6 w-6 mr-4 ${plan.status === 'coming_soon' ? 'text-gray-400' : 'text-emerald-600'}`} fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                      </svg>
+                      {feature.text}
+                    </li>
+                  ))}
+                </ul>
+
+                {plan.cta.disabled ? (
+                  <button 
+                    disabled 
+                    className="w-full bg-gray-400 text-white py-4 px-8 rounded-xl text-xl font-bold cursor-not-allowed"
+                  >
+                    {plan.cta.text}
+                  </button>
+                ) : (
+                  <Button 
+                    variant="primary"
+                    size="xl"
+                    onClick={() => handleSubscribeClick(plan.cta.plan)}
+                    className="w-full py-4"
+                  >
+                    {plan.cta.text}
+                  </Button>
+                )}
               </div>
-
-              <ul className="space-y-4 mb-10 text-left text-gray-500">
-                <li className="flex items-center text-lg">
-                  <svg className="h-6 w-6 text-gray-400 mr-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                  </svg>
-                  Everything in Core Plan
-                </li>
-                <li className="flex items-center text-lg">
-                  <svg className="h-6 w-6 text-gray-400 mr-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                  </svg>
-                  Automated scheduling
-                </li>
-                <li className="flex items-center text-lg">
-                  <svg className="h-6 w-6 text-gray-400 mr-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                  </svg>
-                  Advanced analytics dashboard
-                </li>
-              </ul>
-
-              <button 
-                disabled 
-                className="w-full bg-gray-400 text-white py-4 px-8 rounded-xl text-xl font-bold cursor-not-allowed"
-              >
-                Get Notified
-              </button>
-            </div>
+            ))}
           </div>
 
           <div className="text-center">
@@ -262,7 +187,7 @@ const HomePage = () => {
               <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
               </svg>
-              30-day money-back guarantee • HIPAA-compliant processing • Cancel anytime
+              {Object.values(pricingFeatures).map(feature => feature.text).join(' • ')}
             </div>
           </div>
         </section>
@@ -275,12 +200,14 @@ const HomePage = () => {
           <p className="text-xl md:text-2xl mb-10 opacity-90 max-w-3xl mx-auto">
             Upload your files and see the reconciliation magic happen in real-time
           </p>
-          <button
+          <Button
+            variant="secondary"
+            size="2xl"
             onClick={handleDemoClick}
-            className="bg-white text-emerald-600 font-bold px-12 py-5 rounded-2xl text-2xl hover:bg-gray-50 transition-all shadow-2xl hover:-translate-y-1"
+            className="bg-white text-emerald-600 px-12 py-5 rounded-2xl shadow-2xl hover:bg-gray-50 hover:-translate-y-1"
           >
             🚀 Launch Live Demo
-          </button>
+          </Button>
           <p className="text-lg mt-6 opacity-75">
             Your files are processed locally and never stored on our servers
           </p>
@@ -296,12 +223,13 @@ const HomePage = () => {
             Start your subscription today and eliminate manual reconciliation forever.
           </p>
 
-          <button
+          <Button
+            variant="cta"
             onClick={() => handleSubscribeClick('Core')}
-            className="subscription-cta text-white font-bold px-16 py-6 rounded-2xl text-3xl border-none cursor-pointer"
+            className="px-16 py-6 rounded-2xl text-3xl font-bold"
           >
-            🚀 Subscribe Now - $299/month
-          </button>
+            🚀 Subscribe Now - {formatPrice(pricingPlans.core)}/{pricingPlans.core.period}
+          </Button>
         </section>
       </main>
 
