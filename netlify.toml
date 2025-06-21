@@ -1,5 +1,5 @@
 # netlify.toml - MedSpaSync Pro Marketing Site
-# Corrected configuration for professional medical spa platform
+# Fixed configuration without NODE_ENV production setting
 
 [build]
   command = "npm run build"
@@ -8,7 +8,6 @@
   [build.environment]
     NODE_VERSION = "18.19.1"
     NPM_VERSION = "10.2.4"
-    NODE_ENV = "production"
     GENERATE_SOURCEMAP = "false"
     VITE_PLATFORM_NAME = "MedSpaSync Pro"
     VITE_CONTACT_EMAIL = "support@medspasyncpro.com"
@@ -154,7 +153,6 @@
   command = "npm run build"
   
   [context.production.environment]
-    NODE_ENV = "production"
     VITE_GA_TRACKING_ID = "G-XXXXXXXXXX"
     VITE_HOTJAR_ID = "XXXXXXX"
 
@@ -162,7 +160,6 @@
   command = "npm run build"
   
   [context.deploy-preview.environment]
-    NODE_ENV = "development"
     VITE_ROBOTS_NOINDEX = "true"
 
 [context.branch-deploy]
