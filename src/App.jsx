@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 
@@ -28,11 +28,21 @@ import HIPAACompliance from './pages/Articles/HIPAACompliance';
 // import FinancialAccuracy from './pages/Articles/FinancialAccuracy';
 
 function App() {
+  // Initialize dark mode on app load
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+      document.documentElement.classList.add('dark');
+    }
+  }, []);
+
   return (
     <HelmetProvider>
       <Router>
         <ScrollToTop />
-        <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+        <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
           <Header />
           <main className="flex-grow">
             <Routes>
