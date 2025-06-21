@@ -1,11 +1,275 @@
-[build]
-command = "npm run build"
-publish = "dist"
+# netlify.toml - MedSpaSync Pro Marketing Site
+# Enhanced configuration for professional medical spa platform
 
-[build.environment]
-NODE_VERSION = "18"
+[build]
+  # Build configuration
+  command = "npm run build"
+  publish = "dist"
+  
+  # Build environment variables
+  [build.environment]
+    NODE_VERSION = "18.19.1"
+    NPM_VERSION = "10.2.4"
+    # Enable build optimizations
+    NODE_ENV = "production"
+    GENERATE_SOURCEMAP = "false"
+    # Medical spa platform constants
+    VITE_PLATFORM_NAME = "MedSpaSync Pro"
+    VITE_CONTACT_EMAIL = "support@medspasyncpro.com"
+
+# Build processing configuration
+[build.processing]
+  skip_processing = false
+
+  [build.processing.css]
+    bundle = true
+    minify = true
+
+  [build.processing.js]
+    bundle = true
+    minify = true
+
+  [build.processing.html]
+    pretty_urls = true
+
+  [build.processing.images]
+    compress = true
+
+# Enhanced redirect rules for medical spa platform
+[[redirects]]
+  # SPA fallback - must be last rule
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# SEO-friendly redirects for medical spa content
+[[redirects]]
+  # Legacy URL redirects (if migrating from another platform)
+  from = "/reconciliation"
+  to = "/features"
+  status = 301
 
 [[redirects]]
-from = "/*"
-to = "/index.html"
-status = 200
+  # Demo access shortcuts
+  from = "/try"
+  to = "https://app.medspasyncpro.com/demo"
+  status = 302
+
+[[redirects]]
+  # App platform redirect
+  from = "/app"
+  to = "https://app.medspasyncpro.com"
+  status = 302
+
+[[redirects]]
+  # API redirects to backend
+  from = "/api/*"
+  to = "https://api.medspasyncpro.com/:splat"
+  status = 200
+
+[[redirects]]
+  # Contact form submission
+  from = "/contact-submit"
+  to = "/.netlify/functions/contact"
+  status = 200
+
+# Custom headers for security and performance
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Security headers for medical spa compliance
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    
+    # Performance headers
+    X-DNS-Prefetch-Control = "on"
+    
+    # HTTPS enforcement
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+
+# Static asset optimization
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    # Long-term caching for hashed assets
+    Cache-Control = "public, max-age=31536000, immutable"
+    
+# Font optimization
+[[headers]]
+  for = "*.woff2"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Access-Control-Allow-Origin = "*"
+
+# Image optimization
+[[headers]]
+  for = "*.{png,jpg,jpeg,gif,svg,webp,avif}"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000"
+    Vary = "Accept"
+
+# CSS and JS optimization
+[[headers]]
+  for = "*.{css,js}"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# HTML files (should not be cached)
+[[headers]]
+  for = "*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Service worker (if implementing PWA)
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Manifest and icons
+[[headers]]
+  for = "/manifest.json"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+    Content-Type = "application/manifest+json"
+
+# Sitemap optimization
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+    Content-Type = "application/xml"
+
+# Robots.txt
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+    Content-Type = "text/plain"
+
+# Medical spa specific API endpoints (if served from marketing site)
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    # CORS for medical spa applications
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type, Authorization"
+
+# Function configuration for contact forms
+[functions]
+  directory = "netlify/functions"
+  
+  # Contact form function
+  [functions.contact]
+    runtime = "nodejs18.x"
+
+# Edge functions configuration (if using)
+[edge_functions]
+  # Analytics edge function (if implementing)
+  # [edge_functions.analytics]
+  #   function = "analytics"
+  #   path = "/api/analytics"
+
+# Plugin configuration
+[[plugins]]
+  # Essential image optimization for medical spa visuals
+  package = "@netlify/plugin-nextjs"
+
+[[plugins]]
+  # Lighthouse CI for performance monitoring
+  package = "netlify-plugin-lighthouse"
+  
+  [plugins.inputs]
+    output_path = "lighthouse-results"
+
+[[plugins]]
+  # Sitemap generation
+  package = "netlify-plugin-sitemap"
+  
+  [plugins.inputs]
+    baseUrl = "https://medspasyncpro.com"
+    prettify = true
+    exclude = [
+      "/admin/*",
+      "/test/*"
+    ]
+
+[[plugins]]
+  # A11y testing for medical spa accessibility compliance
+  package = "netlify-plugin-a11y"
+
+# Context-specific configurations
+[context.production]
+  command = "npm run build"
+  
+  [context.production.environment]
+    NODE_ENV = "production"
+    VITE_GA_TRACKING_ID = "G-XXXXXXXXXX"
+    VITE_HOTJAR_ID = "XXXXXXX"
+
+[context.deploy-preview]
+  command = "npm run build"
+  
+  [context.deploy-preview.environment]
+    NODE_ENV = "development"
+    VITE_ROBOTS_NOINDEX = "true"
+
+[context.branch-deploy]
+  command = "npm run build"
+
+# Development context
+[context.dev]
+  command = "npm run dev"
+  port = 3000
+  targetPort = 3000
+  publish = "dist"
+  autoLaunch = false
+
+# Form handling for contact forms
+[forms]
+  # Contact form (if using Netlify forms)
+  [forms.contact]
+    name = "medspasync-contact"
+    action = "/contact"
+    method = "POST"
+
+# Split testing configuration (for A/B testing marketing pages)
+[[split_tests]]
+  # Example: Test different hero sections
+  # [split_tests.hero_test]
+  #   path = "/"
+  #   branches = ["main", "hero-variant-b"]
+
+# Environment-specific redirects
+[context.production.redirects]
+  # Production-only redirects
+  [[context.production.redirects]]
+    from = "/health"
+    to = "https://api.medspasyncpro.com/health"
+    status = 200
+
+# Analytics and monitoring
+[analytics]
+  provider = "google"
+
+# Performance budgets for medical spa platform
+[lighthouse]
+  # Performance thresholds for medical spa professionals
+  [lighthouse.performance]
+    first-contentful-paint = 1.5
+    largest-contentful-paint = 2.5
+    first-input-delay = 100
+    cumulative-layout-shift = 0.1
+
+  [lighthouse.accessibility]
+    score = 0.95  # High accessibility for medical professionals
+
+  [lighthouse.best-practices]
+    score = 0.9
+
+  [lighthouse.seo]
+    score = 0.95  # Strong SEO for medical spa market

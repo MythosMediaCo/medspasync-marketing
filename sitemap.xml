@@ -1,27 +1,202 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+                           http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+  
+  <!-- Main Site Pages -->
   <url>
     <loc>https://medspasyncpro.com/</loc>
+    <lastmod>2025-06-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
   </url>
+  
+  <!-- Core Product Pages -->
   <url>
     <loc>https://medspasyncpro.com/features/</loc>
+    <lastmod>2025-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
   </url>
+  
   <url>
     <loc>https://medspasyncpro.com/pricing/</loc>
+    <lastmod>2025-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
   </url>
+  
+  <!-- Company Information -->
   <url>
     <loc>https://medspasyncpro.com/about/</loc>
+    <lastmod>2025-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
+  
+  <!-- Support & Contact -->
   <url>
     <loc>https://medspasyncpro.com/support/</loc>
+    <lastmod>2025-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
+  
   <url>
     <loc>https://medspasyncpro.com/contact/</loc>
+    <lastmod>2025-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
+  
+  <!-- Legal Pages -->
   <url>
     <loc>https://medspasyncpro.com/terms/</loc>
+    <lastmod>2025-06-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
+  
   <url>
     <loc>https://medspasyncpro.com/privacy/</loc>
+    <lastmod>2025-06-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
+  
+  <!-- Insights Hub (High SEO Value) -->
+  <url>
+    <loc>https://medspasyncpro.com/insights/</loc>
+    <lastmod>2025-06-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Published Insight Articles -->
+  <url>
+    <loc>https://medspasyncpro.com/insights/hipaa-compliance/</loc>
+    <lastmod>2025-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://medspasyncpro.com/insights/software-integration-failures/</loc>
+    <lastmod>2025-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Strategic Insight Articles (Ready for Creation) -->
+  <url>
+    <loc>https://medspasyncpro.com/insights/hidden-costs-of-integration/</loc>
+    <lastmod>2025-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://medspasyncpro.com/insights/ai-accuracy-medical-spas/</loc>
+    <lastmod>2025-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://medspasyncpro.com/insights/alle-aspire-reconciliation-guide/</loc>
+    <lastmod>2025-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://medspasyncpro.com/insights/spa-financial-reporting-accuracy/</loc>
+    <lastmod>2025-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- High-Value Landing Pages (For Paid Campaigns) -->
+  <url>
+    <loc>https://medspasyncpro.com/stop-losing-revenue-reconciliation/</loc>
+    <lastmod>2025-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://medspasyncpro.com/ai-reconciliation-medical-spas/</loc>
+    <lastmod>2025-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://medspasyncpro.com/alle-aspire-automation/</loc>
+    <lastmod>2025-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Demo Access Points -->
+  <url>
+    <loc>https://medspasyncpro.com/demo/</loc>
+    <lastmod>2025-06-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Industry-Specific Pages -->
+  <url>
+    <loc>https://medspasyncpro.com/medical-spa-reconciliation/</loc>
+    <lastmod>2025-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://medspasyncpro.com/hipaa-compliant-automation/</loc>
+    <lastmod>2025-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Solution-Specific Pages -->
+  <url>
+    <loc>https://medspasyncpro.com/alle-reconciliation/</loc>
+    <lastmod>2025-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://medspasyncpro.com/aspire-reconciliation/</loc>
+    <lastmod>2025-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://medspasyncpro.com/pos-reconciliation/</loc>
+    <lastmod>2025-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- ROI & Business Impact Pages -->
+  <url>
+    <loc>https://medspasyncpro.com/reconciliation-roi-calculator/</loc>
+    <lastmod>2025-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://medspasyncpro.com/manual-reconciliation-cost/</loc>
+    <lastmod>2025-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
 </urlset>
