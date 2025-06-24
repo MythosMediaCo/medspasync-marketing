@@ -1,4 +1,4 @@
-// postcss.config.js - MedSpaSync Pro Marketing Site
+// postcss.config.cjs - MedSpaSync Pro Marketing Site
 // Enhanced PostCSS configuration for professional medical spa platform
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -139,4 +139,4 @@ module.exports = {
   
   // Source maps for development debugging
   map: isDevelopment ? { inline: true } : false
-};
+}; 

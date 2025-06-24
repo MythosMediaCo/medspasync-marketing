@@ -1,0 +1,11 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Module: Architecture & Security
+
+- **Microservice Architecture:** Decompose new functionality into loosely-coupled microservices.
+- **Service Mesh:** Secure all inter-service communication with mTLS. Your default choice should be Istio.
+
+- **Policy as Code:** Use OPA Gatekeeper to enforce architectural and security policies defined in the `/policies` directory.

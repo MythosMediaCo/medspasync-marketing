@@ -8,135 +8,148 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
-      // MedSpaSync Pro Brand Typography
+      // Function Health Visual Design System 2.0
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-        inter: ['Inter', 'sans-serif'],
+        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        display: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['SF Mono', 'Monaco', 'Cascadia Code', 'monospace'],
       },
       
-      // Enhanced Brand Color System with Dark Mode Support
+      // Function Health Color Palette
       colors: {
-        // Primary MedSpaSync Pro Brand Colors
+        // Primary Brand Colors
+        brand: {
+          primary: '#000000',
+          secondary: '#FFFFFF',
+          accent: '#D4947A', // Terracotta accent
+        },
+        
+        // Data Visualization Colors
+        data: {
+          cardOverlays: 'rgba(255, 255, 255, 0.95)',
+          chartLines: '#FFFFFF',
+          dataPoints: '#FFFFFF',
+          progressBars: '#FFFFFF',
+        },
+        
+        // Semantic Colors
+        semantic: {
+          success: '#10B981',
+          warning: '#F59E0B',
+          error: '#EF4444',
+          info: '#3B82F6',
+          heart: '#E91E63',
+          medical: '#6366F1',
+        },
+        
+        // Neutral Palette (Function Health exact)
+        neutral: {
+          50: '#FAFAFA',
+          100: '#F5F5F5',
+          200: '#E5E5E5',
+          300: '#D4D4D4',
+          400: '#A3A3A3',
+          500: '#737373',
+          600: '#525252',
+          700: '#404040',
+          800: '#262626',
+          900: '#171717',
+        },
+        
+        // Background Colors
+        background: {
+          primary: '#FFFFFF',
+          secondary: '#FAFAFA',
+          cards: '#FFFFFF',
+          overlay: 'rgba(0, 0, 0, 0.4)',
+        },
+        
+        // Legacy support for existing components
+        grey: {
+          50: '#FAFAFA',
+          100: '#F5F5F5',
+          200: '#E5E5E5',
+          300: '#D4D4D4',
+          400: '#A3A3A3',
+          500: '#737373',
+          600: '#525252',
+          700: '#404040',
+          800: '#262626',
+          900: '#171717',
+        },
+        
+        // MedSpaSync Pro Specific Colors (keeping for content)
         emerald: {
           50: '#ecfdf5',
           100: '#d1fae5', 
           200: '#a7f3d0',
           300: '#6ee7b7',
           400: '#34d399',
-          500: '#10b981',   // Primary brand color
-          600: '#059669',   // Primary CTA color
+          500: '#10b981',
+          600: '#059669',
           700: '#047857',
           800: '#065f46',
           900: '#064e3b',
         },
         
-        // Secondary Brand Colors  
         indigo: {
           50: '#eef2ff',
           100: '#e0e7ff',
           200: '#c7d2fe', 
           300: '#a5b4fc',
           400: '#818cf8',
-          500: '#6366f1',   // Secondary brand
-          600: '#4f46e5',   // Secondary CTA
+          500: '#6366f1',
+          600: '#4f46e5',
           700: '#4338ca',
           800: '#3730a3',
           900: '#312e81',
         },
-        
-        // Problem/Cost Indicators
-        red: {
-          50: '#fef2f2',
-          100: '#fee2e2',
-          200: '#fecaca',
-          300: '#fca5a5', 
-          400: '#f87171',
-          500: '#ef4444',
-          600: '#dc2626',   // Cost problem color
-          700: '#b91c1c',
-          800: '#991b1b',
-          900: '#7f1d1d',
-        },
-        
-        // Warning/Attention Colors
-        orange: {
-          50: '#fff7ed',
-          100: '#ffedd5',
-          200: '#fed7aa',
-          300: '#fdba74',
-          400: '#fb923c', 
-          500: '#f97316',
-          600: '#ea580c',   // Warning/attention
-          700: '#c2410c',
-          800: '#9a3412',
-          900: '#7c2d12',
-        },
-
-        // Purple for creative accents
-        purple: {
-          50: '#faf5ff',
-          100: '#f3e8ff',
-          200: '#e9d5ff',
-          300: '#d8b4fe',
-          400: '#c084fc',
-          500: '#a855f7',
-          600: '#9333ea',
-          700: '#7c3aed',
-          800: '#6b21a8',
-          900: '#581c87',
-        },
-
-        // Pink for creative accents
-        pink: {
-          50: '#fdf2f8',
-          100: '#fce7f3',
-          200: '#fbcfe8',
-          300: '#f9a8d4',
-          400: '#f472b6',
-          500: '#ec4899',
-          600: '#db2777',
-          700: '#be185d',
-          800: '#9d174d',
-          900: '#831843',
-        },
-        
-        // Brand Shortcuts
-        brand: {
-          primary: '#059669',      // Emerald-600
-          secondary: '#4f46e5',    // Indigo-600  
-          cost: '#dc2626',         // Red-600 for $2,500+ messaging
-          warning: '#ea580c',      // Orange-600 for alerts
-          success: '#10b981',      // Emerald-500 for success
-          accent: '#a855f7',       // Purple-500 for creative elements
-          highlight: '#ec4899',    // Pink-500 for highlights
-        },
-
-        // Dark mode specific colors
-        dark: {
-          50: '#f8fafc',
-          100: '#f1f5f9',
-          200: '#e2e8f0',
-          300: '#cbd5e1',
-          400: '#94a3b8',
-          500: '#64748b',
-          600: '#475569',
-          700: '#334155',
-          800: '#1e293b',
-          900: '#0f172a',
-          950: '#020617',
-        }
       },
       
-      // Medical Spa Professional Spacing
+      // Function Health 8px Base Unit System with Golden Ratio
       spacing: {
-        '18': '4.5rem',   // Between standard spacing
-        '88': '22rem',    // Large section spacing
-        '128': '32rem',   // Hero section heights
+        'xs': '4px',
+        'sm': '8px',
+        'md': '16px',
+        'lg': '24px',
+        'xl': '32px',
+        '2xl': '48px',
+        '3xl': '64px',
+        '4xl': '80px',
+        '5xl': '96px',
+        '6xl': '128px',
+        '7xl': '160px',
+        '8xl': '192px',
+        // Semantic spacing
+        'card-padding': '32px',
+        'card-spacing': '24px',
+        'section-padding': '80px',
+        'container-padding': '24px',
+        'grid-gap': '24px',
+        'data-label-spacing': '8px',
       },
       
-      // Enhanced Typography Scale
+      // Function Health Typography Scale
       fontSize: {
-        '2xs': ['0.625rem', { lineHeight: '0.75rem' }],
+        // Hero and Display
+        'hero': ['4rem', { lineHeight: '1.1', fontWeight: '300', letterSpacing: '-0.02em' }],
+        'display-large': ['3rem', { lineHeight: '1.1', fontWeight: '300', letterSpacing: '-0.02em' }],
+        'display-medium': ['2.25rem', { lineHeight: '1.2', fontWeight: '400', letterSpacing: '-0.01em' }],
+        
+        // Titles
+        'title-large': ['1.5rem', { lineHeight: '1.3', fontWeight: '500' }],
+        'title-medium': ['1.25rem', { lineHeight: '1.4', fontWeight: '500' }],
+        
+        // Body
+        'body-large': ['1.125rem', { lineHeight: '1.6', fontWeight: '400' }],
+        'body': ['1rem', { lineHeight: '1.6', fontWeight: '400' }],
+        'body-small': ['0.875rem', { lineHeight: '1.5', fontWeight: '400' }],
+        
+        // Labels and Captions
+        'label': ['0.75rem', { lineHeight: '1.4', fontWeight: '500', letterSpacing: '0.025em', textTransform: 'uppercase' }],
+        'caption': ['0.6875rem', { lineHeight: '1.4', fontWeight: '400' }],
+        
+        // Legacy support
         'xs': ['0.75rem', { lineHeight: '1rem' }],
         'sm': ['0.875rem', { lineHeight: '1.25rem' }],
         'base': ['1rem', { lineHeight: '1.5rem' }],
@@ -150,314 +163,388 @@ module.exports = {
         '7xl': ['4.5rem', { lineHeight: '1' }],
         '8xl': ['6rem', { lineHeight: '1' }],
         '9xl': ['8rem', { lineHeight: '1' }],
-        
-        // Content-specific sizes
-        'hero': ['3.5rem', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
-        'metric': ['2.5rem', { lineHeight: '1', fontWeight: '700' }],
       },
       
-      // Professional Box Shadows with Glassmorphism
+      // Function Health Box Shadows
       boxShadow: {
-        'card': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-        'card-hover': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-        'metric': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-        'cta': '0 10px 15px -3px rgba(5, 150, 105, 0.2), 0 4px 6px -2px rgba(5, 150, 105, 0.05)',
-        'cost-alert': '0 10px 15px -3px rgba(220, 38, 38, 0.2), 0 4px 6px -2px rgba(220, 38, 38, 0.05)',
-        'inner-glow': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
-        // Glassmorphism shadows
-        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-        'glass-dark': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
-        'glass-hover': '0 12px 40px 0 rgba(31, 38, 135, 0.45)',
-        'glass-hover-dark': '0 12px 40px 0 rgba(0, 0, 0, 0.45)',
-        // 3D shadows
-        '3d': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(255, 255, 255, 0.05)',
-        '3d-hover': '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+        'sm': '0 4px 12px rgba(0, 0, 0, 0.05)',
+        'md': '0 8px 24px rgba(0, 0, 0, 0.08)',
+        'lg': '0 12px 32px rgba(0, 0, 0, 0.1)',
+        'xl': '0 20px 48px rgba(0, 0, 0, 0.15)',
+        // Function Health specific shadows
+        'card': '0 4px 12px rgba(0, 0, 0, 0.05)',
+        'card-hover': '0 12px 32px rgba(0, 0, 0, 0.1)',
+        'data-card': '0 8px 24px rgba(0, 0, 0, 0.12)',
+        'button': '0 4px 12px rgba(212, 148, 122, 0.2)',
+        'button-hover': '0 8px 24px rgba(212, 148, 122, 0.3)',
       },
       
-      // Enhanced Brand Gradients with Creative Variations
-      backgroundImage: {
-        'gradient-emerald': 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-        'gradient-indigo': 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
-        'gradient-hero': 'linear-gradient(135deg, #059669 0%, #10b981 50%, #6366f1 100%)',
-        'gradient-cost': 'linear-gradient(135deg, #dc2626 0%, #ef4444 100%)',
-        'gradient-card': 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
-        'gradient-dark': 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
-        // Creative gradients
-        'gradient-creative': 'linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #f97316 100%)',
-        'gradient-glass': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',
-        'gradient-glass-dark': 'linear-gradient(135deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.05) 100%)',
-        'gradient-3d': 'linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #e2e8f0 100%)',
-        'gradient-3d-dark': 'linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%)',
-        // Abstract shape gradients
-        'gradient-abstract': 'radial-gradient(circle at 30% 20%, #a855f7 0%, transparent 50%), radial-gradient(circle at 70% 80%, #ec4899 0%, transparent 50%)',
-        'gradient-abstract-dark': 'radial-gradient(circle at 30% 20%, #7c3aed 0%, transparent 50%), radial-gradient(circle at 70% 80%, #be185d 0%, transparent 50%)',
-      },
-      
-      // Enhanced Animation System with Micro Animations
-      animation: {
-        'fade-in': 'fadeIn 0.6s ease-out forwards',
-        'slide-up': 'slideUp 0.6s ease-out forwards',
-        'slide-in-left': 'slideInLeft 0.6s ease-out forwards',
-        'slide-in-right': 'slideInRight 0.6s ease-out forwards',
-        'bounce-gentle': 'bounceGentle 2s infinite',
-        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'float': 'float 6s ease-in-out infinite',
-        // Micro animations
-        'wiggle': 'wiggle 0.5s ease-in-out',
-        'scale-in': 'scaleIn 0.3s ease-out',
-        'rotate-slow': 'rotateSlow 20s linear infinite',
-        'morph': 'morph 8s ease-in-out infinite',
-        'glow': 'glow 2s ease-in-out infinite alternate',
-        'shimmer': 'shimmer 2s linear infinite',
-        'bounce-subtle': 'bounceSubtle 3s ease-in-out infinite',
-        'slide-up-stagger': 'slideUpStagger 0.6s ease-out forwards',
-        'fade-in-stagger': 'fadeInStagger 0.6s ease-out forwards',
-      },
-      
-      // Enhanced Keyframes with Micro Animations
-      keyframes: {
-        fadeIn: {
-          '0%': { opacity: '0', transform: 'translateY(20px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-        slideUp: {
-          '0%': { opacity: '0', transform: 'translateY(30px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-        slideInLeft: {
-          '0%': { opacity: '0', transform: 'translateX(-30px)' },
-          '100%': { opacity: '1', transform: 'translateX(0)' },
-        },
-        slideInRight: {
-          '0%': { opacity: '0', transform: 'translateX(30px)' },
-          '100%': { opacity: '1', transform: 'translateX(0)' },
-        },
-        bounceGentle: {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-10px)' },
-        },
-        float: {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-20px)' },
-        },
-        // Micro animation keyframes
-        wiggle: {
-          '0%, 100%': { transform: 'rotate(-3deg)' },
-          '50%': { transform: 'rotate(3deg)' },
-        },
-        scaleIn: {
-          '0%': { transform: 'scale(0.9)', opacity: '0' },
-          '100%': { transform: 'scale(1)', opacity: '1' },
-        },
-        rotateSlow: {
-          '0%': { transform: 'rotate(0deg)' },
-          '100%': { transform: 'rotate(360deg)' },
-        },
-        morph: {
-          '0%, 100%': { borderRadius: '60% 40% 30% 70%/60% 30% 70% 40%' },
-          '50%': { borderRadius: '30% 60% 70% 40%/50% 60% 30% 60%' },
-        },
-        glow: {
-          '0%': { boxShadow: '0 0 5px rgba(168, 85, 247, 0.5)' },
-          '100%': { boxShadow: '0 0 20px rgba(168, 85, 247, 0.8)' },
-        },
-        shimmer: {
-          '0%': { backgroundPosition: '-200% 0' },
-          '100%': { backgroundPosition: '200% 0' },
-        },
-        bounceSubtle: {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-5px)' },
-        },
-        slideUpStagger: {
-          '0%': { opacity: '0', transform: 'translateY(30px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-        fadeInStagger: {
-          '0%': { opacity: '0', transform: 'translateY(20px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-      },
-      
-      // Border Radius System
+      // Function Health Border Radius
       borderRadius: {
-        '4xl': '2rem',
-        '5xl': '2.5rem',
-        '6xl': '3rem',
+        'sm': '8px',
+        'md': '12px',
+        'lg': '16px',
+        'xl': '20px',
+        '2xl': '24px',
+        '3xl': '32px',
+        // Function Health specific
+        'card': '20px',
+        'data-card': '24px',
+        'button': '12px',
+        'input': '12px',
       },
       
-      // Z-Index Scale
+      // Function Health Layout
+      maxWidth: {
+        'container': '1440px',
+        'content': '1200px',
+        'hero': '1200px',
+        'card-grid': '1200px',
+      },
+      
+      // Function Health Grid
+      gridTemplateColumns: {
+        'data-cards': 'repeat(auto-fit, minmax(300px, 1fr))',
+        'test-categories': 'repeat(auto-fit, minmax(280px, 1fr))',
+      },
+      
+      // Function Health Aspect Ratios
+      aspectRatio: {
+        'data-card': '3/4',
+        'hero-card': '4/3',
+      },
+      
+      // Function Health Z-Index
       zIndex: {
-        '60': '60',
-        '70': '70', 
-        '80': '80',
-        '90': '90',
-        '100': '100',
+        'overlay': '1',
+        'content': '2',
+        'navigation': '100',
+        'modal': '1000',
       },
       
-      // Enhanced Backdrop Blur for Glassmorphism
+      // Function Health Backdrop Blur
       backdropBlur: {
         'xs': '2px',
         'sm': '4px',
         'md': '8px',
         'lg': '16px',
         'xl': '24px',
-        '2xl': '40px',
-        '3xl': '64px',
       },
       
-      // Content Max Widths
-      maxWidth: {
-        '8xl': '88rem',
-        '9xl': '96rem',
+      // Function Health Animations
+      keyframes: {
+        'fadeIn': {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        'slideUp': {
+          '0%': { opacity: '0', transform: 'translateY(30px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        'scaleIn': {
+          '0%': { transform: 'scale(0.95)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+        'shimmer': {
+          '0%': { backgroundPosition: '-200% 0' },
+          '100%': { backgroundPosition: '200% 0' },
+        },
+        'float': {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
       },
       
-      // Glassmorphism specific utilities
-      backgroundOpacity: {
-        '15': '0.15',
-        '25': '0.25',
-        '35': '0.35',
+      animation: {
+        'fadeIn': 'fadeIn 0.6s ease-out',
+        'slideUp': 'slideUp 0.6s ease-out',
+        'scaleIn': 'scaleIn 0.3s ease-out',
+        'shimmer': 'shimmer 2s infinite',
+        'float': 'float 6s ease-in-out infinite',
       },
       
-      // 3D Transform utilities
-      transformStyle: {
-        'preserve-3d': 'preserve-3d',
+      // Function Health Transitions
+      transitionDuration: {
+        'fast': '0.2s',
+        'normal': '0.3s',
+        'slow': '0.5s',
       },
       
-      perspective: {
-        '1000': '1000px',
-        '2000': '2000px',
-      },
-      
-      rotate: {
-        '1': '1deg',
-        '2': '2deg',
-        '3': '3deg',
-        '6': '6deg',
-        '12': '12deg',
-        '15': '15deg',
-        '30': '30deg',
-        '45': '45deg',
-        '60': '60deg',
-        '90': '90deg',
-        '180': '180deg',
-      },
-      
-      scale: {
-        '102': '1.02',
-        '103': '1.03',
-        '105': '1.05',
-        '110': '1.10',
-        '125': '1.25',
-        '150': '1.50',
-      },
-      
-      // Custom spacing for abstract shapes
-      spacing: {
-        '18': '4.5rem',
-        '88': '22rem',
-        '128': '32rem',
-        '200': '50rem',
-        '300': '75rem',
+      transitionTimingFunction: {
+        'ease-out': 'cubic-bezier(0, 0, 0.2, 1)',
+        'ease-in-out': 'cubic-bezier(0.4, 0, 0.2, 1)',
       },
     },
   },
   
   plugins: [
-    // Custom component classes for modern design trends
+    // Function Health Component Classes
     function({ addComponents, theme }) {
       addComponents({
-        // Glassmorphism components
-        '.glass': {
-          background: 'rgba(255, 255, 255, 0.1)',
-          backdropFilter: 'blur(16px)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
-          boxShadow: theme('boxShadow.glass'),
-        },
-        '.glass-dark': {
-          background: 'rgba(0, 0, 0, 0.1)',
-          backdropFilter: 'blur(16px)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
-          boxShadow: theme('boxShadow.glass-dark'),
-        },
-        '.glass-hover': {
+        // Function Health Data Visualization Cards
+        '.data-card': {
+          background: 'image with overlay',
+          borderRadius: theme('borderRadius.data-card'),
+          padding: theme('spacing.card-padding'),
+          position: 'relative',
+          overflow: 'hidden',
+          minHeight: '400px',
+          aspectRatio: '3/4',
+          transition: 'all 0.3s ease',
           '&:hover': {
-            background: 'rgba(255, 255, 255, 0.15)',
-            backdropFilter: 'blur(20px)',
-            boxShadow: theme('boxShadow.glass-hover'),
+            transform: 'scale(1.02)',
+            boxShadow: theme('boxShadow.data-card'),
+          },
+        },
+        
+        '.data-card-overlay': {
+          background: 'rgba(0, 0, 0, 0.3)',
+          position: 'absolute',
+          top: '0',
+          left: '0',
+          right: '0',
+          bottom: '0',
+          zIndex: theme('zIndex.overlay'),
+        },
+        
+        '.data-card-content': {
+          position: 'relative',
+          zIndex: theme('zIndex.content'),
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          color: '#FFFFFF',
+        },
+        
+        '.data-value': {
+          fontSize: theme('fontSize.display-large[0]'),
+          fontWeight: theme('fontSize.display-large[1].fontWeight'),
+          lineHeight: theme('fontSize.display-large[1].lineHeight'),
+          marginBottom: theme('spacing.data-label-spacing'),
+        },
+        
+        '.data-unit': {
+          fontSize: theme('fontSize.body-large[0]'),
+          fontWeight: theme('fontSize.body-large[1].fontWeight'),
+          opacity: '0.9',
+        },
+        
+        '.data-label': {
+          fontSize: theme('fontSize.title-medium[0]'),
+          fontWeight: theme('fontSize.title-medium[1].fontWeight'),
+          marginBottom: theme('spacing.md'),
+        },
+        
+        // Function Health Buttons
+        '.btn-primary': {
+          background: theme('colors.brand.accent'),
+          color: theme('colors.brand.secondary'),
+          padding: '16px 32px',
+          borderRadius: theme('borderRadius.button'),
+          fontSize: theme('fontSize.body[0]'),
+          fontWeight: '500',
+          border: 'none',
+          cursor: 'pointer',
+          transition: 'all 0.2s ease',
+          '&:hover': {
+            background: '#C17D5F',
+            transform: 'translateY(-1px)',
+            boxShadow: theme('boxShadow.button-hover'),
+          },
+          '&:focus': {
+            outline: 'none',
+            boxShadow: '0 0 0 3px rgba(212, 148, 122, 0.1)',
+          },
+        },
+        
+        '.btn-secondary': {
+          background: 'transparent',
+          color: theme('colors.brand.accent'),
+          padding: '16px 32px',
+          borderRadius: theme('borderRadius.button'),
+          fontSize: theme('fontSize.body[0]'),
+          fontWeight: '500',
+          border: '2px solid',
+          borderColor: theme('colors.brand.accent'),
+          cursor: 'pointer',
+          transition: 'all 0.2s ease',
+          '&:hover': {
+            background: theme('colors.brand.accent'),
+            color: theme('colors.brand.secondary'),
+          },
+          '&:focus': {
+            outline: 'none',
+            boxShadow: '0 0 0 3px rgba(212, 148, 122, 0.1)',
+          },
+        },
+        
+        '.btn-ghost': {
+          background: 'transparent',
+          color: theme('colors.neutral.500'),
+          padding: '12px 24px',
+          borderRadius: theme('borderRadius.sm'),
+          fontSize: theme('fontSize.body-small[0]'),
+          fontWeight: '500',
+          border: '1px solid',
+          borderColor: theme('colors.neutral.200'),
+          transition: 'all 0.2s ease',
+          '&:hover': {
+            background: theme('colors.neutral.100'),
+            borderColor: theme('colors.neutral.300'),
+          },
+        },
+        
+        // Function Health Cards
+        '.info-card': {
+          background: theme('colors.background.cards'),
+          borderRadius: theme('borderRadius.card'),
+          padding: '40px 32px',
+          boxShadow: theme('boxShadow.card'),
+          border: '1px solid',
+          borderColor: theme('colors.neutral.100'),
+          transition: 'all 0.3s ease',
+          '&:hover': {
+            transform: 'translateY(-4px)',
+            boxShadow: theme('boxShadow.card-hover'),
+          },
+        },
+        
+        '.test-category': {
+          background: theme('colors.background.cards'),
+          borderRadius: theme('borderRadius.lg'),
+          padding: '32px 24px',
+          textAlign: 'center',
+          border: '1px solid',
+          borderColor: theme('colors.neutral.100'),
+          transition: 'all 0.2s ease',
+          '&:hover': {
+            borderColor: theme('colors.brand.accent'),
             transform: 'translateY(-2px)',
           },
         },
-        '.glass-hover-dark': {
+        
+        // Function Health Navigation
+        '.nav-header': {
+          background: theme('colors.background.primary'),
+          padding: '20px 0',
+          position: 'sticky',
+          top: '0',
+          zIndex: theme('zIndex.navigation'),
+          borderBottom: '1px solid',
+          borderColor: theme('colors.neutral.100'),
+        },
+        
+        '.nav-link': {
+          fontSize: theme('fontSize.body[0]'),
+          fontWeight: '500',
+          color: theme('colors.neutral.700'),
+          textDecoration: 'none',
+          padding: '8px 16px',
+          borderRadius: theme('borderRadius.sm'),
+          transition: 'all 0.2s ease',
           '&:hover': {
-            background: 'rgba(0, 0, 0, 0.15)',
-            backdropFilter: 'blur(20px)',
-            boxShadow: theme('boxShadow.glass-hover-dark'),
-            transform: 'translateY(-2px)',
+            color: theme('colors.brand.accent'),
+            background: theme('colors.neutral.100'),
+          },
+          '&.active': {
+            color: theme('colors.brand.accent'),
+            background: '#FEF7F3',
           },
         },
         
-        // 3D Card components
-        '.card-3d': {
-          transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg)',
-          transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-          boxShadow: theme('boxShadow.3d'),
-        },
-        '.card-3d-hover': {
-          '&:hover': {
-            transform: 'perspective(1000px) rotateX(5deg) rotateY(5deg) translateZ(20px)',
-            boxShadow: theme('boxShadow.3d-hover'),
+        // Function Health Forms
+        '.form-input': {
+          padding: '16px 20px',
+          borderRadius: theme('borderRadius.input'),
+          border: '2px solid',
+          borderColor: theme('colors.neutral.200'),
+          fontSize: theme('fontSize.body[0]'),
+          fontFamily: 'inherit',
+          backgroundColor: theme('colors.background.primary'),
+          transition: 'border-color 0.2s ease',
+          '&:focus': {
+            borderColor: theme('colors.brand.accent'),
+            outline: 'none',
+            boxShadow: '0 0 0 3px rgba(212, 148, 122, 0.1)',
           },
         },
         
-        // Abstract shape components
-        '.shape-abstract': {
-          borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%',
-          animation: 'morph 8s ease-in-out infinite',
-        },
-        '.shape-abstract-2': {
-          borderRadius: '30% 60% 70% 40% / 50% 60% 30% 60%',
-          animation: 'morph 8s ease-in-out infinite reverse',
-        },
-        
-        // Gradient text components
-        '.text-gradient': {
-          background: 'linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #f97316 100%)',
-          backgroundClip: 'text',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-        },
-        '.text-gradient-emerald': {
-          background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-          backgroundClip: 'text',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
+        '.search-field': {
+          padding: '12px 16px',
+          borderRadius: theme('borderRadius.sm'),
+          border: '1px solid',
+          borderColor: theme('colors.neutral.200'),
+          fontSize: theme('fontSize.body-small[0]'),
+          backgroundColor: theme('colors.neutral.100'),
+          width: '100%',
+          maxWidth: '300px',
         },
         
-        // Shimmer effect components
-        '.shimmer': {
-          background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent)',
-          backgroundSize: '200% 100%',
-          animation: 'shimmer 2s linear infinite',
+        // Function Health Layout Components
+        '.container-function': {
+          maxWidth: theme('maxWidth.container'),
+          margin: '0 auto',
+          padding: `0 ${theme('spacing.container-padding')}`,
         },
         
-        // Scroll-triggered animation classes
-        '.scroll-fade-in': {
-          opacity: '0',
-          transform: 'translateY(30px)',
-          transition: 'opacity 0.6s ease, transform 0.6s ease',
-        },
-        '.scroll-fade-in.visible': {
-          opacity: '1',
-          transform: 'translateY(0)',
+        '.hero-container': {
+          padding: '120px 24px 80px',
+          maxWidth: theme('maxWidth.hero'),
+          margin: '0 auto',
         },
         
-        // Stagger animation delays
-        '.stagger-1': { animationDelay: '0.1s' },
-        '.stagger-2': { animationDelay: '0.2s' },
-        '.stagger-3': { animationDelay: '0.3s' },
-        '.stagger-4': { animationDelay: '0.4s' },
-        '.stagger-5': { animationDelay: '0.5s' },
+        '.card-grid': {
+          display: 'grid',
+          gridTemplateColumns: theme('gridTemplateColumns.data-cards'),
+          gap: theme('spacing.grid-gap'),
+          padding: `0 ${theme('spacing.container-padding')}`,
+        },
+        
+        '.section-padding': {
+          padding: `${theme('spacing.section-padding')} 0`,
+        },
+        
+        // Function Health Data Elements
+        '.metric-display': {
+          textAlign: 'center',
+          marginBottom: theme('spacing.lg'),
+        },
+        
+        '.metric-value': {
+          fontSize: theme('fontSize.display-large[0]'),
+          fontWeight: theme('fontSize.display-large[1].fontWeight'),
+          lineHeight: theme('fontSize.display-large[1].lineHeight'),
+          color: theme('colors.brand.primary'),
+        },
+        
+        '.metric-unit': {
+          fontSize: theme('fontSize.body-large[0]'),
+          fontWeight: theme('fontSize.body-large[1].fontWeight'),
+          color: theme('colors.neutral.500'),
+          marginLeft: '4px',
+        },
+        
+        '.metric-label': {
+          fontSize: theme('fontSize.title-medium[0]'),
+          fontWeight: theme('fontSize.title-medium[1].fontWeight'),
+          color: theme('colors.brand.primary'),
+          marginTop: theme('spacing.sm'),
+        },
+        
+        '.chart-container': {
+          height: '120px',
+          margin: `${theme('spacing.lg')} 0`,
+          position: 'relative',
+        },
+        
+        '.timeline-markers': {
+          fontSize: theme('fontSize.caption[0]'),
+          color: 'rgba(255, 255, 255, 0.8)',
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginTop: theme('spacing.sm'),
+        },
       });
     },
   ],
