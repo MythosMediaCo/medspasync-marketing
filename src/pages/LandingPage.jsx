@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../services/AuthContext.jsx';
+import { useAuth } from '../contexts/AuthContext.jsx';
 import LoadingScreen from '../components/Common/LoadingScreen.jsx';
 import UptimeStatusBadge from '../components/Common/UptimeStatusBadge.jsx';
 import Header from '../components/Header.jsx';

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../services/AuthContext.jsx';
+import { useAuth } from '../contexts/AuthContext.jsx';
 import ThemeToggle from './ThemeToggle.jsx';
 
 const Header = () => {

@@ -1,9 +1,4 @@
 module.exports = {
-  env: {
-    browser: true,
-    es2020: true,
-    node: true,
-  },
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
@@ -14,6 +9,28 @@ module.exports = {
     ecmaFeatures: { jsx: true },
     ecmaVersion: 'latest',
     sourceType: 'module',
+    globals: {
+      // Browser globals
+      window: 'readonly',
+      document: 'readonly',
+      console: 'readonly',
+      setTimeout: 'readonly',
+      clearTimeout: 'readonly',
+      setInterval: 'readonly',
+      clearInterval: 'readonly',
+      fetch: 'readonly',
+      localStorage: 'readonly',
+      sessionStorage: 'readonly',
+      // Node globals
+      process: 'readonly',
+      Buffer: 'readonly',
+      __dirname: 'readonly',
+      __filename: 'readonly',
+      module: 'readonly',
+      require: 'readonly',
+      exports: 'readonly',
+      global: 'readonly'
+    }
   },
   settings: {
     react: { version: 'detect' },
