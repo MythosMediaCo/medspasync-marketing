@@ -1,9 +1,0 @@
----
-description: 
-globs: 
-alwaysApply: false
----
-# Module: Data & Compliance
-
-- **HIPAA Compliance:** Any service that could potentially handle PHI must use federated learning (`TensorFlow Federated` or `PySyft`). Raw data MUST NOT leave its source.
-- **Immutable Audit Trail:** All significant system actions (user logins, data access, governance decisions) MUST be logged to an immutable, cryptographically-hashed audit trail. Log retention is 6 years.

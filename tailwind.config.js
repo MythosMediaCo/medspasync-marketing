@@ -8,74 +8,63 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
-      // Function Health Visual Design System 2.0
+      // MedSpaSync Pro - "This Actually Matters" Design System
       fontFamily: {
         sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
         display: ['Inter', 'system-ui', 'sans-serif'],
         mono: ['SF Mono', 'Monaco', 'Cascadia Code', 'monospace'],
       },
       
-      // Function Health Color Palette
+      // "This Actually Matters" Color Palette
       colors: {
         // Primary Brand Colors
         brand: {
-          primary: '#000000',
-          secondary: '#FFFFFF',
-          accent: '#D4947A', // Terracotta accent
+          primary: '#1a365d', // Deep, rich navy - trustworthy but not clinical
+          secondary: '#faf9f6', // Warm cream - human, not sterile
+          accent: '#ff6b35', // Warm coral - energetic, approachable, human
+          'accent-light': '#ff8a65', // Lighter coral for hover states
         },
         
-        // Data Visualization Colors
-        data: {
-          cardOverlays: 'rgba(255, 255, 255, 0.95)',
-          chartLines: '#FFFFFF',
-          dataPoints: '#FFFFFF',
-          progressBars: '#FFFFFF',
-        },
+        // Supporting Colors
+        success: '#059669', // Keep success green but warmer
+        warning: '#f59e0b', // Warm amber
+        error: '#dc2626', // Warmer red
+        info: '#3b82f6', // Keep blue for info
         
-        // Semantic Colors
-        semantic: {
-          success: '#10B981',
-          warning: '#F59E0B',
-          error: '#EF4444',
-          info: '#3B82F6',
-          heart: '#E91E63',
-          medical: '#6366F1',
-        },
-        
-        // Neutral Palette (Function Health exact)
+        // "Real Impact" Neutral Palette - Warmer, More Human
         neutral: {
-          50: '#FAFAFA',
-          100: '#F5F5F5',
-          200: '#E5E5E5',
-          300: '#D4D4D4',
-          400: '#A3A3A3',
-          500: '#737373',
-          600: '#525252',
-          700: '#404040',
-          800: '#262626',
-          900: '#171717',
+          50: '#faf9f6', // Warmest white
+          100: '#f5f4f1', // Very warm light gray
+          200: '#e8e6e1', // Warm light gray
+          300: '#d1cec7', // Warm medium light gray
+          400: '#a8a59e', // Warm medium gray
+          500: '#7a7770', // Warm medium dark gray
+          600: '#5a5750', // Warm dark gray
+          700: '#2d3748', // Warm charcoal - main text
+          800: '#1a202c', // Very dark warm gray
+          900: '#171923', // Almost black but warm
         },
         
-        // Background Colors
+        // Background Colors - Human, Not Clinical
         background: {
-          primary: '#FFFFFF',
-          secondary: '#FAFAFA',
-          cards: '#FFFFFF',
-          overlay: 'rgba(0, 0, 0, 0.4)',
+          primary: '#faf9f6', // Warm cream background
+          secondary: '#f5f4f1', // Slightly darker warm background
+          cards: '#ffffff', // Pure white for cards
+          overlay: 'rgba(26, 54, 93, 0.8)', // Navy overlay
         },
         
         // Legacy support for existing components
         grey: {
-          50: '#FAFAFA',
-          100: '#F5F5F5',
-          200: '#E5E5E5',
-          300: '#D4D4D4',
-          400: '#A3A3A3',
-          500: '#737373',
-          600: '#525252',
-          700: '#404040',
-          800: '#262626',
-          900: '#171717',
+          50: '#faf9f6',
+          100: '#f5f4f1',
+          200: '#e8e6e1',
+          300: '#d1cec7',
+          400: '#a8a59e',
+          500: '#7a7770',
+          600: '#5a5750',
+          700: '#2d3748',
+          800: '#1a202c',
+          900: '#171923',
         },
         
         // MedSpaSync Pro Specific Colors (keeping for content)
@@ -104,9 +93,15 @@ module.exports = {
           800: '#3730a3',
           900: '#312e81',
         },
+        
+        // New color shortcuts for the aesthetic
+        '1a365d': '#1a365d', // Navy primary
+        'ff6b35': '#ff6b35', // Coral accent
+        'ff8a65': '#ff8a65', // Light coral
+        '2d3748': '#2d3748', // Dark navy
       },
       
-      // Function Health 8px Base Unit System with Golden Ratio
+      // "This Actually Matters" 8px Base Unit System with More Generous Spacing
       spacing: {
         'xs': '4px',
         'sm': '8px',
@@ -120,34 +115,34 @@ module.exports = {
         '6xl': '128px',
         '7xl': '160px',
         '8xl': '192px',
-        // Semantic spacing
-        'card-padding': '32px',
-        'card-spacing': '24px',
-        'section-padding': '80px',
-        'container-padding': '24px',
-        'grid-gap': '24px',
-        'data-label-spacing': '8px',
+        // Semantic spacing - More generous for "Matters" feel
+        'card-padding': '40px',
+        'card-spacing': '32px',
+        'section-padding': '100px',
+        'container-padding': '32px',
+        'grid-gap': '32px',
+        'data-label-spacing': '12px',
       },
       
-      // Function Health Typography Scale
+      // "Authentic Voice" Typography Scale - More Dramatic
       fontSize: {
-        // Hero and Display
-        'hero': ['4rem', { lineHeight: '1.1', fontWeight: '300', letterSpacing: '-0.02em' }],
-        'display-large': ['3rem', { lineHeight: '1.1', fontWeight: '300', letterSpacing: '-0.02em' }],
-        'display-medium': ['2.25rem', { lineHeight: '1.2', fontWeight: '400', letterSpacing: '-0.01em' }],
+        // Hero and Display - More confident
+        'hero': ['4.5rem', { lineHeight: '1.1', fontWeight: '700', letterSpacing: '-0.025em' }],
+        'display-large': ['3.5rem', { lineHeight: '1.1', fontWeight: '700', letterSpacing: '-0.025em' }],
+        'display-medium': ['2.75rem', { lineHeight: '1.3', fontWeight: '600', letterSpacing: '-0.015em' }],
         
-        // Titles
-        'title-large': ['1.5rem', { lineHeight: '1.3', fontWeight: '500' }],
-        'title-medium': ['1.25rem', { lineHeight: '1.4', fontWeight: '500' }],
+        // Titles - More prominent
+        'title-large': ['1.875rem', { lineHeight: '1.4', fontWeight: '600' }],
+        'title-medium': ['1.5rem', { lineHeight: '1.5', fontWeight: '600' }],
         
-        // Body
-        'body-large': ['1.125rem', { lineHeight: '1.6', fontWeight: '400' }],
-        'body': ['1rem', { lineHeight: '1.6', fontWeight: '400' }],
-        'body-small': ['0.875rem', { lineHeight: '1.5', fontWeight: '400' }],
+        // Body - More readable
+        'body-large': ['1.25rem', { lineHeight: '1.7', fontWeight: '400' }],
+        'body': ['1.125rem', { lineHeight: '1.7', fontWeight: '400' }],
+        'body-small': ['1rem', { lineHeight: '1.6', fontWeight: '400' }],
         
-        // Labels and Captions
-        'label': ['0.75rem', { lineHeight: '1.4', fontWeight: '500', letterSpacing: '0.025em', textTransform: 'uppercase' }],
-        'caption': ['0.6875rem', { lineHeight: '1.4', fontWeight: '400' }],
+        // Labels and Captions - More confident
+        'label': ['0.875rem', { lineHeight: '1.5', fontWeight: '600', letterSpacing: '0.05em', textTransform: 'uppercase' }],
+        'caption': ['0.75rem', { lineHeight: '1.5', fontWeight: '500' }],
         
         // Legacy support
         'xs': ['0.75rem', { lineHeight: '1rem' }],
@@ -165,36 +160,36 @@ module.exports = {
         '9xl': ['8rem', { lineHeight: '1' }],
       },
       
-      // Function Health Box Shadows
+      // "This Actually Matters" Box Shadows - More Dramatic, Less Clinical
       boxShadow: {
-        'sm': '0 4px 12px rgba(0, 0, 0, 0.05)',
-        'md': '0 8px 24px rgba(0, 0, 0, 0.08)',
-        'lg': '0 12px 32px rgba(0, 0, 0, 0.1)',
-        'xl': '0 20px 48px rgba(0, 0, 0, 0.15)',
-        // Function Health specific shadows
-        'card': '0 4px 12px rgba(0, 0, 0, 0.05)',
-        'card-hover': '0 12px 32px rgba(0, 0, 0, 0.1)',
-        'data-card': '0 8px 24px rgba(0, 0, 0, 0.12)',
-        'button': '0 4px 12px rgba(212, 148, 122, 0.2)',
-        'button-hover': '0 8px 24px rgba(212, 148, 122, 0.3)',
+        'sm': '0 4px 16px rgba(26, 54, 93, 0.08)', // Navy-tinted shadows
+        'md': '0 8px 32px rgba(26, 54, 93, 0.12)', // More dramatic
+        'lg': '0 16px 48px rgba(26, 54, 93, 0.16)', // Very dramatic
+        'xl': '0 24px 64px rgba(26, 54, 93, 0.2)', // Maximum drama
+        // "This Actually Matters" specific shadows
+        'card': '0 8px 32px rgba(26, 54, 93, 0.1)', // Navy card shadows
+        'card-hover': '0 16px 48px rgba(26, 54, 93, 0.15)', // More dramatic hover
+        'data-card': '0 12px 40px rgba(26, 54, 93, 0.14)', // Navy data card shadows
+        'button': '0 6px 20px rgba(255, 107, 53, 0.25)', // Coral button shadows
+        'button-hover': '0 12px 32px rgba(255, 107, 53, 0.35)', // More dramatic coral hover
       },
       
-      // Function Health Border Radius
+      // "This Actually Matters" Border Radius - More Human, Less Clinical
       borderRadius: {
-        'sm': '8px',
-        'md': '12px',
-        'lg': '16px',
-        'xl': '20px',
-        '2xl': '24px',
-        '3xl': '32px',
-        // Function Health specific
-        'card': '20px',
-        'data-card': '24px',
-        'button': '12px',
-        'input': '12px',
+        'sm': '12px', // Slightly larger
+        'md': '16px', // More generous
+        'lg': '20px', // More human
+        'xl': '24px', // More generous
+        '2xl': '32px', // Very generous
+        '3xl': '40px', // Maximum generosity
+        // "This Actually Matters" specific
+        'card': '24px', // More generous cards
+        'data-card': '28px', // More generous data cards
+        'button': '16px', // More generous buttons
+        'input': '16px', // More generous inputs
       },
       
-      // Function Health Layout
+      // "This Actually Matters" Layout - More Generous for "Matters" Feel
       maxWidth: {
         'container': '1440px',
         'content': '1200px',

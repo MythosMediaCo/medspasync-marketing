@@ -311,3 +311,7 @@ For questions about the design system or content strategy:
 ---
 
 *Built by 10-year medical spa industry veteran Jacob Hagood, who lived through the reconciliation nightmare and built the AI solution that eliminates it.*
+
+# Environment Management
+
+This project uses a multi-environment configuration system. See scripts/ and .env.example for details.

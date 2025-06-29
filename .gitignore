@@ -286,3 +286,7 @@ models/large/
 # Training data
 training-data/
 ml-datasets/
+
+# Ignore all env files except .env.example
+.env*
+!.env.example

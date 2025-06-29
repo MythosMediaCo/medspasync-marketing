@@ -58,6 +58,8 @@
     "security:fix": "npm audit fix"
   },
   "dependencies": {
+    "@azure/identity": "^4.0.1",
+    "@azure/keyvault-secrets": "^4.7.3",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0",
     "react-helmet-async": "^2.0.4",
@@ -65,6 +67,9 @@
   },
   "devDependencies": {
     "@lhci/cli": "^0.15.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/react": "^18.2.79",
     "@types/react-dom": "^18.2.23",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
