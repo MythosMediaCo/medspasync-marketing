@@ -1,19 +1,7 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "medspasync-ai-api/medspasync-ai-api-main/frontend/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist",
-        "buildCommand": "npm run build",
-        "installCommand": "npm install"
-      }
-    }
-  ],
-  "routes": [
-    { "src": "/(.*)", "dest": "/$1" }
-  ],
-  "buildCommand": "cd medspasync-ai-api/medspasync-ai-api-main/frontend && npm install && npm run build",
-  "outputDirectory": "medspasync-ai-api/medspasync-ai-api-main/frontend/dist"
+  "buildCommand": "npm run build",
+  "outputDirectory": "medspasync-ai-api/medspasync-ai-api-main/frontend/dist",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 } 
