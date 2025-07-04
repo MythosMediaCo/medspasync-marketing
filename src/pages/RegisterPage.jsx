@@ -17,14 +17,9 @@ const RegisterPage = React.memo(() => {
         isSubmitting,
         reset // To reset form after submission/on mount
     } = useForm({
-        firstName: '',
-        lastName: '',
         email: '',
-        password: '',
-        confirmPassword: '',
         spaName: '',
-        agreeToTerms: false // Added for validation schema
-    }, validationSchemas.register); // Use Yup validation schema
+    }, validationSchemas.trialRegister); // Use a new validation schema for trial
 
     // Clear form and auth errors on mount
     useEffect(() => {
@@ -85,54 +80,6 @@ const RegisterPage = React.memo(() => {
                         </div>
                     )}
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate> {/* noValidate disables browser's default HTML validation */}
-                        {/* First Name Field */}
-                        <div className="form-field"> {/* You can add a custom class for form fields */}
-                            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
-                                First Name
-                            </label>
-                            <input
-                                type="text"
-                                id="firstName"
-                                name="firstName"
-                                value={values.firstName}
-                                onChange={handleChange}
-                                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all ${
-                                    errors.firstName ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-white'
-                                }`}
-                                placeholder="John"
-                                disabled={isSubmitting}
-                                aria-invalid={errors.firstName ? "true" : "false"}
-                                aria-describedby={errors.firstName ? "firstName-error" : undefined}
-                            />
-                            {errors.firstName && (
-                                <p id="firstName-error" className="mt-1 text-sm text-red-600" role="alert">{errors.firstName}</p>
-                            )}
-                        </div>
-
-                        {/* Last Name Field */}
-                        <div className="form-field">
-                            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
-                                Last Name
-                            </label>
-                            <input
-                                type="text"
-                                id="lastName"
-                                name="lastName"
-                                value={values.lastName}
-                                onChange={handleChange}
-                                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all ${
-                                    errors.lastName ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-white'
-                                }`}
-                                placeholder="Doe"
-                                disabled={isSubmitting}
-                                aria-invalid={errors.lastName ? "true" : "false"}
-                                aria-describedby={errors.lastName ? "lastName-error" : undefined}
-                            />
-                            {errors.lastName && (
-                                <p id="lastName-error" className="mt-1 text-sm text-red-600" role="alert">{errors.lastName}</p>
-                            )}
-                        </div>
-
                         {/* Medical Spa Name Field */}
                         <div className="form-field">
                             <label htmlFor="spaName" className="block text-sm font-medium text-gray-700 mb-2">
@@ -181,77 +128,6 @@ const RegisterPage = React.memo(() => {
                             )}
                         </div>
 
-                        {/* Password Field */}
-                        <div className="form-field">
-                            <label htmlFor="registerPassword" className="block text-sm font-medium text-gray-700 mb-2">
-                                Password
-                            </label>
-                            <input
-                                type="password"
-                                id="registerPassword"
-                                name="password"
-                                value={values.password}
-                                onChange={handleChange}
-                                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all ${
-                                    errors.password ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-white'
-                                }`}
-                                placeholder="Create a strong password"
-                                disabled={isSubmitting}
-                                aria-invalid={errors.password ? "true" : "false"}
-                                aria-describedby={errors.password ? "registerPassword-error" : undefined}
-                            />
-                            {errors.password && (
-                                <p id="registerPassword-error" className="mt-1 text-sm text-red-600" role="alert">{errors.password}</p>
-                            )}
-                        </div>
-
-                        {/* Confirm Password Field */}
-                        <div className="form-field">
-                            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
-                                Confirm Password
-                            </label>
-                            <input
-                                type="password"
-                                id="confirmPassword"
-                                name="confirmPassword"
-                                value={values.confirmPassword}
-                                onChange={handleChange}
-                                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all ${
-                                    errors.confirmPassword ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-white'
-                                }`}
-                                placeholder="Confirm your password"
-                                disabled={isSubmitting}
-                                aria-invalid={errors.confirmPassword ? "true" : "false"}
-                                aria-describedby={errors.confirmPassword ? "confirmPassword-error" : undefined}
-                            />
-                            {errors.confirmPassword && (
-                                <p id="confirmPassword-error" className="mt-1 text-sm text-red-600" role="alert">{errors.confirmPassword}</p>
-                            )}
-                        </div>
-
-                        {/* Agree to Terms Checkbox */}
-                        <div className="flex items-center">
-                            <input
-                                type="checkbox"
-                                id="agreeToTerms"
-                                name="agreeToTerms"
-                                checked={values.agreeToTerms}
-                                onChange={handleChange}
-                                className={`h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded ${
-                                    errors.agreeToTerms ? 'border-red-300' : ''
-                                }`}
-                                disabled={isSubmitting}
-                                aria-invalid={errors.agreeToTerms ? "true" : "false"}
-                                aria-describedby={errors.agreeToTerms ? "agreeToTerms-error" : undefined}
-                            />
-                            <label htmlFor="agreeToTerms" className="ml-2 block text-sm text-gray-700">
-                                I agree to the <a href="#" className="text-indigo-600 hover:underline">terms and conditions</a>
-                            </label>
-                        </div>
-                        {errors.agreeToTerms && (
-                            <p id="agreeToTerms-error" className="mt-1 text-sm text-red-600" role="alert">{errors.agreeToTerms}</p>
-                        )}
-
                         {/* Submit Button */}
                         <button
                             type="submit"
@@ -265,7 +141,7 @@ const RegisterPage = React.memo(() => {
                                 </>
                             ) : (
                                 <>
-                                    Create Account
+                                    Start Free Trial
                                     <span className="ml-2">→</span>
                                 </>
                             )}

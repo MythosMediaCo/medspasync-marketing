@@ -19,6 +19,7 @@ const ClientsPage = lazy(() => import('./pages/ClientsPage.jsx'));
 const AppointmentsPage = lazy(() => import('./pages/AppointmentsPage.jsx'));
 const ServicesPage = lazy(() => import('./pages/ServicesPage.jsx'));
 const DemoReconciliation = lazy(() => import('./pages/DemoReconciliation.jsx'));
+const DemoPage = lazy(() => import('./pages/DemoPage.jsx'));
 const ReconciliationDashboardPage = lazy(() => import('./pages/ReconciliationDashboard.jsx'));
 const ReconciliationWorkflowPage = lazy(() => import('./pages/reconciliation/index.jsx'));
 
@@ -37,6 +38,16 @@ export default function AppRoutes() {
           <PublicRoute>
             <Suspense fallback={<LoadingScreen />}>
               <DemoReconciliation />
+            </Suspense>
+          </PublicRoute>
+        }
+      />
+      <Route
+        path="/demo/roi"
+        element={
+          <PublicRoute>
+            <Suspense fallback={<LoadingScreen />}>
+              <DemoPage />
             </Suspense>
           </PublicRoute>
         }

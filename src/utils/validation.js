@@ -101,6 +101,17 @@ export const validationSchemas = {
       
       return errors;
     }
+  },
+  
+  trialRegister: {
+    validate: (values) => {
+      const errors = {};
+      const emailError = validateEmail(values.email);
+      if (emailError) errors.email = emailError;
+      const spaNameError = validateRequired(values.spaName, 'Medical spa name');
+      if (spaNameError) errors.spaName = spaNameError;
+      return errors;
+    }
   }
 };
 

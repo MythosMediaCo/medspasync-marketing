@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  base: './',
+  base: '/',
   server: {
     port: 5173
   },
@@ -13,11 +13,20 @@ export default defineConfig({
     sourcemap: false,
     rollupOptions: {
       output: {
-        manualChunks: undefined
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          analytics: ['exceljs', 'papaparse'],
+          ui: ['lucide-react', 'react-dropzone']
+        }
       }
     }
   },
   test: {
     environment: 'jsdom'
+  },
+  // Vercel deployment optimization
+  preview: {
+    port: 5173,
+    host: true
   }
 });
