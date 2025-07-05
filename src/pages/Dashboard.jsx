@@ -4,7 +4,7 @@ import { Calendar, Users, DollarSign, BarChart3, TrendingUp, Clock, Star, Plus }
 import { useClients } from '../hooks/useClients.js';
 import { useAppointmentsByDateRange } from '../hooks/useAppointments.js';
 import { useServices } from '../hooks/useServices.js';
-import { useAuth } from '../services/AuthContext.jsx';
+import { useAuth } from '../contexts/AuthContext.jsx';
 import StatusBadge from '../components/Ui/StatusBadge.jsx';
 import LoadingSpinner, { LoadingCard } from '../components/Ui/LoadingSpinner.jsx';
 import ClientCard from '../components/ClientCard.jsx';

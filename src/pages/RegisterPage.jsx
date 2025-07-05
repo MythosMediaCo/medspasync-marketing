@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from '../hooks/useForm.js'; // Explicit .js extension
 import { validationSchemas } from '../utils/validation.js'; // Explicit .js extension
-import { useAuth } from '../services/AuthContext.jsx'; // Explicit .js extension
+import { useAuth } from '../contexts/AuthContext.jsx'; // Explicit .js extension
 import LoadingScreen from '../components/Common/LoadingScreen.jsx';
 
 const RegisterPage = React.memo(() => {

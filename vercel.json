@@ -1,8 +1,11 @@
 {
   "buildCommand": "npm run build",
-  "outputDirectory": "medspasync-ai-api/medspasync-ai-api-main/frontend/dist",
+  "outputDirectory": "dist",
   "rewrites": [
-    { "source": "/((?!assets|.*\\.js|.*\\.css|.*\\.svg|.*\\.png|.*\\.jpg|.*\\.woff2|.*\\.ttf|.*\\.eot|.*\\.ico).*)", "destination": "/index.html" }
+    { 
+      "source": "/((?!assets|.*\\.(js|css|svg|png|jpg|woff2|ttf|eot|ico|json|map)$).*)", 
+      "destination": "/index.html" 
+    }
   ],
   "headers": [
     {
@@ -10,7 +13,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://status.medspasyncpro.com; connect-src 'self' https://api.medspasyncpro.com https://status.medspasyncpro.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none';"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://status.medspasyncpro.com; connect-src 'self' https://api.medspasyncpro.com https://status.medspasyncpro.com; object-src 'none'; base-uri 'self';"
         }
       ]
     },

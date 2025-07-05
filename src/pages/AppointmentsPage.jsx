@@ -5,7 +5,7 @@
 
 import React, { useState, useMemo } from 'react';
 import Header from '../components/Header.jsx';
-import { useAuth } from '../services/AuthContext.jsx';
+import { useAuth } from '../contexts/AuthContext.jsx';
 import { Calendar, Plus, Search, Users, Phone, Mail, Clock, User, DollarSign, MoreVertical } from 'lucide-react';
 import { 
   useAppointments, 

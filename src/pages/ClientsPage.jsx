@@ -1,7 +1,7 @@
 // src/pages/ClientsPage.jsx
 import React, { useState, useMemo, useCallback } from 'react';
 import Header from '../components/Header.jsx';
-import { useAuth } from '../services/AuthContext.jsx';
+import { useAuth } from '../contexts/AuthContext.jsx';
 import { Plus, Search, Users } from 'lucide-react'; // Removed unused icons (Phone, Mail, Calendar, MoreVertical, Edit, Trash2)
 import {
   useClients,
