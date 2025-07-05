@@ -44,6 +44,7 @@
     "lucide-react": "^0.525.0",
     "papaparse": "^5.5.3",
     "postcss": "^8.5.6",
+    "postcss-nested": "^7.0.2",
     "rollup-plugin-visualizer": "^6.0.3",
     "tailwindcss": "^4.1.11",
     "typescript": "^5.0.0",
