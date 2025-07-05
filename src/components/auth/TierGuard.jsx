@@ -1,6 +1,6 @@
 // components/auth/TierGuard.jsx
 import React from 'react';
-import { useAuth } from '../../services/AuthContext';
+import { useAuth } from '../../contexts/AuthContext.jsx';
 import UpsellBanner from '../Ui/UpsellBanner';
 
 const TierGuard = ({ allowedTiers = [], fallback = null, children }) => {

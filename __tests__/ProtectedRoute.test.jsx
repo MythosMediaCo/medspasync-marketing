@@ -4,11 +4,11 @@ import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from '../src/components/auth/ProtectedRoute.jsx';
 import TierGuard from '../src/components/auth/TierGuard.jsx';
 
-vi.mock('../src/services/AuthContext.jsx', () => ({
+vi.mock('../src/contexts/AuthContext.jsx', () => ({
   useAuth: vi.fn()
 }));
 
-const { useAuth } = require('../src/services/AuthContext.jsx');
+const { useAuth } = require('../src/contexts/AuthContext.jsx');
 
 const Dummy = () => <div>AI review</div>;
 

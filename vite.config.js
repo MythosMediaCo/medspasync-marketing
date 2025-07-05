@@ -42,5 +42,12 @@ export default defineConfig(({ mode }) => {
       __AI_API_BASE_URL__: JSON.stringify(aiApiBase),
     },
     base: basePath,
+    test: {
+      include: ['src/**/*.test.{js,jsx,ts,tsx}', '__tests__/**/*.{js,jsx,ts,tsx}'],
+      setupFiles: 'src/test/setup.js',
+      exclude: ['**/backup/**', '**/medspasync-backend/**', '**/medspasync-ai-api/**', '**/node_modules/**', '**/dist/**'],
+      environment: 'jsdom',
+      globals: true
+    }
   };
 });
