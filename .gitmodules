@@ -1,0 +1,14 @@
+[submodule "medspasync-backend"]
+	path = medspasync-backend
+	url = https://github.com/MythosMediaCo/medspasync-backend.git
+	branch = main
+
+[submodule "medspasync-frontend"]
+	path = medspasync-frontend
+	url = https://github.com/MythosMediaCo/medspasync-frontend.git
+	branch = main
+
+[submodule "medspasync-ai-api"]
+	path = medspasync-ai-api
+	url = https://github.com/MythosMediaCo/medspasync-ai-api.git
+	branch = main 

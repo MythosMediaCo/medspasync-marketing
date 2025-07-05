@@ -22,8 +22,7 @@ module.exports = {
     
     // Custom properties (CSS variables) support
     require('postcss-custom-properties')({
-      preserve: false, // Don't preserve original custom properties in output
-      importFrom: 'src/styles/variables.css' // Import CSS variables if file exists
+      preserve: false // Don't preserve original custom properties in output
     }),
     
     // CSS Grid and Flexbox gap property support for older browsers
