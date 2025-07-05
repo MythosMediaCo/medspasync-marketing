@@ -4,7 +4,7 @@
 	branch = main
 
 [submodule "medspasync-frontend"]
-	path = medspasync-frontend
+	path = medspasync-frontend-master
 	url = https://github.com/MythosMediaCo/medspasync-frontend.git
 	branch = main
 
