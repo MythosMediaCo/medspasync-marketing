@@ -3,10 +3,7 @@
   "outputDirectory": "medspasync-frontend-master/dist",
   "installCommand": "cd medspasync-frontend-master && npm install",
   "rewrites": [
-    { 
-      "source": "/((?!assets|.*\\.(js|css|svg|png|jpg|woff2|ttf|eot|ico|json|map)$).*)", 
-      "destination": "/index.html" 
-    }
+    { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
     {

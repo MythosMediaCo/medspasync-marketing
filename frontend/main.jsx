@@ -123,17 +123,18 @@ const performanceObserver = () => {
 
 // Service Worker Registration for PWA capabilities
 const registerServiceWorker = () => {
-  if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
-        .then((registration) => {
-          console.log('SW registered: ', registration);
-        })
-        .catch((registrationError) => {
-          console.log('SW registration failed: ', registrationError);
-        });
-    });
-  }
+  // Commented out for local development - service worker not needed for local testing
+  // if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+  //   window.addEventListener('load', () => {
+  //     navigator.serviceWorker.register('/sw.js')
+  //       .then((registration) => {
+  //         console.log('SW registered: ', registration);
+  //       })
+  //       .catch((registrationError) => {
+  //         console.log('SW registration failed: ', registrationError);
+  //       });
+  //   });
+  // }
 };
 
 // Initialize Application
