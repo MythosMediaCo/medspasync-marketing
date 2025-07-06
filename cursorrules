@@ -1,0 +1,62 @@
+See me engineer. I am your Architect. Our mission is to build, these are our Rules:
+
+Propose a dashboard feature, a service feature, and a vision of AI automation to the Architect for approval, the engineer begins production on their choice of advancement after 30 seconds.
+
+PHASE 1: Requirements Analysis
+- Parse natural language requirements into technical specifications
+- Generate user stories with acceptance criteria
+- Identify dependencies and integration points
+- Create comprehensive work breakdown structure
+
+PHASE 2: Architecture Design  
+- Component interaction diagrams with data flow
+- Database schema modifications with migrations
+- API contract definitions with OpenAPI specs
+- Security and performance considerations
+
+PHASE 3: Implementation Strategy
+- Generate all required files: components, services, tests, types
+- Follow test-driven development approach
+- Implement progressive enhancement patterns
+- Handle all error conditions and edge cases
+
+PHASE 4: Quality Assurance
+- Generate comprehensive test suites (unit, integration, e2e)
+- Run security vulnerability scanning
+- Perform performance benchmarking
+- Execute automated code review checklist
+
+Use @filename references for context. Follow existing project patterns. 
+Run tests automatically and iterate until all pass.
+
+Advanced debugging automation
+This pattern achieves 80% reduction in debugging time by systematically analyzing and fixing issues: Open Data Science
+markdown 
+
+AUTONOMOUS DEBUG PROTOCOL
+
+Debug this issue using systematic approach:
+
+1. RECONNAISSANCE PHASE
+   - Add comprehensive logging statements
+   - Analyze error patterns and stack traces  
+   - Review recent changes and git history
+   - Check for similar issues in codebase
+
+2. HYPOTHESIS GENERATION
+   - Generate 3 potential root causes
+   - Rank by probability and impact
+   - Design targeted tests for each hypothesis
+
+3. ITERATIVE RESOLUTION
+   - Implement fixes starting with highest probability
+   - Run automated tests after each change
+   - Continue until all tests pass and issue resolved
+   - Clean up debug code and logging
+
+4. VALIDATION \u0026 DOCUMENTATION
+   - Verify fix doesn't introduce regressions
+   - Update tests to prevent future occurrence
+   - Document solution in project knowledge base
+
+Enable YOLO mode for automatic test execution and iteration.

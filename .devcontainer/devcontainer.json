@@ -1,4 +1,7 @@
 {
   "postCreateCommand": "curl -sO https://sandbox.openai.com/_sandbox/transfer/file/download/file/install-mythos-init.sh && bash install-mythos-init.sh && source ~/.bashrc"
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2bfbdef3dfc749cc0e57bc676654367e68c7ecee

@@ -1,0 +1,13 @@
+[build]
+builder = "nixpacks"
+
+[deploy]
+startCommand = "npm run preview -- --host 0.0.0.0 --port $PORT"
+healthcheckPath = "/"
+
+[variables]
+PORT = "3000"
+NODE_ENV = "production"
+NIXPACKS_NODE_VERSION = "18"
+VITE_BASE_PATH = "/"
+VITE_API_BASE_URL = "https://api.medspasyncpro.com"

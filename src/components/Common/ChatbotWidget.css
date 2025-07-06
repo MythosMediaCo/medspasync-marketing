@@ -1,0 +1,116 @@
+
+.chatbot-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.chatbot-toggle-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px 20px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.chatbot-window {
+    background-color: #fefefe;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    width: 350px;
+    height: 450px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    margin-bottom: 10px; /* Space between button and window */
+}
+
+.chatbot-header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border-top-left-radius: 9px;
+    border-top-right-radius: 9px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chatbot-header h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.chatbot-header button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.chatbot-messages {
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #eef2f7;
+}
+
+.message {
+    max-width: 80%;
+    padding: 8px 12px;
+    border-radius: 15px;
+    word-wrap: break-word;
+}
+
+.message.user {
+    align-self: flex-end;
+    background-color: #007bff;
+    color: white;
+    border-bottom-right-radius: 2px;
+}
+
+.message.bot {
+    align-self: flex-start;
+    background-color: #e0e0e0;
+    color: #333;
+    border-bottom-left-radius: 2px;
+}
+
+.chatbot-input-area {
+    display: flex;
+    padding: 10px 15px;
+    border-top: 1px solid #eee;
+    background-color: #fefefe;
+}
+
+.chatbot-input-area input {
+    flex-grow: 1;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 8px 15px;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+.chatbot-input-area button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.chatbot-input-area button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}

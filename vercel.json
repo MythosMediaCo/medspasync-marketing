@@ -1,7 +1,10 @@
 {
+<<<<<<< HEAD
   "buildCommand": "cd medspasync-frontend-master && npm install && npm run build",
   "outputDirectory": "medspasync-frontend-master/dist",
   "installCommand": "cd medspasync-frontend-master && npm install",
+=======
+>>>>>>> 2bfbdef3dfc749cc0e57bc676654367e68c7ecee
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ],

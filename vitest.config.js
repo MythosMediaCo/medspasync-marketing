@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
+<<<<<<< HEAD
 import { resolve } from 'path';
 
 export default defineConfig({
@@ -40,3 +41,13 @@ export default defineConfig({
     }
   }
 }); 
+=======
+
+export default defineConfig({
+  plugins: [react({ fastRefresh: false })],
+  test: {
+    environment: 'jsdom',
+    setupFiles: './vitest.setup.js'
+  }
+});
+>>>>>>> 2bfbdef3dfc749cc0e57bc676654367e68c7ecee

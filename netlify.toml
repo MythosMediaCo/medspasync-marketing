@@ -1,9 +1,16 @@
+<<<<<<< HEAD
 # netlify.toml - MedSpaSync Pro Marketing Site
 # Fixed configuration to resolve CSP and font loading issues
+=======
+[build.environment]
+  NODE_VERSION = "18"
+  VITE_API_BASE = "https://api.medspasyncpro.com"
+>>>>>>> 2bfbdef3dfc749cc0e57bc676654367e68c7ecee
 
 [build]
   command = "npm run build"
   publish = "dist"
+<<<<<<< HEAD
   
   [build.environment]
     NODE_VERSION = "18.19.1"
@@ -55,17 +62,23 @@
   from = "/contact-submit"
   to = "/.netlify/functions/contact"
   status = 200
+=======
+>>>>>>> 2bfbdef3dfc749cc0e57bc676654367e68c7ecee
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
+<<<<<<< HEAD
 # Fixed headers - Remove Google Fonts CSP violation
+=======
+>>>>>>> 2bfbdef3dfc749cc0e57bc676654367e68c7ecee
 [[headers]]
   for = "/*"
   [headers.values]
     X-Frame-Options = "DENY"
+<<<<<<< HEAD
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
@@ -173,3 +186,10 @@
 
 [context.branch-deploy]
   command = "npm run build"
+=======
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "interest-cohort=()"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://status.medspasyncpro.com; connect-src 'self' https://api.medspasyncpro.com https://status.medspasyncpro.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+    Cache-Control = "public, max-age=0, must-revalidate"
+>>>>>>> 2bfbdef3dfc749cc0e57bc676654367e68c7ecee
