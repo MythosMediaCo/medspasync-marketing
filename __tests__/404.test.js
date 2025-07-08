@@ -3,15 +3,22 @@ import fs from 'fs';
 import path from 'path';
 
 describe('404.html', () => {
-  it('exists in project root and matches index.html content', () => {
-    const root = path.resolve(__dirname, '..');
-    const indexPath = path.join(root, 'index.html');
-    const notFoundPath = path.join(root, '404.html');
-
+  it('exists in project root', () => {
+    const notFoundPath = path.join(process.cwd(), '404.html');
     expect(fs.existsSync(notFoundPath)).toBe(true);
+  });
 
-    const indexHtml = fs.readFileSync(indexPath, 'utf8');
+  it('has proper 404 page structure', () => {
+    const notFoundPath = path.join(process.cwd(), '404.html');
     const notFoundHtml = fs.readFileSync(notFoundPath, 'utf8');
-    expect(notFoundHtml.trim()).toBe(indexHtml.trim());
+    
+    // Check that it's a proper HTML file
+    expect(notFoundHtml).toContain('<!DOCTYPE html>');
+    expect(notFoundHtml).toContain('<html');
+    expect(notFoundHtml).toContain('</html>');
+    
+    // Check that it has 404-specific content
+    expect(notFoundHtml).toContain('404');
+    expect(notFoundHtml).toContain('Page Not Found');
   });
 });

@@ -1,49 +1,39 @@
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
-<<<<<<< HEAD
+import { visualizer } from 'rollup-plugin-visualizer';
 import { resolve } from 'path';
 
-// https://vitejs.dev/config/
-export default defineConfig(({ command, mode }) => {
-  // Load environment variables
+function stripUseClient() {
+  return {
+    name: 'strip-use-client',
+    transform(code, id) {
+      if (
+        id.includes('node_modules') &&
+        (code.includes('"use client"') || code.includes("'use client'"))
+      ) {
+        return code.replace(/['"]use client['"];?/g, '');
+      }
+    }
+  };
+}
+
+export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
+  const basePath = env.VITE_BASE_PATH || '/';
+  const apiBase = env.VITE_API_BASE_URL || 'https://api.medspasyncpro.com';
+  const aiApiBase = env.VITE_AI_API_URL || 'https://aapii-production.up.railway.app';
   const isProduction = mode === 'production';
-  const isDevelopment = mode === 'development';
 
   return {
-    // Enhanced Plugin Configuration
     plugins: [
       react({
-        // React Fast Refresh for better development experience
         fastRefresh: true,
-        // Include .jsx files in Fast Refresh
         include: /\.(jsx|tsx)$/,
-      }),
-      
-      // Add PWA plugin for professional medical spa platform
-      // Uncomment when ready to implement PWA features
-      // VitePWA({
-      //   registerType: 'autoUpdate',
-      //   workbox: {
-      //     globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
-      //     runtimeCaching: [
-      //       {
-      //         urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-      //         handler: 'CacheFirst',
-      //         options: {
-      //           cacheName: 'google-fonts-cache',
-      //           expiration: {
-      //             maxEntries: 10,
-      //             maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
-      //           }
-      //         }
-      //       }
-      //     ]
-      //   }
-      // }),
+      }), 
+      stripUseClient(), 
+      visualizer()
     ],
-
-    // Path Resolution for Clean Imports
+    
     resolve: {
       alias: {
         '@': resolve(__dirname, 'src'),
@@ -52,58 +42,42 @@ export default defineConfig(({ command, mode }) => {
         '@utils': resolve(__dirname, 'src/utils'),
         '@assets': resolve(__dirname, 'src/assets'),
         '@styles': resolve(__dirname, 'src/styles'),
-        '@context': resolve(__dirname, 'src/context'),
+        '@context': resolve(__dirname, 'src/contexts'),
         '@hooks': resolve(__dirname, 'src/hooks'),
+        '@services': resolve(__dirname, 'src/services'),
       },
     },
-
-    // Enhanced Build Configuration
+    
     build: {
-      // Source maps for production debugging (medical spa compliance)
-      sourcemap: isProduction ? 'hidden' : true,
-      
-      // Output directory for static hosting (Netlify/Vercel)
+      sourcemap: mode !== 'production',
+      minify: 'terser',
       outDir: 'dist',
       emptyOutDir: true,
+      target: 'es2015',
       
-      // Advanced build optimizations
-      target: 'es2015', // Support modern browsers (medical spa professionals)
-      minify: isProduction ? 'terser' : false,
-      
-      // Terser options for better compression
       terserOptions: isProduction ? {
         compress: {
-          drop_console: true,     // Remove console.logs in production
-          drop_debugger: true,    // Remove debugger statements
-          pure_funcs: ['console.log', 'console.info'], // Remove specific functions
+          drop_console: true,
+          drop_debugger: true,
+          pure_funcs: ['console.log', 'console.info'],
         },
         mangle: {
-          safari10: true,         // Safari compatibility
+          safari10: true,
         },
         format: {
-          comments: false,        // Remove comments for smaller bundles
+          comments: false,
         },
       } : {},
       
-      // Chunk splitting for better caching
       rollupOptions: {
         output: {
-          // Manual chunk splitting for optimal loading
           manualChunks: {
-            // Vendor libraries
-            vendor: ['react', 'react-dom'],
+            react: ['react', 'react-dom'],
             router: ['react-router-dom'],
-            ui: ['react-helmet-async'],
-            
-            // MedSpaSync Pro specific chunks
-            'medical-spa-core': [
-              // Add your medical spa specific modules here
-              // './src/utils/reconciliation.js',
-              // './src/utils/analytics.js',
-            ],
+            ui: ['react-helmet-async', 'react-hot-toast'],
+            charts: ['recharts'],
+            utils: ['date-fns', 'axios'],
           },
-          
-          // File naming for better caching
           chunkFileNames: (chunkInfo) => {
             const facadeModuleId = chunkInfo.facadeModuleId 
               ? chunkInfo.facadeModuleId.split('/').pop().replace('.js', '') 
@@ -125,33 +99,30 @@ export default defineConfig(({ command, mode }) => {
             return `${extType}/[name]-[hash][extname]`;
           },
         },
-        
-        // External dependencies (if using CDN)
-        external: isProduction ? [
-          // Uncomment if using CDN for production
-          // 'react',
-          // 'react-dom',
-        ] : [],
       },
-      
-      // Bundle size analysis
-      reportCompressedSize: true,
-      chunkSizeWarningLimit: 1000, // Warn for chunks > 1MB
+      manifest: true,
+      chunkSizeWarningLimit: 500,
     },
-
-    // Enhanced Development Server
+    
+    define: {
+      __API_BASE_URL__: JSON.stringify(apiBase),
+      __AI_API_BASE_URL__: JSON.stringify(aiApiBase),
+      __APP_VERSION__: JSON.stringify(process.env.npm_package_version),
+      __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
+      __IS_PRODUCTION__: isProduction,
+      __PLATFORM_NAME__: JSON.stringify('MedSpaSync Pro'),
+    },
+    
+    base: basePath,
+    
     server: {
       port: 3000,
       open: true,
-      host: true, // Allow network access for team testing
-      
-      // CORS for medical spa API integration
+      host: true,
       cors: true,
-      
-      // Proxy configuration for API calls
       proxy: {
         '/api': {
-          target: env.VITE_API_URL || 'http://localhost:3001',
+          target: apiBase,
           changeOrigin: true,
           secure: false,
           configure: (proxy, _options) => {
@@ -167,16 +138,13 @@ export default defineConfig(({ command, mode }) => {
           },
         },
       },
-      
-      // Security headers for development
       headers: {
         'X-Content-Type-Options': 'nosniff',
         'X-Frame-Options': 'DENY',
         'X-XSS-Protection': '1; mode=block',
       },
     },
-
-    // Preview server configuration (for production testing)
+    
     preview: {
       port: 4173,
       host: true,
@@ -188,146 +156,7 @@ export default defineConfig(({ command, mode }) => {
         'Referrer-Policy': 'strict-origin-when-cross-origin',
       },
     },
-
-    // Environment Variables
-    define: {
-      // Global constants
-      __APP_VERSION__: JSON.stringify(process.env.npm_package_version),
-      __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
-      __IS_PRODUCTION__: isProduction,
-      
-      // Medical spa platform specific
-      __PLATFORM_NAME__: JSON.stringify('MedSpaSync Pro'),
-      __DEMO_MODE__: JSON.stringify(env.VITE_DEMO_MODE === 'true'),
-    },
-
-    // CSS Configuration
-    css: {
-      // PostCSS configuration
-      postcss: {
-        plugins: [
-          // Will use postcss.config.js
-        ],
-      },
-      
-      // CSS modules for component-specific styles
-      modules: {
-        localsConvention: 'camelCase',
-        generateScopedName: isDevelopment 
-          ? '[name]__[local]___[hash:base64:5]'
-          : '[hash:base64:8]',
-      },
-      
-      // CSS preprocessing
-      preprocessorOptions: {
-        scss: {
-          additionalData: `
-            // Global SCSS variables for MedSpaSync Pro
-            $primary-color: #059669;
-            $secondary-color: #4f46e5;
-            $cost-color: #dc2626;
-            $success-color: #10b981;
-          `,
-        },
-      },
-    },
-
-    // Optimization Configuration
-    optimizeDeps: {
-      // Include dependencies that should be pre-bundled
-      include: [
-        'react',
-        'react-dom',
-        'react-router-dom',
-        'react-helmet-async',
-      ],
-      
-      // Exclude dependencies from pre-bundling
-      exclude: [
-        // Large dependencies that don't benefit from pre-bundling
-      ],
-      
-      // Force optimization of specific dependencies
-      force: true,
-    },
-
-    // Worker Configuration (for potential AI processing)
-    worker: {
-      format: 'es',
-      plugins: [
-        // Worker-specific plugins if needed
-      ],
-    },
-
-    // JSON Configuration
-    json: {
-      namedExports: true,
-      stringify: false,
-    },
-
-    // Environment-specific configuration
-    ...(isDevelopment && {
-      // Development-only configuration
-      esbuild: {
-        define: {
-          // Development debugging
-          __DEV__: 'true',
-        },
-      },
-    }),
-
-    ...(isProduction && {
-      // Production-only configuration
-      esbuild: {
-        drop: ['console', 'debugger'], // Remove console statements
-        legalComments: 'none',         // Remove legal comments
-      },
-    }),
-  };
-});
-=======
-import { visualizer } from 'rollup-plugin-visualizer';
-
-function stripUseClient() {
-  return {
-    name: 'strip-use-client',
-    transform(code, id) {
-      if (
-        id.includes('node_modules') &&
-        (code.includes('"use client"') || code.includes("'use client'"))
-      ) {
-        return code.replace(/['"]use client['"];?/g, '');
-      }
-    }
-  };
-}
-
-export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), '');
-  const basePath = env.VITE_BASE_PATH || '/';
-  const apiBase = env.VITE_API_BASE_URL || 'https://api.medspasyncpro.com';
-  const aiApiBase = env.VITE_AI_API_URL || 'https://aapii-production.up.railway.app';
-
-  return {
-    plugins: [react(), stripUseClient(), visualizer()],
-    build: {
-      sourcemap: mode !== 'production',
-      minify: 'terser',
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            react: ['react', 'react-dom'],
-          },
-        },
-      },
-      manifest: true,
-      chunkSizeWarningLimit: 500,
-    },
-    define: {
-      __API_BASE_URL__: JSON.stringify(apiBase),
-      __AI_API_BASE_URL__: JSON.stringify(aiApiBase),
-    },
-    base: basePath,
+    
     test: {
       include: ['src/**/*.test.{js,jsx,ts,tsx}', '__tests__/**/*.{js,jsx,ts,tsx}'],
       setupFiles: 'src/test/setup.js',
@@ -337,4 +166,3 @@ export default defineConfig(({ mode }) => {
     }
   };
 });
->>>>>>> 2bfbdef3dfc749cc0e57bc676654367e68c7ecee

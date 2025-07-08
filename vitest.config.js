@@ -1,13 +1,12 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
-<<<<<<< HEAD
 import { resolve } from 'path';
 
 export default defineConfig({
   plugins: [react()],
   test: {
     environment: 'jsdom',
-    setupFiles: ['./src/test/setup.js'],
+    setupFiles: ['./vitest.setup.js'],
     globals: true,
     coverage: {
       provider: 'v8',
@@ -40,14 +39,4 @@ export default defineConfig({
       '@context': resolve(__dirname, 'src/context')
     }
   }
-}); 
-=======
-
-export default defineConfig({
-  plugins: [react({ fastRefresh: false })],
-  test: {
-    environment: 'jsdom',
-    setupFiles: './vitest.setup.js'
-  }
 });
->>>>>>> 2bfbdef3dfc749cc0e57bc676654367e68c7ecee
