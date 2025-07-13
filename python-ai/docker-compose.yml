@@ -1,60 +1,67 @@
 version: '3.8'
 
 services:
-  # AI Reconciliation Engine - The Heart of the Kingdom
-  ai-engine:
-    build: .
-    ports:
-      - "8000:8000"
-    environment:
-      - API_HOST=0.0.0.0
-      - API_PORT=8000
-      - MAX_WORKERS=4
-      - BATCH_SIZE=100
-      - MODEL_THRESHOLD=0.95
-    volumes:
-      - ./data:/app/data
-      - ./models:/app/models
-      - ./logs:/app/logs
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-    networks:
-      - ai-kingdom
-
-  # Database - The Kingdom's Memory
+  # PostgreSQL Database
   postgres:
-    image: postgres:15
+    image: postgres:15-alpine
+    container_name: medspasync_postgres
     environment:
-      POSTGRES_DB: medspa_ai
-      POSTGRES_USER: ai_king
-      POSTGRES_PASSWORD: kingdom_secure_2024
-    ports:
-      - "5432:5432"
+      POSTGRES_DB: medspasync_ai
+      POSTGRES_USER: medspasync_user
+      # Use environment variable for password - DO NOT hardcode in production
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-default_password_change_in_production}
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
-    restart: unless-stopped
+    ports:
+      - "5432:5432"
     networks:
-      - ai-kingdom
+      - medspasync_network
+    restart: unless-stopped
 
-  # Redis - The Kingdom's Cache
+  # Redis Cache
   redis:
     image: redis:7-alpine
+    container_name: medspasync_redis
+    command: redis-server --requirepass ${REDIS_PASSWORD:-default_redis_password_change_in_production}
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
-    restart: unless-stopped
     networks:
-      - ai-kingdom
+      - medspasync_network
+    restart: unless-stopped
 
-  # Nginx - The Kingdom's Gateway
+  # AI API Service
+  ai-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: medspasync_ai_api
+    environment:
+      - DATABASE_URL=postgresql://medspasync_user:${POSTGRES_PASSWORD:-default_password_change_in_production}@postgres:5432/medspasync_ai
+      - REDIS_URL=redis://:${REDIS_PASSWORD:-default_redis_password_change_in_production}@redis:6379
+      - JWT_SECRET=${JWT_SECRET:-default_jwt_secret_change_in_production}
+      - API_KEY=${API_KEY:-default_api_key_change_in_production}
+      - NODE_ENV=production
+      - LOG_LEVEL=info
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+      - ./models:/app/models
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - medspasync_network
+    restart: unless-stopped
+
+  # Nginx Reverse Proxy
   nginx:
     image: nginx:alpine
+    container_name: medspasync_nginx
     ports:
       - "80:80"
       - "443:443"
@@ -62,14 +69,34 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/ssl:/etc/nginx/ssl
     depends_on:
-      - ai-engine
-    restart: unless-stopped
+      - ai-api
     networks:
-      - ai-kingdom
+      - medspasync_network
+    restart: unless-stopped
 
-  # Monitoring - The Kingdom's Watchtower
+  # Grafana Monitoring
+  grafana:
+    image: grafana/grafana:latest
+    container_name: medspasync_grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      # Use environment variable for password - DO NOT hardcode in production
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-default_grafana_password_change_in_production}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+    networks:
+      - medspasync_network
+    restart: unless-stopped
+
+  # Prometheus Monitoring
   prometheus:
     image: prom/prometheus:latest
+    container_name: medspasync_prometheus
     ports:
       - "9090:9090"
     volumes:
@@ -82,82 +109,16 @@ services:
       - '--web.console.templates=/etc/prometheus/consoles'
       - '--storage.tsdb.retention.time=200h'
       - '--web.enable-lifecycle'
-    restart: unless-stopped
     networks:
-      - ai-kingdom
-
-  # Grafana - The Kingdom's Dashboard
-  grafana:
-    image: grafana/grafana:latest
-    ports:
-      - "3000:3000"
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=kingdom_secure_2024
-    volumes:
-      - grafana_data:/var/lib/grafana
-      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
-      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
-    depends_on:
-      - prometheus
+      - medspasync_network
     restart: unless-stopped
-    networks:
-      - ai-kingdom
-
-  # Job Queue - The Kingdom's Workforce
-  celery:
-    build: .
-    command: celery -A reconciliation_engine.celery worker --loglevel=info
-    environment:
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - CELERY_RESULT_BACKEND=redis://redis:6379/0
-    volumes:
-      - ./data:/app/data
-      - ./models:/app/models
-    depends_on:
-      - redis
-      - postgres
-    restart: unless-stopped
-    networks:
-      - ai-kingdom
-
-  # Flower - The Kingdom's Task Monitor
-  flower:
-    build: .
-    command: celery -A reconciliation_engine.celery flower --port=5555
-    ports:
-      - "5555:5555"
-    environment:
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - CELERY_RESULT_BACKEND=redis://redis:6379/0
-    depends_on:
-      - redis
-      - celery
-    restart: unless-stopped
-    networks:
-      - ai-kingdom
-
-  # Backup Service - The Kingdom's Archive
-  backup:
-    build: .
-    command: python backup_service.py
-    environment:
-      - BACKUP_SCHEDULE=0 2 * * *
-      - BACKUP_RETENTION_DAYS=30
-    volumes:
-      - ./data:/app/data
-      - ./backups:/app/backups
-    depends_on:
-      - postgres
-    restart: unless-stopped
-    networks:
-      - ai-kingdom
 
 volumes:
   postgres_data:
   redis_data:
-  prometheus_data:
   grafana_data:
+  prometheus_data:
 
 networks:
-  ai-kingdom:
+  medspasync_network:
     driver: bridge 

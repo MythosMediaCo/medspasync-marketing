@@ -4,11 +4,11 @@
 	branch = main
 
 [submodule "medspasync-frontend"]
-	path = medspasync-frontend-master
+	path = frontend-app
 	url = https://github.com/MythosMediaCo/medspasync-frontend.git
 	branch = main
 
 [submodule "medspasync-ai-api"]
-	path = medspasync-ai-api
+	path = python-ai
 	url = https://github.com/MythosMediaCo/medspasync-ai-api.git
 	branch = main 

@@ -104,7 +104,7 @@ function DeployToCloud {
     Write-Host "   • Sign up/Login with GitHub" -ForegroundColor White
     Write-Host "   • Click 'New Project'" -ForegroundColor White
     Write-Host "   • Select your repository" -ForegroundColor White
-    Write-Host "   • Choose 'medspasync-frontend' directory" -ForegroundColor White
+    Write-Host "   • Choose 'frontend-app' directory" -ForegroundColor White
     Write-Host "   • Configure environment variables:" -ForegroundColor White
     Write-Host "     NEXT_PUBLIC_API_URL=https://your-backend-url.railway.app" -ForegroundColor Gray
     Write-Host "     NEXT_PUBLIC_APP_NAME=MedSpaSync Pro" -ForegroundColor Gray
@@ -125,7 +125,7 @@ function DeployToCloud {
     
     Write-Host "`n3️⃣ Deploy AI API to Railway:" -ForegroundColor Cyan
     Write-Host "   • Create another Railway project" -ForegroundColor White
-    Write-Host "   • Select 'medspasync-ai-api' directory" -ForegroundColor White
+    Write-Host "   • Select 'python-ai' directory" -ForegroundColor White
     Write-Host "   • Configure environment variables:" -ForegroundColor White
     Write-Host "     ENVIRONMENT=production" -ForegroundColor Gray
     Write-Host "     AI_API_SECRET_KEY=your-ai-api-secret" -ForegroundColor Gray
@@ -136,7 +136,7 @@ function DeployToCloud {
     Write-Host "   • Sign up/Login with GitHub" -ForegroundColor White
     Write-Host "   • Click 'New site from Git'" -ForegroundColor White
     Write-Host "   • Choose your repository" -ForegroundColor White
-    Write-Host "   • Select 'medspasync-marketing' directory" -ForegroundColor White
+    Write-Host "   • Select 'medspasync-marketing-main' directory" -ForegroundColor White
     Write-Host "   • Build command: npm run build" -ForegroundColor White
     Write-Host "   • Publish directory: dist" -ForegroundColor White
     
@@ -201,7 +201,7 @@ function ManualDeployment {
     
     Write-Host "`nFrontend (Vercel):" -ForegroundColor Cyan
     Write-Host "npm i -g vercel" -ForegroundColor Gray
-    Write-Host "cd medspasync-frontend" -ForegroundColor Gray
+    Write-Host "cd frontend-app" -ForegroundColor Gray
     Write-Host "vercel --prod" -ForegroundColor Gray
     
     Write-Host "`nBackend (Railway):" -ForegroundColor Cyan
@@ -212,7 +212,7 @@ function ManualDeployment {
     
     Write-Host "`nMarketing (Netlify):" -ForegroundColor Cyan
     Write-Host "npm i -g netlify-cli" -ForegroundColor Gray
-    Write-Host "cd medspasync-marketing" -ForegroundColor Gray
+    Write-Host "cd medspasync-marketing-main" -ForegroundColor Gray
     Write-Host "netlify deploy --prod" -ForegroundColor Gray
     
     Write-Host "`n📖 For detailed instructions, see: DEPLOYMENT_INSTRUCTIONS.md" -ForegroundColor Yellow

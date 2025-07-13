@@ -2,8 +2,8 @@
 # Fixed configuration to resolve CSP and font loading issues
 
 [build]
-  publish = "dist"
-  command = "npm run build"
+  publish = "frontend-app/dist"
+  command = "cd frontend-app && npm run build"
 
 [build.environment]
   NODE_VERSION = "18"
@@ -156,7 +156,7 @@
 
 # Context configurations
 [context.production]
-  command = "npm run build"
+  command = "cd frontend-app && npm run build"
   
   [context.production.environment]
     VITE_GA_TRACKING_ID = "G-XXXXXXXXXX"
@@ -164,11 +164,11 @@
     NODE_ENV = "production"
 
 [context.deploy-preview]
-  command = "npm run build"
+  command = "cd frontend-app && npm run build"
   
   [context.deploy-preview.environment]
     VITE_ROBOTS_NOINDEX = "true"
     NODE_ENV = "staging"
 
 [context.branch-deploy]
-  command = "npm run build"
+  command = "cd frontend-app && npm run build"

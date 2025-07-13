@@ -1,7 +1,0 @@
-[
-  { "id": 1, "pos": "Jane Doe", "alle": "Jane D.", "aspire": "Jane A. Doe", "confidence": 0.82, "flagged": true },
-  { "id": 2, "pos": "Mary Smith", "alle": "M. Smith", "aspire": "Mary S", "confidence": 0.59, "flagged": true },
-  { "id": 3, "pos": "John Brown", "alle": "J. Brown", "aspire": "Jon Brow", "confidence": 0.4, "flagged": true },
-  { "id": 4, "pos": "Chris Green", "alle": "Christopher Green", "aspire": "Chris G.", "confidence": 0.76, "flagged": true },
-  { "id": 5, "pos": "Pat Johnson", "alle": "Pat J.", "aspire": "Patrick Johnson", "confidence": 0.65, "flagged": true }
-]

@@ -51,13 +51,13 @@ build_app() {
     print_status "Building application..."
     
     # Clean previous build
-    npm run clean
+    (cd frontend-app && npm run clean)
     
     # Install dependencies
-    npm ci
+    (cd frontend-app && npm ci)
     
     # Build for production
-    npm run build
+    (cd frontend-app && npm run build)
     
     if [ $? -eq 0 ]; then
         print_success "Build completed successfully"
@@ -76,7 +76,7 @@ deploy_vercel() {
         npm install -g vercel
     fi
     
-    vercel --prod
+    (cd frontend-app && vercel --prod)
     print_success "Deployed to Vercel"
 }
 
@@ -89,7 +89,7 @@ deploy_netlify() {
         npm install -g netlify-cli
     fi
     
-    netlify deploy --prod --dir=dist
+    (cd frontend-app && netlify deploy --prod --dir=dist)
     print_success "Deployed to Netlify"
 }
 
@@ -117,7 +117,7 @@ deploy_docker() {
     fi
     
     # Build Docker image
-    docker build -t medspasync-pro .
+    docker build -t medspasync-pro frontend-app
     
     # Run container
     docker run -d -p 3000:80 --name medspasync-pro-app medspasync-pro
@@ -135,7 +135,7 @@ deploy_docker_compose() {
         exit 1
     fi
     
-    docker-compose up -d
+    (cd frontend-app && docker-compose up -d)
     
     print_success "Docker Compose deployment completed"
     print_status "Application available at http://localhost:3000"

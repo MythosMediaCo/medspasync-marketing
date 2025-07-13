@@ -1,8 +1,12 @@
 // scripts/generate-sitemap.js
 // Generates XML sitemap for MedSpaSync Pro marketing site
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Base URL for MedSpaSync Pro
 const baseUrl = 'https://medspasyncpro.com';
@@ -69,13 +73,11 @@ function writeSitemap() {
 }
 
 // Main execution
-if (require.main === module) {
-  try {
-    writeSitemap();
-  } catch (error) {
-    console.error('❌ Sitemap generation failed:', error.message);
-    process.exit(1);
-  }
+try {
+  writeSitemap();
+} catch (error) {
+  console.error('❌ Sitemap generation failed:', error.message);
+  process.exit(1);
 }
 
-module.exports = { generateSitemap, writeSitemap };
+export { generateSitemap, writeSitemap };

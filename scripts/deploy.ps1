@@ -49,6 +49,7 @@ function Build-App {
     Write-Status "Building application..."
     
     # Clean previous build
+    cd frontend-app
     npm run clean
     
     # Install dependencies
@@ -56,6 +57,7 @@ function Build-App {
     
     # Build for production
     npm run build
+    cd ..
     
     if ($LASTEXITCODE -eq 0) {
         Write-Success "Build completed successfully"
@@ -73,8 +75,9 @@ function Deploy-Vercel {
         Write-Warning "Vercel CLI not found. Installing..."
         npm install -g vercel
     }
-    
+    cd frontend-app
     vercel --prod
+    cd ..
     Write-Success "Deployed to Vercel"
 }
 
@@ -86,8 +89,9 @@ function Deploy-Netlify {
         Write-Warning "Netlify CLI not found. Installing..."
         npm install -g netlify-cli
     }
-    
+    cd frontend-app
     netlify deploy --prod --dir=dist
+    cd ..
     Write-Success "Deployed to Netlify"
 }
 
@@ -114,7 +118,7 @@ function Deploy-Docker {
     }
     
     # Build Docker image
-    docker build -t medspasync-pro .
+    docker build -t medspasync-pro frontend-app
     
     # Run container
     docker run -d -p 3000:80 --name medspasync-pro-app medspasync-pro
@@ -131,9 +135,9 @@ function Deploy-DockerCompose {
         Write-Error "Docker Compose is not installed"
         exit 1
     }
-    
+    cd frontend-app
     docker-compose up -d
-    
+    cd ..
     Write-Success "Docker Compose deployment completed"
     Write-Status "Application available at http://localhost:3000"
 }
