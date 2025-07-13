@@ -1,0 +1,98 @@
+# Page snapshot
+
+```yaml
+- text: M
+- heading "MedSpaSync" [level=1]
+- paragraph: Pro
+- navigation:
+  - link "🏠Dashboard":
+    - /url: /dashboard
+  - link "🎯Reconciliation":
+    - /url: /reconciliation
+  - link "📊Analytics":
+    - /url: /analytics
+  - link "📈Reports":
+    - /url: /reports
+  - link "👥Tenants":
+    - /url: /tenants
+  - link "💾Backups":
+    - /url: /backups
+  - link "⚙️Settings":
+    - /url: /settings
+- button "🚪Sign Out"
+- banner:
+  - text: M
+  - heading "MedSpaSync Pro" [level=1]
+  - paragraph: Practice Management
+  - navigation:
+    - button "Application"
+    - button "Marketing Site"
+  - button "☰"
+- banner:
+  - text: M
+  - heading "MedSpaSync Pro" [level=1]
+  - text: AI Reconciliation
+  - button "🔔"
+  - button "⚙️"
+  - button "🚪"
+- heading "Reconciliation Dashboard" [level=2]
+- paragraph: AI-powered insights to maximize your reward system revenue
+- paragraph: Total Transactions
+- paragraph: 1,247
+- paragraph: +12% this month
+- text: 📊
+- paragraph: Reconciled Today
+- paragraph: "23"
+- paragraph: 98.5% accuracy
+- text: 🎯
+- paragraph: Revenue Recovered
+- paragraph: $12,500
+- paragraph: +$2,400 this month
+- text: 💰
+- heading "AI Insights & Alerts" [level=3]
+- button "View All"
+- text: ⚠️
+- heading "Revenue Recovery Opportunity" [level=4]
+- paragraph: Potential $2,400 in unreconciled rewards from last month
+- button "Review pending transactions →"
+- text: high priority ⚠️
+- heading "New Reward Pattern Detected" [level=4]
+- paragraph: Increased Alle rewards usage on weekends
+- button "Optimize weekend promotions →"
+- text: medium priority ⚠️
+- heading "Unusual Transaction Pattern" [level=4]
+- paragraph: 3 transactions with 95% confidence mismatch
+- button "Manual review required →"
+- text: high priority
+- heading "Recent Reconciliations" [level=3]
+- button "View All"
+- text: SJ
+- paragraph: Sarah Johnson
+- paragraph: Botox Treatment
+- paragraph: $150
+- paragraph: Alle
+- text: 98.2% confidence reconciled MC
+- paragraph: Michael Chen
+- paragraph: Chemical Peel
+- paragraph: $200
+- paragraph: Aspire
+- text: 95.8% confidence pending review ED
+- paragraph: Emily Davis
+- paragraph: Consultation
+- paragraph: $75
+- paragraph: Alle
+- text: 99.1% confidence reconciled
+- heading "Quick Actions" [level=3]
+- button "🎯 Upload Transactions Process new reward data":
+  - text: 🎯
+  - paragraph: Upload Transactions
+  - paragraph: Process new reward data
+- button "📊 Generate Report Export reconciliation data":
+  - text: 📊
+  - paragraph: Generate Report
+  - paragraph: Export reconciliation data
+- button "⚙️ Configure Rules Set matching criteria":
+  - text: ⚙️
+  - paragraph: Configure Rules
+  - paragraph: Set matching criteria
+```

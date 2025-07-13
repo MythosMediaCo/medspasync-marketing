@@ -1,0 +1,264 @@
+/* === Design System CSS Variables === */
+:root {
+  /* Colors from Design Tokens JSON */
+  --color-primary: #1A2233;
+  --color-secondary: #F5F6FA;
+  --color-accent: #3B82F6;
+  --color-background: #FFFFFF;
+  --color-surface: #F5F6FA;
+  --color-error: #E53E3E;
+  --color-success: #22C55E;
+  --color-warning: #F59E42;
+  --color-info: #2563EB;
+  --color-text-primary: #1A2233;
+  --color-text-secondary: #6B7280;
+  --color-border: #E5E7EB;
+  --color-divider: #E5E7EB;
+  
+  /* Spacing from Design Tokens JSON */
+  --spacing-0: 0px;
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+  --spacing-20: 80px;
+  
+  /* Typography from Design Tokens JSON */
+  --font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 20px;
+  --font-size-xl: 24px;
+  --font-size-2xl: 32px;
+  --font-size-3xl: 40px;
+  --line-height-xs: 16px;
+  --line-height-sm: 20px;
+  --line-height-md: 24px;
+  --line-height-lg: 28px;
+  --line-height-xl: 32px;
+  --line-height-2xl: 40px;
+  --line-height-3xl: 48px;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.02em;
+  --letter-spacing-wider: 0.04em;
+  
+  /* Border Radius from Design Tokens JSON */
+  --border-radius-none: 0px;
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 16px;
+  --border-radius-full: 9999px;
+  
+  /* Shadows from Design Tokens JSON */
+  --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+  
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.2s ease;
+  --transition-slow: 0.3s ease;
+}
+
+/* === Global Reset === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Typography hierarchy from design system */
+h1, .h1 {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 48px;
+  color: #1A2233;
+  margin-bottom: 24px;
+}
+
+h2, .h2 {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 40px;
+  color: #1A2233;
+  margin-bottom: 48px;
+  text-align: center;
+}
+
+h3, .h3 {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+  color: #1A2233;
+  margin-bottom: 16px;
+}
+
+p, .body {
+  font-size: 16px;
+  color: #6B7280;
+  line-height: 24px;
+  margin-bottom: 24px;
+}
+
+/* Utility classes from design system */
+.text-center { text-align: center; }
+.text-muted { color: #6B7280; }
+.text-primary { color: #1A2233; }
+.text-secondary { color: #6B7280; }
+
+/* Section spacing */
+.section {
+  padding: 80px 0;
+}
+
+/* Button base styles (reference from HTML example) */
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.2s;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary {
+  background: #3B82F6;
+  color: #FFFFFF;
+}
+
+.btn-primary:hover {
+  background: #2563EB;
+}
+
+.btn-secondary {
+  background: #F5F6FA;
+  color: #1A2233;
+  border: 1px solid #E5E7EB;
+}
+
+.btn-secondary:hover {
+  background: #E5E7EB;
+}
+
+.btn-accent {
+  background: #C6865A;
+  color: #FFFFFF;
+}
+
+.btn-accent:hover {
+  background: #A46B3B;
+}
+
+/* Card base styles (reference from HTML example) */
+.card {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
+}
+
+/* Form input base styles (reference from HTML example) */
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #1A2233;
+  background: #FFFFFF;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.form-input::placeholder {
+  color: #9CA3AF;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #1A2233;
+}
+
+/* Status indicators from HTML example */
+.status {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.status-success {
+  background: #22C55E;
+  color: #FFFFFF;
+}
+
+.status-error {
+  background: #E53E3E;
+  color: #FFFFFF;
+}
+
+.status-warning {
+  background: #F59E42;
+  color: #FFFFFF;
+}
+
+.status-info {
+  background: #2563EB;
+  color: #FFFFFF;
+}
+
+/* Animated gradient background for login page */
+@keyframes gradient-x {
+  0%, 100% {
+    background-size: 200% 200%;
+    background-position: left center;
+  }
+  50% {
+    background-size: 200% 200%;
+    background-position: right center;
+  }
+}
+
+.animate-gradient-x {
+  background-size: 200% 200%;
+  animation: gradient-x 15s ease infinite;
+}
