@@ -27,6 +27,7 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [
       react({
+        jsxRuntime: 'classic',
         fastRefresh: true,
         include: /\.(jsx|tsx)$/,
       }), 
@@ -45,6 +46,8 @@ export default defineConfig(({ mode }) => {
         '@context': resolve(__dirname, 'src/contexts'),
         '@hooks': resolve(__dirname, 'src/hooks'),
         '@services': resolve(__dirname, 'src/services'),
+        'react': resolve(__dirname, 'node_modules/react'),
+        'react-dom': resolve(__dirname, 'node_modules/react-dom'),
       },
     },
     
