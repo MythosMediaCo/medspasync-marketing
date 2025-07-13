@@ -26,11 +26,7 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [
-      react({
-        jsxRuntime: 'classic',
-        fastRefresh: true,
-        include: /\.(jsx|tsx)$/,
-      }), 
+      react(), 
       stripUseClient(), 
       visualizer()
     ],
@@ -46,9 +42,12 @@ export default defineConfig(({ mode }) => {
         '@context': resolve(__dirname, 'src/contexts'),
         '@hooks': resolve(__dirname, 'src/hooks'),
         '@services': resolve(__dirname, 'src/services'),
-        'react': resolve(__dirname, 'node_modules/react'),
-        'react-dom': resolve(__dirname, 'node_modules/react-dom'),
       },
+    },
+    
+    optimizeDeps: {
+      include: ['react', 'react-dom', 'react/jsx-runtime'],
+      force: true
     },
     
     build: {
@@ -57,6 +56,10 @@ export default defineConfig(({ mode }) => {
       outDir: 'dist',
       emptyOutDir: true,
       target: 'es2015',
+      commonjsOptions: {
+        include: [/node_modules/],
+        transformMixedEsModules: true
+      },
       
       // Asset optimization
       assetsInlineLimit: 4096, // Inline assets smaller than 4kb
@@ -77,12 +80,16 @@ export default defineConfig(({ mode }) => {
       } : {},
       
       rollupOptions: {
+        external: (id) => {
+          // Don't externalize React in production build
+          return false;
+        },
         output: {
           manualChunks: (id) => {
             // Vendor chunks for better caching
             if (id.includes('node_modules')) {
-              // React ecosystem
-              if (id.includes('react') || id.includes('react-dom')) {
+              // React ecosystem - keep together
+              if (id.includes('react') || id.includes('react-dom') || id.includes('react/')) {
                 return 'vendor-react';
               }
               // Router
