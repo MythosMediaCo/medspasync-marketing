@@ -86,9 +86,9 @@ export default defineConfig(({ mode }) => {
         },
         output: {
           manualChunks: (id) => {
-            // Vendor chunks for better caching
+            // Ensure React is always available - don't split it
             if (id.includes('node_modules')) {
-              // React ecosystem - keep together
+              // Keep React and React-DOM together in the main vendor chunk
               if (id.includes('react') || id.includes('react-dom') || id.includes('react/')) {
                 return 'vendor-react';
               }
