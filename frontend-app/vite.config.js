@@ -85,63 +85,8 @@ export default defineConfig(({ mode }) => {
           return false;
         },
         output: {
-          manualChunks: (id) => {
-            // Ensure React is always available - don't split it
-            if (id.includes('node_modules')) {
-              // Keep React and React-DOM together in the main vendor chunk
-              if (id.includes('react') || id.includes('react-dom') || id.includes('react/')) {
-                return 'vendor-react';
-              }
-              // Router
-              if (id.includes('react-router')) {
-                return 'vendor-router';
-              }
-              // Charts and visualization
-              if (id.includes('recharts') || id.includes('d3')) {
-                return 'vendor-charts';
-              }
-              // HTTP and utils
-              if (id.includes('axios') || id.includes('date-fns') || id.includes('lodash')) {
-                return 'vendor-utils';
-              }
-              // UI libraries
-              if (id.includes('react-hot-toast') || id.includes('react-helmet') || id.includes('lucide-react')) {
-                return 'vendor-ui';
-              }
-              // Authentication and form libraries
-              if (id.includes('react-query') || id.includes('formik') || id.includes('yup')) {
-                return 'vendor-data';
-              }
-              // Tailwind and CSS
-              if (id.includes('tailwind') || id.includes('clsx') || id.includes('tailwind-merge')) {
-                return 'vendor-styles';
-              }
-              // Everything else
-              return 'vendor-misc';
-            }
-            
-            // App chunks by feature
-            if (id.includes('/pages/')) {
-              const pageName = id.split('/pages/')[1].split('/')[0].replace('.jsx', '');
-              return `page-${pageName}`;
-            }
-            
-            if (id.includes('/components/')) {
-              if (id.includes('/charts/')) return 'components-charts';
-              if (id.includes('/auth/')) return 'components-auth';
-              if (id.includes('/reconciliation/')) return 'components-reconciliation';
-              if (id.includes('/Common/')) return 'components-common';
-              return 'components-misc';
-            }
-            
-            if (id.includes('/services/')) {
-              return 'services';
-            }
-            
-            if (id.includes('/utils/')) {
-              return 'utils';
-            }
-          },
+          // Disable manual chunking to prevent React bundling issues
+          manualChunks: undefined,
           chunkFileNames: (chunkInfo) => {
             const facadeModuleId = chunkInfo.facadeModuleId 
               ? chunkInfo.facadeModuleId.split('/').pop().replace('.js', '') 

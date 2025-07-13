@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-const AIContext = createContext({ matches: [] });
+// Ensure React is available before creating context
+const AIContext = React.createContext({ matches: [] });
 
 export const AIProvider = ({ children }) => {
   const [matches, setMatches] = useState([]);

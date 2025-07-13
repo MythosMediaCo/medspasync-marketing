@@ -10,7 +10,8 @@ import storageService from '../services/storageService.js';
 import toast from 'react-hot-toast';
 import { decodeJWT } from '../utils/jwt.js';
 
-const AuthContext = createContext(null);
+// Ensure React is available before creating context
+const AuthContext = React.createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => storageService.getUserData());

@@ -1,6 +1,7 @@
 import React, { createContext, useContext } from 'react';
 
-const ReconciliationHistoryContext = createContext([]);
+// Ensure React is available before creating context
+const ReconciliationHistoryContext = React.createContext([]);
 
 export const ReconciliationHistoryProvider = ({ history = [], children }) => (
   <ReconciliationHistoryContext.Provider value={history}>
