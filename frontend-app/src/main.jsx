@@ -5,6 +5,9 @@ import App from './App.jsx';
 import './index.css';
 import { AuthProvider } from './contexts/AuthContext';
 
+// Ensure React is globally available
+window.React = React;
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter

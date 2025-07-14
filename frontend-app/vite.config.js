@@ -42,6 +42,8 @@ export default defineConfig(({ mode }) => {
         '@context': resolve(__dirname, 'src/contexts'),
         '@hooks': resolve(__dirname, 'src/hooks'),
         '@services': resolve(__dirname, 'src/services'),
+        'react': resolve(__dirname, 'node_modules/react'),
+        'react-dom': resolve(__dirname, 'node_modules/react-dom'),
       },
     },
     
@@ -122,6 +124,8 @@ export default defineConfig(({ mode }) => {
       __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
       __IS_PRODUCTION__: isProduction,
       __PLATFORM_NAME__: JSON.stringify('MedSpaSync Pro'),
+      // Ensure React is globally available
+      'global.React': 'React',
     },
     
     base: basePath,
